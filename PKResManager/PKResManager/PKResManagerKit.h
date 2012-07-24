@@ -13,6 +13,15 @@
 #error "PKResManager uses features only available in iOS SDK 4.0 and later."
 #endif
 
+#ifdef DEBUG
+#   define DLog(fmt, ...) {NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);}
+#   define ELog(err) {if(err) DLog(@"%@", err)}
+#else
+#   define DLog(...)
+#   define ELog(err)
+#endif
+
+
 #import "PKResManager.h"
 
 #define BUNDLE_PREFIX @"bundle://"
@@ -33,6 +42,6 @@
 #define SYSTEM_STYLE_NIGHT_URL @"bundle://skintype_night.bundle" 
 #define SYSTEM_STYLE_VERSION @"SYSTEM_STYLE_VERSION"
 
-#define COLOR_AND_FONT    @"#color_font"
+#define COLOR_AND_FONT    @"/#plists/color_font"
 
 #endif

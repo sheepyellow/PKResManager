@@ -112,7 +112,7 @@ customStyleArray = _customStyleArray;
     {
         return;
     }
-    NSLog(@"start change style :%@",[NSDate date]);
+    DLog(@"start change style :%@",[NSDate date]);
     _isLoading = YES;
     block(NO);
     
@@ -130,11 +130,11 @@ customStyleArray = _customStyleArray;
     // get plist dict
     NSString *plistPath=[self.styleBundle pathForResource:COLOR_AND_FONT ofType:@"plist"];    
     self.resOtherCache = [NSMutableDictionary dictionaryWithContentsOfFile:plistPath];
-//    NSLog(@"resOtherCache:%@",self.resOtherCache);
+//    DLog(@"resOtherCache:%@",self.resOtherCache);
 
     // thread issue
     NSMutableArray *holdResObjectArray = [NSMutableArray arrayWithArray:_resObjectsArray];
-    NSLog(@"all res object count:%d",holdResObjectArray.count);
+    DLog(@"all res object count:%d",holdResObjectArray.count);
     
     // change style
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
@@ -150,7 +150,7 @@ customStyleArray = _customStyleArray;
             }
             else 
             {
-                NSLog(@" change style failed ! => %@",obj);
+                DLog(@" change style failed ! => %@",obj);
             }            
             __block double progress = (double)(idx+1) / (double)(holdResObjectArray.count);                                
             for(ResStyleProgressBlock progressBlock in self.styleChangedHandlers) 
@@ -163,7 +163,7 @@ customStyleArray = _customStyleArray;
         }];
         _isLoading = NO; 
         block(YES);
-        NSLog(@"end change style :%@",[NSDate date]);
+        DLog(@"end change style :%@",[NSDate date]);
     });
 
     while (!_isLoading) {        
@@ -203,12 +203,12 @@ customStyleArray = _customStyleArray;
     NSFileManager *fileManager = [NSFileManager defaultManager];    
     if (![fileManager fileExistsAtPath:stylePath isDirectory:&isDir] && isDir)
     {
-        NSLog(@" No such file or directory");
+        DLog(@" No such file or directory");
         return NO;
     }
     if (![fileManager removeItemAtPath:stylePath error:&error]) 
     {
-        NSLog(@" delete file error:%@",error);
+        DLog(@" delete file error:%@",error);
         return NO;
     }
 
@@ -216,7 +216,7 @@ customStyleArray = _customStyleArray;
     
     [self saveCustomStyleArray];
     
-    NSLog(@" %@",self.allStyleArray);
+    DLog(@" %@",self.allStyleArray);
 
     // need reset
     if ([_styleName isEqualToString:name]) {
@@ -262,18 +262,18 @@ customStyleArray = _customStyleArray;
         if ([fileManager fileExistsAtPath:customStylePath]) 
         {
             NSError *updateError = nil;
-            NSLog(@" exist <%@>",name);
+            DLog(@" exist <%@> ,will overwrite",name);
             if (![fileManager removeItemAtPath:customStylePath error:&updateError]) 
             {
-                NSLog(@"updateError:%@",updateError);
+                DLog(@"updateError:%@",updateError);
             }
         }
         if (![fileManager copyItemAtPath:bundlePath toPath:customStylePath error:&error]) 
         {
-            NSLog(@"error :%@",error);
+            DLog(@"copy file error :%@",error);
             return NO;
         }        
-        NSLog(@"after delete %@",self.allStyleArray);
+        DLog(@"saved: %@",self.allStyleArray);
         return YES;
     }
     return NO;
@@ -310,14 +310,12 @@ customStyleArray = _customStyleArray;
     _isLoading = NO;
     NSDictionary *defalutStyleDict = [_defaultStyleArray objectAtIndex:0];
     NSString *styleName = [defalutStyleDict objectForKey:kStyleName];    
-    [self swithToStyle:styleName onComplete:^(BOOL finished) {
-        return;
-    }];
+    [self swithToStyle:styleName];
 }
 - (UIImage *)imageForKey:(id)key style:(NSString *)name
 {
     if (key == nil) {
-        NSLog(@" imageForKey:style: key = nil");
+        DLog(@" imageForKey:style: key = nil");
         return nil;
     }
     NSBundle *tempBundle = [self bundleByStyleName:name];
@@ -337,7 +335,7 @@ customStyleArray = _customStyleArray;
 - (UIImage *)imageForKey:(id)key cache:(BOOL)needCache
 {
     if (key == nil) {
-        NSLog(@" imageForKey:cache: key = nil");
+        DLog(@" imageForKey:cache: key = nil");
         return nil;
     }
     UIImage *image = [_resImageCache objectForKey:key];
@@ -353,16 +351,20 @@ customStyleArray = _customStyleArray;
             image = [UIImage imageWithContentsOfFile:imagePath];
         }
 
-        if (image != nil && needCache) 
-        {
-            [_resImageCache setObject:image forKey:key];
-        }
-        //NSLog(@"imagePath:%@",imagePath);
+        //DLog(@"imagePath:%@",imagePath);
     }
-    // TODO:if error ,get default resource
+    // if error ,get default resource
     if (image == nil) {
-        NSLog(@" will get default style => %@",key);
-        return nil;
+        DLog(@" will get default style => %@",key);
+        NSBundle *defaultBundle = [self bundleByStyleName:SYSTEM_STYLE_LIGHT];
+        NSString *imagePath = [defaultBundle pathForResource:key ofType:@"png"];
+        image = [UIImage imageWithContentsOfFile:imagePath];
+        NSAssert(image!=nil,@" get default Image error !!!");
+    }
+    // cache
+    if (image != nil && needCache) 
+    {
+        [_resImageCache setObject:image forKey:key];
     }
     
     return image;
@@ -375,7 +377,7 @@ customStyleArray = _customStyleArray;
 - (UIFont *)fontForKey:(id)key
 {
     NSArray *keyArray = [key componentsSeparatedByString:@"-"];    
-    NSAssert(keyArray.count == 2,@"module key name error!!!");
+    NSAssert(keyArray.count == 2,@"module key name error!!! ==> ",key);
     
     NSString *moduleKey = [keyArray objectAtIndex:0];
     NSString *memberKey = [keyArray objectAtIndex:1];
@@ -394,7 +396,7 @@ customStyleArray = _customStyleArray;
 - (UIColor *)colorForKey:(id)key
 {  
     NSArray *keyArray = [key componentsSeparatedByString:@"-"];    
-    NSAssert(keyArray.count == 2,@"module key name error!!!");
+    NSAssert(keyArray.count == 2,@"module key name error!!! ==> ",key);
     
     NSString *moduleKey = [keyArray objectAtIndex:0];
     NSString *memberKey = [keyArray objectAtIndex:1];
@@ -519,7 +521,7 @@ customStyleArray = _customStyleArray;
         if(![[NSFileManager defaultManager] createDirectoryAtPath:newDirectory 
                                       withIntermediateDirectories:NO attributes:nil error:&error])
         {
-            NSLog(@"create file error：%@",error);
+            DLog(@"create file error：%@",error);
         }   
 	}
     return newDirectory;
@@ -534,7 +536,7 @@ customStyleArray = _customStyleArray;
     NSString *filePath = nil;
     NSString *bundlePath = nil;
     
-    NSLog(@"bundleURL:%@",bundleURL);
+    DLog(@"bundleURL:%@",bundleURL);
     if ([self isBundleURL:bundleURL]) 
     {
         _styleType = ResStyleType_System;
@@ -549,7 +551,7 @@ customStyleArray = _customStyleArray;
     }
     else 
     {
-        NSLog(@"na ni !!! bundleName:%@",bundleURL);
+        DLog(@"na ni !!! bundleName:%@",bundleURL);
         _styleType = ResStyleType_Unknow;        
         return nil;
     }

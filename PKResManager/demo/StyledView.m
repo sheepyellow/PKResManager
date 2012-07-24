@@ -12,7 +12,7 @@
 
 - (void)dealloc
 {
-//    NSLog(@" dealloc :%@",[self description]);
+//    DLog(@" dealloc :%@",[self description]);
     [[PKResManager getInstance] removeChangeStyleObject:self];
     [_imageView release];    
     [_label release];
@@ -43,7 +43,7 @@
 #pragma mark - delegate
 - (void)changeStyle:(id)sender
 {
-//    NSLog(@" change :%@",[self description]);
+//    DLog(@" change :%@",[self description]);
     self.backgroundColor = [[PKResManager getInstance] colorForKey:@"DemoModule-styleView"];
     UIImage *image = [[PKResManager getInstance] imageForKey:@"sendbutton"];
     _imageView.image = image;

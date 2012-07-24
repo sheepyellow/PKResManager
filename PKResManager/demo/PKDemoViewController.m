@@ -67,6 +67,7 @@ dataArray;
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:demoId];
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
+    cell.textLabel.font = [[PKResManager getInstance] fontForKey:@"SettingModule-tableCell"];
     cell.textLabel.text = [self.dataArray objectAtIndex:indexPath.row];
     // 
     return cell;
@@ -105,6 +106,8 @@ dataArray;
     }
 
     self.navigationController.navigationBar.tintColor = [[PKResManager getInstance] colorForKey:@"DemoModule-navBar"];
+    
+    [self.tableView reloadData];
 }
 
 @end

@@ -2,40 +2,16 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>FriendModule</key>
-	<dict>
-		<key>number</key>
-		<string>000</string>
-		<key>tableview</key>
-		<dict>
-			<key>font</key>
-			<string>STHeitiSC-Light</string>
-			<key>rgb</key>
-			<string>255,255,255</string>
-			<key>size</key>
-			<string>16.0</string>
-		</dict>
-		<key>tableCell</key>
-		<dict>
-			<key>rgb</key>
-			<string>1,1,1</string>
-		</dict>
-	</dict>
 	<key>SettingModule</key>
 	<dict>
 		<key>number</key>
 		<string>001</string>
-		<key>tableview</key>
-		<dict>
-			<key>font</key>
-			<string>STHeitiSC-Light</string>
-			<key>rgb</key>
-			<string>20,20,20,1</string>
-		</dict>
 		<key>tableCell</key>
 		<dict>
 			<key>font</key>
 			<string>STHeitiSC-Light</string>
+			<key>size</key>
+			<string>16.0</string>
 			<key>rgb</key>
 			<string>10,10,10,1</string>
 		</dict>
