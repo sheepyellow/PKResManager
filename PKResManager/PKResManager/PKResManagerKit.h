@@ -51,7 +51,5 @@
 
 // error
 #define PK_ERROR_DOMAIN   @"PK_ERROR_DOMAIN"
-#define PK_ERROR_UNKNOW   
-#define PK_ERROR_
 
 #endif
