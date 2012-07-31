@@ -8,8 +8,16 @@
 
 #import <Foundation/Foundation.h>
 
+typedef enum {
+	PKErrorCodeSuccess						= 0, // 自定义,表示成功.
+	PKErrorCodeUnknow                       = 1, // 未知错误
+	PKErrorCodeUnavailable	        		= 2, // 不可用，需要下载
+    PKErrorCodeBundleName                   = 3, // bundleName问题
+} PKErrorCode;
+
+
 typedef void (^ResStyleProgressBlock) (double progress);
-typedef void (^ResStyleCompleteBlock) (BOOL finished);
+typedef void (^ResStyleCompleteBlock) (BOOL finished, NSError *error);
 
 typedef enum {
     ResStyleType_System,
@@ -62,7 +70,7 @@ typedef enum {
 /*!
  * save in custom file path
  */
-- (BOOL)saveStyle:(NSString *)name withBundle:(NSBundle *)bundle;
+- (BOOL)saveStyle:(NSString *)styleId name:(NSString *)name version:(NSNumber *)version withBundle:(NSBundle *)bundle;
 /*!
  * delete style
  */
@@ -87,10 +95,13 @@ typedef enum {
 - (UIImage *)imageForKey:(id)key cache:(BOOL)needCache;
 - (UIImage *)imageForKey:(id)key;
 
-// 这些都存着么
+
 - (UIFont *)fontForKey:(id)key;
 
 - (UIColor *)colorForKey:(id)key;
+
+- (UIImage *)previewImage;
+- (UIImage *)previewImageByStyleName:(NSString *)name;
 
 + (PKResManager*)getInstance;
 

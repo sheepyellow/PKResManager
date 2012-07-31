@@ -72,23 +72,40 @@ dataArray = _dataArray;
         _dataArray = [[NSMutableArray alloc] initWithCapacity:allStyleArray.count];
     }
     [_dataArray removeAllObjects];
+    // test add undownload style
+    for (int i = 0; i < 2; i++) {
+        NSDictionary *unknowDict = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:
+                                                                        [NSDate date],
+                                                                        [NSString stringWithFormat:@"%d",i],
+                                                                        [NSString stringWithFormat:@"documents://testSave.bundle%d",i],
+                                                                        @"v0.1",
+                                                                        nil]
+                                                               forKeys:[NSArray arrayWithObjects:
+                                                                        kStyleID,
+                                                                        kStyleName,
+                                                                        kStyleURL,
+                                                                        kStyleVersion,
+                                                                        nil]];
+        [_dataArray addObject:unknowDict];
+    }
+    
     [allStyleArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         NSDictionary *aStyleDict = (NSDictionary*)obj;
-        NSString *styleName = [aStyleDict objectForKey:kStyleName];
-        //NSString *styleVersion = [aStyleDict objectForKey:kStyleVersion];
-        [_dataArray addObject:styleName];
+        [_dataArray addObject:aStyleDict];
         if (stop) {
             [self.tableView reloadData];
         }
     }];
     
-    
 }
 - (void)addCustomStyleAction:(id)sender
 {
     // test save custom style
-    NSBundle *bundle = [NSBundle bundleWithPath:[[NSBundle mainBundle] pathForResource:@"testSave" ofType:@"bundle"]];    
-    [[PKResManager getInstance] saveStyle:CUSTOM_STYLE withBundle:bundle];
+    NSBundle *bundle = [NSBundle bundleWithPath:[[NSBundle mainBundle] pathForResource:@"testSave" ofType:@"bundle"]];
+    [[PKResManager getInstance] saveStyle:@"32198139428"
+                                     name:CUSTOM_STYLE
+                                  version:[NSNumber numberWithFloat:1.0f]
+                               withBundle:bundle];
     [self refreshDataSource];
 }
 - (void)delCustomStyleAction:(id)sender
@@ -112,7 +129,32 @@ dataArray = _dataArray;
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
     }
-    cell.textLabel.text = [self.dataArray objectAtIndex:indexPath.row];
+
+    NSDictionary *aStyleDict = [self.dataArray objectAtIndex:indexPath.row];
+    NSString *styleName = [aStyleDict objectForKey:kStyleName];
+    NSNumber *styleVersion = [aStyleDict objectForKey:kStyleVersion];
+    // name
+    cell.textLabel.font = [UIFont systemFontOfSize:13.0f];
+    cell.textLabel.text = styleName;
+    
+    // preview
+    UIImage *image = [[PKResManager getInstance] previewImageByStyleName:styleName];
+    if (image) {
+        UIImageView *perviewImageView = [[UIImageView alloc] initWithImage:image];
+        perviewImageView.frame = CGRectMake(100.0f, 0.0f, 40, 40);
+        [cell addSubview:perviewImageView];
+        [perviewImageView release];        
+    }
+    
+    // version
+    if (styleVersion != nil) {
+        UILabel *versionLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 100, cell.frame.size.height)];
+        versionLabel.font = [UIFont systemFontOfSize:13.0f];;
+        versionLabel.text = [NSString stringWithFormat:@"v%.1f   ",styleVersion.floatValue];
+        versionLabel.textAlignment = UITextAlignmentRight;
+        cell.accessoryView = versionLabel;
+        [versionLabel release];
+    }
     
     return cell;
 }
@@ -120,8 +162,21 @@ dataArray = _dataArray;
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *styleName = [self.dataArray objectAtIndex:indexPath.row];
-    [[PKResManager getInstance] swithToStyle:styleName];
+    NSDictionary *aStyleDict = [self.dataArray objectAtIndex:indexPath.row];
+    NSString *styleName = [aStyleDict objectForKey:kStyleName];
+    [[PKResManager getInstance] swithToStyle:styleName onComplete:^(BOOL finished, NSError *error) {
+        if (finished) {
+            if (error && error.code != PKErrorCodeUnavailable) {
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                                    message:[NSString stringWithFormat:@"code:%d",error.code]
+                                                                   delegate:nil
+                                                          cancelButtonTitle:@"OK"
+                                                          otherButtonTitles:nil];
+                [alertView show];
+                [alertView autorelease];
+            }
+        }
+    }];
 }
 
 @end

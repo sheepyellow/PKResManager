@@ -100,28 +100,40 @@ customStyleArray = _customStyleArray;
 }
 - (void)swithToStyle:(NSString *)name
 {
-    [self swithToStyle:name onComplete:^(BOOL finished) {
+    [self swithToStyle:name onComplete:^(BOOL finished, NSError *error) {
         return ;
     }];
 }
 - (void)swithToStyle:(NSString *)name onComplete:(ResStyleCompleteBlock)block
 {    
     if ([_styleName isEqualToString:name] 
-        || name == nil 
-        || _isLoading) 
+        || name == nil )
     {
+        NSError *error = [NSError errorWithDomain:PK_ERROR_DOMAIN code:PKErrorCodeUnavailable userInfo:nil];
+        block(YES,error);
+        return;
+    }
+    else if (_isLoading) {
+        block(NO,nil);
         return;
     }
     DLog(@"start change style :%@",[NSDate date]);
     _isLoading = YES;
-    block(NO);
+    block(NO,nil);
     
-    _styleName = name;
+    if (_styleName) {
+        [_styleName release];
+    }
+    _styleName = [name copy];
     
     // read resource bundle
     self.styleBundle = [self bundleByStyleName:name];
-    
-    NSAssert(self.styleBundle != nil , @"error: _styleBundle == nil"); 
+    if (self.styleBundle == nil) {
+        NSError *error = [NSError errorWithDomain:PK_ERROR_DOMAIN code:PKErrorCodeBundleName userInfo:nil];
+        block(YES,error);
+        _isLoading = NO;
+        return;
+    }
 
     // remove cache
     [_resImageCache removeAllObjects]; 
@@ -161,8 +173,13 @@ customStyleArray = _customStyleArray;
                 
             }
         }];
-        _isLoading = NO; 
-        block(YES);
+        _isLoading = NO;
+        
+        // save
+        NSData *data = [NSKeyedArchiver archivedDataWithRootObject:_styleName];
+        [[NSUserDefaults standardUserDefaults] setObject:data forKey:kNowResStyle];
+        
+        block(YES,nil);
         DLog(@"end change style :%@",[NSDate date]);
     });
 
@@ -225,54 +242,58 @@ customStyleArray = _customStyleArray;
     
     return YES;    
 }
-// TODO: version perview
-- (BOOL)saveStyle:(NSString *)name withBundle:(NSBundle *)bundle
-{    
+
+- (BOOL)saveStyle:(NSString *)styleId name:(NSString *)name version:(NSNumber *)version withBundle:(NSBundle *)bundle
+{
     NSString *bundlePath = bundle.resourcePath;
     NSArray *elementArray = [bundlePath componentsSeparatedByString:@"/"];
     NSString *bundleName = [elementArray lastObject];
-    if (bundleName != nil) 
+    if (bundleName != nil)
     {
         NSUInteger index = [self styleTypeIndexByName:name];
         NSDictionary *styleDict = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:
+                                                                       styleId,
                                                                        name,
-                                                                       [NSString stringWithFormat:@"%@%@",DOCUMENTS_PREFIX,bundleName], 
-                                                                       nil]                                                                       
+                                                                       [NSString stringWithFormat:@"%@%@",DOCUMENTS_PREFIX,bundleName],
+                                                                       version,
+                                                                       nil]
                                                               forKeys:[NSArray arrayWithObjects:
+                                                                       kStyleID,
                                                                        kStyleName,
-                                                                       kStyleURL, 
+                                                                       kStyleURL,
+                                                                       kStyleVersion,
                                                                        nil]];
         // if exists ,replace
-        if (index != NSNotFound) 
+        if (index != NSNotFound)
         {
             [_allStyleArray replaceObjectAtIndex:index withObject:styleDict];
         }
         else
         {
-            [_allStyleArray addObject:styleDict];                    
+            [_allStyleArray addObject:styleDict];
         }
         [self saveCustomStyleArray];
         
         // file operation
         NSError *error = nil;
         NSFileManager *fileManager = [NSFileManager defaultManager];
-        NSString *customStylePath = [[self getDocumentsDirectoryWithSubDir:SAVED_STYLE_DIR] 
+        NSString *customStylePath = [[self getDocumentsDirectoryWithSubDir:SAVED_STYLE_DIR]
                                      stringByAppendingFormat:@"/%@",bundleName];
-        // if exist , overwrite 
-        if ([fileManager fileExistsAtPath:customStylePath]) 
+        // if exist , overwrite
+        if ([fileManager fileExistsAtPath:customStylePath])
         {
             NSError *updateError = nil;
             DLog(@" exist <%@> ,will overwrite",name);
-            if (![fileManager removeItemAtPath:customStylePath error:&updateError]) 
+            if (![fileManager removeItemAtPath:customStylePath error:&updateError])
             {
                 DLog(@"updateError:%@",updateError);
             }
         }
-        if (![fileManager copyItemAtPath:bundlePath toPath:customStylePath error:&error]) 
+        if (![fileManager copyItemAtPath:bundlePath toPath:customStylePath error:&error])
         {
             DLog(@"copy file error :%@",error);
             return NO;
-        }        
+        }
         DLog(@"saved: %@",self.allStyleArray);
         return YES;
     }
@@ -286,26 +307,6 @@ customStyleArray = _customStyleArray;
 }
 - (void)resetStyle
 {
-    if (!_styleChangedHandlers) {
-        _styleChangedHandlers = [[NSMutableArray alloc] init];
-    }
-    if (!_resObjectsArray) {
-        _resObjectsArray = CreateNonRetainingArray(); // 不retain的数组                
-    }
-    if (!_resImageCache) {
-        _resImageCache = [[NSMutableDictionary alloc] init];        
-    }    
-    if (!_resOtherCache) {
-        _resOtherCache = [[NSMutableDictionary alloc] init];        
-    }    
-        
-    // get all style
-    if (_allStyleArray) {
-        [_allStyleArray removeAllObjects];
-        [_allStyleArray release];
-    }
-    _allStyleArray = [[self getSavedStyleArray] retain];
-
     // swith to default style
     _isLoading = NO;
     NSDictionary *defalutStyleDict = [_defaultStyleArray objectAtIndex:0];
@@ -377,7 +378,7 @@ customStyleArray = _customStyleArray;
 - (UIFont *)fontForKey:(id)key
 {
     NSArray *keyArray = [key componentsSeparatedByString:@"-"];    
-    NSAssert(keyArray.count == 2,@"module key name error!!! ==> ",key);
+    NSAssert(keyArray.count == 2,@"module key name error!!! ==> font");
     
     NSString *moduleKey = [keyArray objectAtIndex:0];
     NSString *memberKey = [keyArray objectAtIndex:1];
@@ -396,7 +397,7 @@ customStyleArray = _customStyleArray;
 - (UIColor *)colorForKey:(id)key
 {  
     NSArray *keyArray = [key componentsSeparatedByString:@"-"];    
-    NSAssert(keyArray.count == 2,@"module key name error!!! ==> ",key);
+    NSAssert(keyArray.count == 2,@"module key name error!!! ==> color");
     
     NSString *moduleKey = [keyArray objectAtIndex:0];
     NSString *memberKey = [keyArray objectAtIndex:1];
@@ -434,6 +435,21 @@ customStyleArray = _customStyleArray;
                            alpha:[alphaValue floatValue]];
     
 }
+- (UIImage *)previewImage
+{
+    return [self previewImageByStyleName:_styleName];
+}
+- (UIImage *)previewImageByStyleName:(NSString *)name
+{
+    UIImage *image = nil;
+    NSBundle *bundle = [self bundleByStyleName:name];
+    if (bundle!=nil) {
+        NSString *imagePath = [bundle pathForResource:PREVIEW_PATH ofType:@"png"];
+        image = [UIImage imageWithContentsOfFile:imagePath];
+    }
+    // TODO: image == nil
+    return image;
+}
 #pragma mark - Private
 
 - (BOOL)isBundleURL:(NSString *)URL
@@ -458,21 +474,25 @@ customStyleArray = _customStyleArray;
 {
     if (!_defaultStyleArray) {
         NSDictionary *lightDict = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:
+                                                                       SYSTEM_STYLE_ID,
                                                                        SYSTEM_STYLE_LIGHT,
                                                                        SYSTEM_STYLE_LIGHT_URL,
                                                                        SYSTEM_STYLE_VERSION,
                                                                        nil] 
                                                               forKeys:[NSArray arrayWithObjects:
+                                                                       kStyleID,
                                                                        kStyleName,
                                                                        kStyleURL,
                                                                        kStyleVersion,
                                                                        nil]];
         NSDictionary *nightDict = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:
+                                                                       SYSTEM_STYLE_ID,
                                                                        SYSTEM_STYLE_NIGHT,
                                                                        SYSTEM_STYLE_NIGHT_URL,
                                                                        SYSTEM_STYLE_VERSION,
                                                                        nil] 
                                                               forKeys:[NSArray arrayWithObjects:
+                                                                       kStyleID,
                                                                        kStyleName,
                                                                        kStyleURL,
                                                                        kStyleVersion, nil]];
@@ -529,7 +549,9 @@ customStyleArray = _customStyleArray;
 - (NSBundle *)bundleByStyleName:(NSString *)name
 {
     NSInteger index = [self styleTypeIndexByName:name];
-    NSAssert(index != NSNotFound , @"error: index not found"); 
+    if (index == NSNotFound) {
+        return nil;
+    }
     
     NSDictionary *styleDict = [self.allStyleArray objectAtIndex:index];
     NSString *bundleURL = [styleDict objectForKey:kStyleURL];
@@ -564,7 +586,24 @@ customStyleArray = _customStyleArray;
 - (id)init{
     self = [super init];
     if (self) {
-        [self resetStyle];
+        _styleChangedHandlers = [[NSMutableArray alloc] init];
+        _resObjectsArray = CreateNonRetainingArray(); // 不retain的数组
+        _resImageCache = [[NSMutableDictionary alloc] init];
+        _resOtherCache = [[NSMutableDictionary alloc] init];
+        
+        // get all style ( will get defalut style array)
+        _allStyleArray = [[self getSavedStyleArray] retain];
+        
+        // read
+        NSData *data = [[NSUserDefaults standardUserDefaults] objectForKey:kNowResStyle];
+        if (data!=nil) {
+            _isLoading = NO;
+            NSString *nowStyleName = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+            [self swithToStyle:nowStyleName];
+        }else{
+            [self resetStyle];
+        }
+
     }
     return self;
 }
