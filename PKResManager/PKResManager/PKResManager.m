@@ -215,7 +215,7 @@ customStyleArray = _customStyleArray;
                             substringFromIndex:DOCUMENTS_PREFIX.length];
     BOOL isDir=NO;
     NSError *error = nil;
-    NSString *stylePath = [[self getDocumentsDirectoryWithSubDir:SAVED_STYLE_DIR] 
+    NSString *stylePath = [[self getDocumentsDirectoryWithSubDir:nil]
                            stringByAppendingFormat:@"/%@",bundleName];
     NSFileManager *fileManager = [NSFileManager defaultManager];    
     if (![fileManager fileExistsAtPath:stylePath isDirectory:&isDir] && isDir)
@@ -254,7 +254,7 @@ customStyleArray = _customStyleArray;
         NSDictionary *styleDict = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:
                                                                        styleId,
                                                                        name,
-                                                                       [NSString stringWithFormat:@"%@%@",DOCUMENTS_PREFIX,bundleName],
+                                                                       [NSString stringWithFormat:@"%@%@/%@",DOCUMENTS_PREFIX,SAVED_STYLE_DIR,bundleName],
                                                                        version,
                                                                        nil]
                                                               forKeys:[NSArray arrayWithObjects:
@@ -378,7 +378,7 @@ customStyleArray = _customStyleArray;
 - (UIFont *)fontForKey:(id)key
 {
     NSArray *keyArray = [key componentsSeparatedByString:@"-"];    
-    NSAssert(keyArray.count == 2,@"module key name error!!! ==> font");
+    NSAssert(keyArray.count >= 2,@"module key name error!!! ==> font");
     
     NSString *moduleKey = [keyArray objectAtIndex:0];
     NSString *memberKey = [keyArray objectAtIndex:1];
@@ -397,7 +397,7 @@ customStyleArray = _customStyleArray;
 - (UIColor *)colorForKey:(id)key
 {  
     NSArray *keyArray = [key componentsSeparatedByString:@"-"];    
-    NSAssert(keyArray.count == 2,@"module key name error!!! ==> color");
+    NSAssert(keyArray.count >= 2,@"module key name error!!! ==> color");
     
     NSString *moduleKey = [keyArray objectAtIndex:0];
     NSString *memberKey = [keyArray objectAtIndex:1];
@@ -568,7 +568,7 @@ customStyleArray = _customStyleArray;
     else if([self isDocumentsURL:bundleURL])
     {
         _styleType = ResStyleType_Custom;
-        filePath = [self getDocumentsDirectoryWithSubDir:SAVED_STYLE_DIR];
+        filePath = [self getDocumentsDirectoryWithSubDir:nil];
         bundlePath = [NSString stringWithFormat:@"%@/%@",filePath,[bundleURL substringFromIndex:DOCUMENTS_PREFIX.length]];
     }
     else 
