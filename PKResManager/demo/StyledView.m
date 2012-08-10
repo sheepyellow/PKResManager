@@ -26,7 +26,7 @@
         [[PKResManager getInstance] addChangeStyleObject:self];
         self.backgroundColor = [[PKResManager getInstance] colorForKey:@"DemoModule-styleView"];
         _isDefault = YES;
-        UIImage *image = [[PKResManager getInstance] imageForKey:@"sendbutton"];
+        UIImage *image = [[PKResManager getInstance] imageForKey:@"sendbutton.png"];
         _imageView = [[UIImageView alloc] initWithImage:image];
         [self addSubview:_imageView];
         
@@ -45,7 +45,7 @@
 {
 //    DLog(@" change :%@",[self description]);
     self.backgroundColor = [[PKResManager getInstance] colorForKey:@"DemoModule-styleView"];
-    UIImage *image = [[PKResManager getInstance] imageForKey:@"sendbutton"];
+    UIImage *image = [[PKResManager getInstance] imageForKey:@"sendbutton.png"];
     _imageView.image = image;
     _label.font = [[PKResManager getInstance] fontForKey:@"DemoModule-label"];
     [_label setTextColor:[[PKResManager getInstance] colorForKey:@"DemoModule-label"]];

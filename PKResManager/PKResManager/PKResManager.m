@@ -322,9 +322,18 @@ customStyleArray = _customStyleArray;
     NSBundle *tempBundle = [self bundleByStyleName:name];
     NSAssert(tempBundle != nil,@" tempBundle = nil");
     
+    if ([key hasSuffix:@".png"] || [key hasSuffix:@".jpg"]) {
+        key = [key substringToIndex:((NSString*)key).length-4];
+    }
+    
     UIImage *image = nil;
     NSString *imagePath = [tempBundle pathForResource:key ofType:@"png"];
     image = [UIImage imageWithContentsOfFile:imagePath];
+    
+    if (image == nil) {
+        imagePath = [self.styleBundle pathForResource:key ofType:@"jpg"];
+        image = [UIImage imageWithContentsOfFile:imagePath];
+    }
     
     if (image == nil) 
     {
@@ -339,20 +348,27 @@ customStyleArray = _customStyleArray;
         DLog(@" imageForKey:cache: key = nil");
         return nil;
     }
-    UIImage *image = [_resImageCache objectForKey:key];
     
+    if ([key hasSuffix:@".png"] || [key hasSuffix:@".jpg"]) {
+        key = [key substringToIndex:((NSString*)key).length-4];
+    }
+    
+    UIImage *image = [_resImageCache objectForKey:key];
+    NSString *imagePath = nil;
     if (image == nil) 
     {
-        NSString *imagePath = [self.styleBundle pathForResource:key ofType:@"png"];
+        imagePath = [self.styleBundle pathForResource:key ofType:@"png"];
         image = [UIImage imageWithContentsOfFile:imagePath];
-        
-        if (image == nil) 
-        {
-            imagePath = [[NSBundle mainBundle] pathForResource:key ofType:@"png"];
-            image = [UIImage imageWithContentsOfFile:imagePath];
-        }
-
         //DLog(@"imagePath:%@",imagePath);
+    }
+    if (image == nil) {
+        imagePath = [self.styleBundle pathForResource:key ofType:@"jpg"];
+        image = [UIImage imageWithContentsOfFile:imagePath];
+    }
+    if (image == nil)
+    {
+        imagePath = [[NSBundle mainBundle] pathForResource:key ofType:@"png"];
+        image = [UIImage imageWithContentsOfFile:imagePath];
     }
     // if error ,get default resource
     if (image == nil) {
@@ -377,8 +393,8 @@ customStyleArray = _customStyleArray;
 
 - (UIFont *)fontForKey:(id)key
 {
-    NSArray *keyArray = [key componentsSeparatedByString:@"-"];    
-    NSAssert(keyArray.count >= 2,@"module key name error!!! ==> font");
+    NSArray *keyArray = [key componentsSeparatedByString:@"-"];
+    NSAssert1(keyArray.count == 2, @"module key name error!!! [font]==> %@", key);
     
     NSString *moduleKey = [keyArray objectAtIndex:0];
     NSString *memberKey = [keyArray objectAtIndex:1];
@@ -396,8 +412,8 @@ customStyleArray = _customStyleArray;
 
 - (UIColor *)colorForKey:(id)key
 {  
-    NSArray *keyArray = [key componentsSeparatedByString:@"-"];    
-    NSAssert(keyArray.count >= 2,@"module key name error!!! ==> color");
+    NSArray *keyArray = [key componentsSeparatedByString:@"-"];
+    NSAssert1(keyArray.count == 2, @"module key name error!!! [color]==> %@", key);
     
     NSString *moduleKey = [keyArray objectAtIndex:0];
     NSString *memberKey = [keyArray objectAtIndex:1];
