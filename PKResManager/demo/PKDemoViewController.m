@@ -30,7 +30,7 @@ dataArray;
 {
     [super viewDidLoad];
     [[PKResManager getInstance] addChangeStyleObject:self];    
-    self.navigationController.navigationBar.tintColor = [[PKResManager getInstance] colorForKey:@"DemoModule-navBar"];
+    self.navigationController.navigationBar.tintColor = [UIColor colorForKey:@"DemoModule-navBar"];
     self.navigationItem.title = @"Demo";
     self.dataArray = [[[NSMutableArray alloc] initWithObjects:@"Demo",@"List",@"Reset", nil] autorelease];
     self.tableView = [[[UITableView alloc] initWithFrame:self.view.bounds] autorelease];
@@ -67,7 +67,7 @@ dataArray;
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:demoId];
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
-    cell.textLabel.font = [[PKResManager getInstance] fontForKey:@"SettingModule-tableCell"];
+    cell.textLabel.font = [UIFont fontForKey:@"SettingModule-tableCell"];
     cell.textLabel.text = [self.dataArray objectAtIndex:indexPath.row];
     // 
     return cell;
@@ -105,7 +105,7 @@ dataArray;
         [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent animated:YES];        
     }
 
-    self.navigationController.navigationBar.tintColor = [[PKResManager getInstance] colorForKey:@"DemoModule-navBar"];
+    self.navigationController.navigationBar.tintColor = [UIColor colorForKey:@"DemoModule-navBar"]; 
     
     [self.tableView reloadData];
 }

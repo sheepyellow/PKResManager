@@ -21,8 +21,10 @@
 #   define ELog(err)
 #endif
 
-
 #import "PKResManager.h"
+#import "UIImage+PKImage.h"
+#import "UIColor+PKColor.h"
+#import "UIFont+PKFont.h"
 
 #define BUNDLE_PREFIX    @"bundle://"
 #define DOCUMENTS_PREFIX @"documents://"

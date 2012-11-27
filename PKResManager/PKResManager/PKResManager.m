@@ -22,10 +22,7 @@ static PKResManager *_instance = nil;
 
 @interface PKResManager (/*private*/)
 @property (nonatomic, retain) NSMutableArray *styleChangedHandlers; // delegates
-@property (nonatomic, retain) NSBundle *styleBundle;                
 @property (nonatomic, retain) NSMutableArray *resObjectsArray;      
-@property (nonatomic, retain) NSMutableDictionary *resImageCache;
-@property (nonatomic, retain) NSMutableDictionary *resOtherCache;
 @property (nonatomic, retain) NSMutableArray *defaultStyleArray;
 @property (nonatomic, retain) NSMutableArray *customStyleArray;
 
@@ -35,7 +32,6 @@ static PKResManager *_instance = nil;
 - (NSUInteger)styleTypeIndexByName:(NSString *)name;
 - (void)saveCustomStyleArray;
 - (NSMutableArray*)getSavedStyleArray;
-- (NSBundle *)bundleByStyleName:(NSString *)name;
 @end
 
 @implementation PKResManager
@@ -312,102 +308,6 @@ customStyleArray = _customStyleArray;
     NSDictionary *defalutStyleDict = [_defaultStyleArray objectAtIndex:0];
     NSString *styleName = [defalutStyleDict objectForKey:kStyleName];    
     [self swithToStyle:styleName];
-}
-- (UIImage *)imageForKey:(id)key style:(NSString *)name
-{
-    if (key == nil) {
-        DLog(@" imageForKey:style: key = nil");
-        return nil;
-    }
-    NSBundle *tempBundle = [self bundleByStyleName:name];
-    NSAssert(tempBundle != nil,@" tempBundle = nil");
-    
-    if ([key hasSuffix:@".png"] || [key hasSuffix:@".jpg"]) {
-        key = [key substringToIndex:((NSString*)key).length-4];
-    }
-    
-    UIImage *image = nil;
-    NSString *imagePath = [tempBundle pathForResource:key ofType:@"png"];
-    image = [UIImage imageWithContentsOfFile:imagePath];
-    
-    if (image == nil) {
-        imagePath = [self.styleBundle pathForResource:key ofType:@"jpg"];
-        image = [UIImage imageWithContentsOfFile:imagePath];
-    }
-    
-    if (image == nil) 
-    {
-        imagePath = [[NSBundle mainBundle] pathForResource:key ofType:@"png"];
-        image = [UIImage imageWithContentsOfFile:imagePath];
-    }
-    return image;
-}
-- (UIImage *)imageForKey:(id)key cache:(BOOL)needCache
-{
-    if (key == nil) {
-        DLog(@" imageForKey:cache: key = nil");
-        return nil;
-    }
-    
-    if ([key hasSuffix:@".png"] || [key hasSuffix:@".jpg"]) {
-        key = [key substringToIndex:((NSString*)key).length-4];
-    }
-    
-    UIImage *image = [_resImageCache objectForKey:key];
-    NSString *imagePath = nil;
-    if (image == nil) 
-    {
-        imagePath = [self.styleBundle pathForResource:key ofType:@"png"];
-        image = [UIImage imageWithContentsOfFile:imagePath];
-        //DLog(@"imagePath:%@",imagePath);
-    }
-    if (image == nil) {
-        imagePath = [self.styleBundle pathForResource:key ofType:@"jpg"];
-        image = [UIImage imageWithContentsOfFile:imagePath];
-    }
-    if (image == nil)
-    {
-        imagePath = [[NSBundle mainBundle] pathForResource:key ofType:@"png"];
-        image = [UIImage imageWithContentsOfFile:imagePath];
-    }
-    // if error ,get default resource
-    if (image == nil) {
-        DLog(@" will get default style => %@",key);
-        NSBundle *defaultBundle = [self bundleByStyleName:SYSTEM_STYLE_LIGHT];
-        NSString *imagePath = [defaultBundle pathForResource:key ofType:@"png"];
-        image = [UIImage imageWithContentsOfFile:imagePath];
-        NSAssert(image!=nil,@" get default Image error !!!");
-    }
-    // cache
-    if (image != nil && needCache) 
-    {
-        [_resImageCache setObject:image forKey:key];
-    }
-    
-    return image;
-}
-- (UIImage *)imageForKey:(id)key
-{
-    return [self imageForKey:key cache:YES];
-}
-
-- (UIFont *)fontForKey:(id)key
-{
-    NSArray *keyArray = [key componentsSeparatedByString:@"-"];
-    NSAssert1(keyArray.count == 2, @"module key name error!!! [font]==> %@", key);
-    
-    NSString *moduleKey = [keyArray objectAtIndex:0];
-    NSString *memberKey = [keyArray objectAtIndex:1];
-    
-    NSDictionary *moduleDict = [self.resOtherCache objectForKey:moduleKey];    
-    NSDictionary *memberDict = [moduleDict objectForKey:memberKey];
-    
-    NSString *fontName = [memberDict objectForKey:@"font"];
-    NSNumber *fontSize = [memberDict objectForKey:@"size"];
-    UIFont *font = [UIFont fontWithName:fontName 
-                                   size:fontSize.floatValue];
-    
-    return font;    
 }
 
 - (UIColor *)colorForKey:(id)key

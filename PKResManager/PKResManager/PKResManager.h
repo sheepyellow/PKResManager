@@ -32,6 +32,11 @@ typedef enum {
 @end
 
 @interface PKResManager : NSObject
+
+@property (nonatomic, retain) NSBundle *styleBundle;
+@property (nonatomic, retain) NSMutableDictionary *resImageCache;
+@property (nonatomic, retain) NSMutableDictionary *resOtherCache;
+
 /*!
  * All style Dict Array
  */
@@ -85,18 +90,7 @@ typedef enum {
  */
 - (void)resetStyle;
 
-/*!
- *   @method
- *   @abstract get image by key 
- *   @param needCache , will cached
- *   @param name, will not cached
- */
-- (UIImage *)imageForKey:(id)key style:(NSString *)name;
-- (UIImage *)imageForKey:(id)key cache:(BOOL)needCache;
-- (UIImage *)imageForKey:(id)key;
-
-
-- (UIFont *)fontForKey:(id)key;
+- (NSBundle *)bundleByStyleName:(NSString *)name;
 
 - (UIColor *)colorForKey:(id)key;
 

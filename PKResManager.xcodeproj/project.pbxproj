@@ -21,12 +21,15 @@
 		2F4FF39A15B40F8400BA831D /* skintype_night.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2F4FF39615B40F8400BA831D /* skintype_night.bundle */; };
 		2F4FF39B15B40F8400BA831D /* testSave.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2F4FF39715B40F8400BA831D /* testSave.bundle */; };
 		2FDCA45015B5E4B4005F68D6 /* PKStyleListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FDCA44F15B5E4B4005F68D6 /* PKStyleListViewController.m */; };
+		2FF9F7D11664A21F007F6EBE /* UIImage+PKImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF9F7D01664A21F007F6EBE /* UIImage+PKImage.m */; };
+		2FF9F7D51664A232007F6EBE /* UIColor+PKColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF9F7D41664A232007F6EBE /* UIColor+PKColor.m */; };
+		2FF9F7D81664A243007F6EBE /* UIFont+PKFont.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF9F7D71664A243007F6EBE /* UIFont+PKFont.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		2F07BBA915B55E6D00C46164 /* PKDemoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKDemoViewController.h; sourceTree = "<group>"; };
 		2F07BBAA15B55E6D00C46164 /* PKDemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKDemoViewController.m; sourceTree = "<group>"; };
-		2F07BBAC15B563C500C46164 /* PKStyledViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; path = PKStyledViewController.h; sourceTree = "<group>"; };
+		2F07BBAC15B563C500C46164 /* PKStyledViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKStyledViewController.h; sourceTree = "<group>"; };
 		2F07BBAD15B563C500C46164 /* PKStyledViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKStyledViewController.m; sourceTree = "<group>"; };
 		2F07BBBD15B5697200C46164 /* StyledView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StyledView.h; sourceTree = "<group>"; };
 		2F07BBBE15B5697200C46164 /* StyledView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StyledView.m; sourceTree = "<group>"; };
@@ -48,6 +51,12 @@
 		2F4FF39715B40F8400BA831D /* testSave.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = testSave.bundle; sourceTree = "<group>"; };
 		2FDCA44E15B5E4B4005F68D6 /* PKStyleListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKStyleListViewController.h; sourceTree = "<group>"; };
 		2FDCA44F15B5E4B4005F68D6 /* PKStyleListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKStyleListViewController.m; sourceTree = "<group>"; };
+		2FF9F7CF1664A21F007F6EBE /* UIImage+PKImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+PKImage.h"; sourceTree = "<group>"; };
+		2FF9F7D01664A21F007F6EBE /* UIImage+PKImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+PKImage.m"; sourceTree = "<group>"; };
+		2FF9F7D31664A232007F6EBE /* UIColor+PKColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+PKColor.h"; sourceTree = "<group>"; };
+		2FF9F7D41664A232007F6EBE /* UIColor+PKColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+PKColor.m"; sourceTree = "<group>"; };
+		2FF9F7D61664A243007F6EBE /* UIFont+PKFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+PKFont.h"; sourceTree = "<group>"; };
+		2FF9F7D71664A243007F6EBE /* UIFont+PKFont.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+PKFont.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,6 +144,12 @@
 				2F4FF39215B40F8400BA831D /* PKResManager.h */,
 				2F4FF39315B40F8400BA831D /* PKResManager.m */,
 				2F4FF39415B40F8400BA831D /* PKResManagerKit.h */,
+				2FF9F7CF1664A21F007F6EBE /* UIImage+PKImage.h */,
+				2FF9F7D01664A21F007F6EBE /* UIImage+PKImage.m */,
+				2FF9F7D31664A232007F6EBE /* UIColor+PKColor.h */,
+				2FF9F7D41664A232007F6EBE /* UIColor+PKColor.m */,
+				2FF9F7D61664A243007F6EBE /* UIFont+PKFont.h */,
+				2FF9F7D71664A243007F6EBE /* UIFont+PKFont.m */,
 				2F4FF39515B40F8400BA831D /* skintype_light.bundle */,
 				2F4FF39615B40F8400BA831D /* skintype_night.bundle */,
 				2F4FF39715B40F8400BA831D /* testSave.bundle */,
@@ -213,6 +228,9 @@
 				2F07BBAE15B563C500C46164 /* PKStyledViewController.m in Sources */,
 				2F07BBBF15B5697300C46164 /* StyledView.m in Sources */,
 				2FDCA45015B5E4B4005F68D6 /* PKStyleListViewController.m in Sources */,
+				2FF9F7D11664A21F007F6EBE /* UIImage+PKImage.m in Sources */,
+				2FF9F7D51664A232007F6EBE /* UIColor+PKColor.m in Sources */,
+				2FF9F7D81664A243007F6EBE /* UIFont+PKFont.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
