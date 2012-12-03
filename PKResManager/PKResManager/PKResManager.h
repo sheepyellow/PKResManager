@@ -33,7 +33,8 @@ typedef enum {
 
 @interface PKResManager : NSObject
 
-@property (nonatomic, retain) NSBundle *styleBundle;
+@property (nonatomic, readonly) NSBundle *styleBundle;
+@property (nonatomic, readonly) NSMutableDictionary *defaultResOtherCache;
 @property (nonatomic, retain) NSMutableDictionary *resImageCache;
 @property (nonatomic, retain) NSMutableDictionary *resOtherCache;
 
@@ -53,6 +54,7 @@ typedef enum {
  * is loading?
  */
 @property (nonatomic, readonly) BOOL isLoading;
+
 // Add style Object
 - (void)addChangeStyleObject:(id)object;
 // Object dealloc invoke this method!!!
@@ -91,8 +93,6 @@ typedef enum {
 - (void)resetStyle;
 
 - (NSBundle *)bundleByStyleName:(NSString *)name;
-
-- (UIColor *)colorForKey:(id)key;
 
 - (UIImage *)previewImage;
 - (UIImage *)previewImageByStyleName:(NSString *)name;

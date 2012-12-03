@@ -39,6 +39,12 @@
 #define kStyleName     @"kStyleName"
 #define kStyleVersion  @"kStyleVersion"
 #define kStyleURL      @"kStyleURL"
+// color
+#define kColor           @"rgb"
+#define kColorHL         @"rgb_hl"
+#define kShadowColor     @"shadow_rgb"
+#define kShadowColorHL   @"shadow_rgb_hl"
+#define kShadowOffset    @"shadow_offset"
 
 #define SYSTEM_STYLE_LIGHT      @"light"
 #define SYSTEM_STYLE_NIGHT      @"night"
@@ -48,7 +54,7 @@
 #define SYSTEM_STYLE_ID         @""
 #define SYSTEM_STYLE_VERSION    @"999.0"
 
-#define COLOR_AND_FONT    @"/#config/color_font"
+#define CONFIG_PLIST_PATH    @"/#config/color_font"
 #define PREVIEW_PATH      @"/#config/preview"
 
 // error

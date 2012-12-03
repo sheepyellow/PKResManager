@@ -25,7 +25,6 @@ static PKResManager *_instance = nil;
 @property (nonatomic, retain) NSMutableArray *resObjectsArray;      
 @property (nonatomic, retain) NSMutableArray *defaultStyleArray;
 @property (nonatomic, retain) NSMutableArray *customStyleArray;
-
 - (NSString *)getDocumentsDirectoryWithSubDir:(NSString *)subDir;
 - (BOOL)isBundleURL:(NSString *)URL;
 - (BOOL)isDocumentsURL:(NSString *)URL;
@@ -41,10 +40,11 @@ static PKResManager *_instance = nil;
 allStyleArray = _allStyleArray,
 styleName = _styleName,
 styleType = _styleType,
-isLoading = _isLoading;
+isLoading = _isLoading,
+defaultResOtherCache = _defaultResOtherCache;
 
 // private
-@synthesize 
+@synthesize
 styleChangedHandlers = _styleChangedHandlers,
 styleBundle = _styleBundle,
 resObjectsArray = _resObjectsArray,
@@ -60,7 +60,7 @@ customStyleArray = _customStyleArray;
     }
     [self.styleChangedHandlers removeAllObjects];
     self.styleChangedHandlers = nil;
-    self.styleBundle = nil;
+    [_styleBundle release];
     self.resObjectsArray = nil;
     self.resImageCache = nil;
     self.resOtherCache = nil;
@@ -70,6 +70,7 @@ customStyleArray = _customStyleArray;
     }
     self.defaultStyleArray = nil;
     self.customStyleArray = nil;
+    [_defaultResOtherCache release];
     [super dealloc];
 }
 
@@ -123,7 +124,7 @@ customStyleArray = _customStyleArray;
     _styleName = [name copy];
     
     // read resource bundle
-    self.styleBundle = [self bundleByStyleName:name];
+    _styleBundle = [[self bundleByStyleName:name] retain];
     if (self.styleBundle == nil) {
         NSError *error = [NSError errorWithDomain:PK_ERROR_DOMAIN code:PKErrorCodeBundleName userInfo:nil];
         block(YES,error);
@@ -136,7 +137,7 @@ customStyleArray = _customStyleArray;
     [_resOtherCache removeAllObjects];    
 
     // get plist dict
-    NSString *plistPath=[self.styleBundle pathForResource:COLOR_AND_FONT ofType:@"plist"];    
+    NSString *plistPath=[self.styleBundle pathForResource:CONFIG_PLIST_PATH ofType:@"plist"];    
     self.resOtherCache = [NSMutableDictionary dictionaryWithContentsOfFile:plistPath];
 //    DLog(@"resOtherCache:%@",self.resOtherCache);
 
@@ -310,47 +311,6 @@ customStyleArray = _customStyleArray;
     [self swithToStyle:styleName];
 }
 
-- (UIColor *)colorForKey:(id)key
-{  
-    NSArray *keyArray = [key componentsSeparatedByString:@"-"];
-    NSAssert1(keyArray.count == 2, @"module key name error!!! [color]==> %@", key);
-    
-    NSString *moduleKey = [keyArray objectAtIndex:0];
-    NSString *memberKey = [keyArray objectAtIndex:1];
-    
-    NSDictionary *moduleDict = [self.resOtherCache objectForKey:moduleKey];    
-    NSDictionary *memberDict = [moduleDict objectForKey:memberKey];
-    
-    NSString *colorStr = [memberDict objectForKey:@"rgb"];
-    
-    NSNumber *redValue;
-    NSNumber *greenValue;
-    NSNumber *blueValue;
-    NSNumber *alphaValue;
-    NSArray *colorArray = [colorStr componentsSeparatedByString:@","];
-    if (colorArray != nil && colorArray.count == 3) {
-        redValue = [NSNumber numberWithFloat:[[colorArray objectAtIndex:0] floatValue]];
-        greenValue = [NSNumber numberWithFloat:[[colorArray objectAtIndex:1] floatValue]];
-        blueValue = [NSNumber numberWithFloat:[[colorArray objectAtIndex:2] floatValue]];
-        alphaValue = [NSNumber numberWithFloat:1.0];
-    } else if (colorArray != nil && colorArray.count == 4) {
-        redValue = [NSNumber numberWithFloat:[[colorArray objectAtIndex:0] floatValue]];
-        greenValue = [NSNumber numberWithFloat:[[colorArray objectAtIndex:1] floatValue]];
-        blueValue = [NSNumber numberWithFloat:[[colorArray objectAtIndex:2] floatValue]];
-        alphaValue = [NSNumber numberWithFloat:[[colorArray objectAtIndex:3] floatValue]];
-    } else {
-        return nil;
-    }
-    
-    if ([alphaValue floatValue]<=0.0f) {
-        return [UIColor clearColor];
-    }
-    return [UIColor colorWithRed:[redValue floatValue]/255.0f 
-                           green:[greenValue floatValue]/255.0f
-                            blue:[blueValue floatValue]/255.0f
-                           alpha:[alphaValue floatValue]];
-    
-}
 - (UIImage *)previewImage
 {
     return [self previewImageByStyleName:_styleName];
@@ -366,6 +326,20 @@ customStyleArray = _customStyleArray;
     // TODO: image == nil
     return image;
 }
+
+- (NSMutableDictionary *)defaultResOtherCache
+{
+    if (!_defaultResOtherCache)
+    {
+        NSDictionary *defalutStyleDict = [_defaultStyleArray objectAtIndex:0];
+        NSString *defaultStyleName = [defalutStyleDict objectForKey:kStyleName];
+        NSBundle *tempBundle = [self bundleByStyleName:defaultStyleName];
+        NSString *plistPath=[tempBundle pathForResource:CONFIG_PLIST_PATH ofType:@"plist"];
+        _defaultResOtherCache = [[NSMutableDictionary dictionaryWithContentsOfFile:plistPath] retain];
+    }
+    return _defaultResOtherCache;
+}
+
 #pragma mark - Private
 
 - (BOOL)isBundleURL:(NSString *)URL

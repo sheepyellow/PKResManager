@@ -18,6 +18,6 @@
  */
 + (UIImage *)imageForKey:(id)key style:(NSString *)name;
 + (UIImage *)imageForKey:(id)key cache:(BOOL)needCache;
-+ (UIImage *)imageForKey:(id)key;
++ (UIImage *)imageForKey:(id)key; // default cached
 
 @end

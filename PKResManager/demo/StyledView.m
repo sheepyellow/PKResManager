@@ -24,7 +24,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         [[PKResManager getInstance] addChangeStyleObject:self];
-        self.backgroundColor = [[PKResManager getInstance] colorForKey:@"DemoModule-styleView"];
+        self.backgroundColor = [UIColor colorForKey:@"DemoModule-styleView"];
         _isDefault = YES;
         UIImage *image = [UIImage imageForKey:@"sendbutton.png"];
         _imageView = [[UIImageView alloc] initWithImage:image];
@@ -34,7 +34,7 @@
         _label.backgroundColor = [UIColor clearColor];
         _label.text = @"Font Test";
         _label.font = [UIFont fontForKey:@"DemoModule-label"];
-        [_label setTextColor:[[PKResManager getInstance] colorForKey:@"DemoModule-label"]];
+        [_label setTextColor:[UIColor colorForKey:@"DemoModule-label"]];
         [self addSubview:_label];
     }
     return self;
@@ -44,11 +44,11 @@
 - (void)changeStyle:(id)sender
 {
 //    DLog(@" change :%@",[self description]);
-    self.backgroundColor = [[PKResManager getInstance] colorForKey:@"DemoModule-styleView"];
+    self.backgroundColor = [UIColor colorForKey:@"DemoModule-styleView"];
     UIImage *image = [UIImage imageForKey:@"sendbutton.png"];
     _imageView.image = image;
     _label.font = [UIFont fontForKey:@"DemoModule-label"];
-    [_label setTextColor:[[PKResManager getInstance] colorForKey:@"DemoModule-label"]];
+    [_label setTextColor:[UIColor colorForKey:@"DemoModule-label"]];
     
     [self setNeedsLayout];
 }
