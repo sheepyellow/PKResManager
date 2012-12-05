@@ -33,9 +33,21 @@ typedef enum {
 
 @interface PKResManager : NSObject
 
+/*!
+ * 当前主题 style bundle
+ */
 @property (nonatomic, readonly) NSBundle *styleBundle;
+/*!
+ * 默认主题下 plist 资源
+ */
 @property (nonatomic, readonly) NSMutableDictionary *defaultResOtherCache;
+/*!
+ * 图片缓存
+ */
 @property (nonatomic, retain) NSMutableDictionary *resImageCache;
+/*!
+ * plist 资源缓存
+ */
 @property (nonatomic, retain) NSMutableDictionary *resOtherCache;
 
 /*!
@@ -91,12 +103,18 @@ typedef enum {
  * reset
  */
 - (void)resetStyle;
-
+/*!
+ * 通过名字获取资源bundle
+ */
 - (NSBundle *)bundleByStyleName:(NSString *)name;
-
+/*!
+ * 预览图
+ */
 - (UIImage *)previewImage;
 - (UIImage *)previewImageByStyleName:(NSString *)name;
-
+/*!
+ * 单例
+ */
 + (PKResManager*)getInstance;
 
 @end

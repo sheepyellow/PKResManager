@@ -54,7 +54,7 @@
 #define SYSTEM_STYLE_ID         @""
 #define SYSTEM_STYLE_VERSION    @"999.0"
 
-#define CONFIG_PLIST_PATH    @"/#config/color_font"
+#define CONFIG_PLIST_PATH    @"/#config/styleConfig"
 #define PREVIEW_PATH      @"/#config/preview"
 
 // error

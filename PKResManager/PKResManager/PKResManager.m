@@ -25,6 +25,7 @@ static PKResManager *_instance = nil;
 @property (nonatomic, retain) NSMutableArray *resObjectsArray;      
 @property (nonatomic, retain) NSMutableArray *defaultStyleArray;
 @property (nonatomic, retain) NSMutableArray *customStyleArray;
+
 - (NSString *)getDocumentsDirectoryWithSubDir:(NSString *)subDir;
 - (BOOL)isBundleURL:(NSString *)URL;
 - (BOOL)isDocumentsURL:(NSString *)URL;
@@ -36,20 +37,20 @@ static PKResManager *_instance = nil;
 @implementation PKResManager
 
 // public
-@synthesize 
+@synthesize
+styleBundle = _styleBundle,
+defaultResOtherCache = _defaultResOtherCache,
+resImageCache = _resImageCache,
+resOtherCache = _resOtherCache,
 allStyleArray = _allStyleArray,
 styleName = _styleName,
 styleType = _styleType,
-isLoading = _isLoading,
-defaultResOtherCache = _defaultResOtherCache;
+isLoading = _isLoading;
 
 // private
 @synthesize
 styleChangedHandlers = _styleChangedHandlers,
-styleBundle = _styleBundle,
 resObjectsArray = _resObjectsArray,
-resImageCache = _resImageCache,
-resOtherCache = _resOtherCache,
 defaultStyleArray = _defaultStyleArray,
 customStyleArray = _customStyleArray;
 
