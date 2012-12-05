@@ -174,10 +174,13 @@ customStyleArray = _customStyleArray;
         _isLoading = NO;
         
         // save
-        NSData *data = [NSKeyedArchiver archivedDataWithRootObject:_styleName];
-        [[NSUserDefaults standardUserDefaults] setObject:data forKey:kNowResStyle];
-        
-        block(YES,nil);
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            // save
+            NSData *data = [NSKeyedArchiver archivedDataWithRootObject:_styleName];
+            [[NSUserDefaults standardUserDefaults] setObject:data forKey:kNowResStyle];
+            // block
+            block(YES,nil);
+        });
         DLog(@"end change style :%@",[NSDate date]);
     });
     
@@ -195,7 +198,9 @@ customStyleArray = _customStyleArray;
 }
 - (void)changeStyleOnProgress:(ResStyleProgressBlock)progressBlock
 {
-    [self.styleChangedHandlers addObject:[progressBlock copy]];
+    ResStyleProgressBlock tempBlock = [progressBlock copy];
+    [self.styleChangedHandlers addObject:tempBlock];
+    [tempBlock release];
 }
 
 - (BOOL)deleteStyle:(NSString *)name
