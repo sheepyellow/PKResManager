@@ -22,7 +22,7 @@ static PKResManager *_instance = nil;
 
 @interface PKResManager (/*private*/)
 @property (nonatomic, retain) NSMutableArray *styleChangedHandlers; // delegates
-@property (nonatomic, retain) NSMutableArray *resObjectsArray;      
+@property (nonatomic, retain) NSMutableArray *resObjectsArray;
 @property (nonatomic, retain) NSMutableArray *defaultStyleArray;
 @property (nonatomic, retain) NSMutableArray *customStyleArray;
 
@@ -67,7 +67,7 @@ customStyleArray = _customStyleArray;
     self.resOtherCache = nil;
     if (_allStyleArray.count>0) {
         [_allStyleArray removeAllObjects];
-        [_allStyleArray release],_allStyleArray= nil;        
+        [_allStyleArray release],_allStyleArray= nil;
     }
     self.defaultStyleArray = nil;
     self.customStyleArray = nil;
@@ -77,22 +77,22 @@ customStyleArray = _customStyleArray;
 
 - (void)addChangeStyleObject:(id)object
 {
-    if (![self.resObjectsArray containsObject:object]) 
-    {   
-        @synchronized(self.resObjectsArray) 
+    if (![self.resObjectsArray containsObject:object])
+    {
+        @synchronized(self.resObjectsArray)
         {
-            [self.resObjectsArray addObject:object];    
+            [self.resObjectsArray addObject:object];
         }
     }
 }
 
 - (void)removeChangeStyleObject:(id)object
 {
-    if ([self.resObjectsArray containsObject:object])  
+    if ([self.resObjectsArray containsObject:object])
     {
-        @synchronized(self.resObjectsArray) 
+        @synchronized(self.resObjectsArray)
         {
-            [self.resObjectsArray removeObject:object];    
+            [self.resObjectsArray removeObject:object];
         }
     }
 }
@@ -103,8 +103,8 @@ customStyleArray = _customStyleArray;
     }];
 }
 - (void)swithToStyle:(NSString *)name onComplete:(ResStyleCompleteBlock)block
-{    
-    if ([_styleName isEqualToString:name] 
+{
+    if ([_styleName isEqualToString:name]
         || name == nil )
     {
         NSError *error = [NSError errorWithDomain:PK_ERROR_DOMAIN code:PKErrorCodeUnavailable userInfo:nil];
@@ -132,16 +132,16 @@ customStyleArray = _customStyleArray;
         _isLoading = NO;
         return;
     }
-
+    
     // remove cache
-    [_resImageCache removeAllObjects]; 
-    [_resOtherCache removeAllObjects];    
-
+    [_resImageCache removeAllObjects];
+    [_resOtherCache removeAllObjects];
+    
     // get plist dict
-    NSString *plistPath=[self.styleBundle pathForResource:CONFIG_PLIST_PATH ofType:@"plist"];    
+    NSString *plistPath=[self.styleBundle pathForResource:CONFIG_PLIST_PATH ofType:@"plist"];
     self.resOtherCache = [NSMutableDictionary dictionaryWithContentsOfFile:plistPath];
-//    DLog(@"resOtherCache:%@",self.resOtherCache);
-
+    //    DLog(@"resOtherCache:%@",self.resOtherCache);
+    
     // thread issue
     NSMutableArray *holdResObjectArray = [NSMutableArray arrayWithArray:_resObjectsArray];
     DLog(@"all res object count:%d",holdResObjectArray.count);
@@ -150,22 +150,22 @@ customStyleArray = _customStyleArray;
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
     dispatch_async(queue, ^{
         [holdResObjectArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            if ([obj respondsToSelector:@selector(changeStyle:)]) 
+            if ([obj respondsToSelector:@selector(changeStyle:)])
             {
                 
                 dispatch_sync(dispatch_get_main_queue(), ^{
-                    [obj changeStyle:self];                                                                
+                    [obj changeStyle:self];
                 });
                 
             }
-            else 
+            else
             {
                 DLog(@" change style failed ! => %@",obj);
-            }            
-            __block double progress = (double)(idx+1) / (double)(holdResObjectArray.count);                                
-            for(ResStyleProgressBlock progressBlock in self.styleChangedHandlers) 
-            {            
-                dispatch_sync(dispatch_get_main_queue(), ^{                    
+            }
+            __block double progress = (double)(idx+1) / (double)(holdResObjectArray.count);
+            for(ResStyleProgressBlock progressBlock in self.styleChangedHandlers)
+            {
+                dispatch_sync(dispatch_get_main_queue(), ^{
                     progressBlock(progress);
                 });
                 
@@ -180,8 +180,8 @@ customStyleArray = _customStyleArray;
         block(YES,nil);
         DLog(@"end change style :%@",[NSDate date]);
     });
-
-    while (!_isLoading) {        
+    
+    while (!_isLoading) {
         return;
     }
     
@@ -202,12 +202,12 @@ customStyleArray = _customStyleArray;
 {
     NSUInteger index = [self styleTypeIndexByName:name];
     // default style ,can not delete
-    if (index < self.defaultStyleArray.count 
-        || index == NSNotFound) 
+    if (index < self.defaultStyleArray.count
+        || index == NSNotFound)
     {
         return NO;
     }
-
+    
     NSDictionary *styleDict = [self.allStyleArray objectAtIndex:index];
     NSString *bundleName = [(NSString *)[styleDict objectForKey:kStyleURL]
                             substringFromIndex:DOCUMENTS_PREFIX.length];
@@ -215,30 +215,30 @@ customStyleArray = _customStyleArray;
     NSError *error = nil;
     NSString *stylePath = [[self getDocumentsDirectoryWithSubDir:nil]
                            stringByAppendingFormat:@"/%@",bundleName];
-    NSFileManager *fileManager = [NSFileManager defaultManager];    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
     if (![fileManager fileExistsAtPath:stylePath isDirectory:&isDir] && isDir)
     {
         DLog(@" No such file or directory");
         return NO;
     }
-    if (![fileManager removeItemAtPath:stylePath error:&error]) 
+    if (![fileManager removeItemAtPath:stylePath error:&error])
     {
         DLog(@" delete file error:%@",error);
         return NO;
     }
-
+    
     [_allStyleArray removeObjectAtIndex:index];
     
     [self saveCustomStyleArray];
     
     DLog(@" %@",self.allStyleArray);
-
+    
     // need reset
     if ([_styleName isEqualToString:name]) {
         [self resetStyle];
     }
     
-    return YES;    
+    return YES;
 }
 
 - (BOOL)saveStyle:(NSString *)styleId name:(NSString *)name version:(NSNumber *)version withBundle:(NSBundle *)bundle
@@ -301,14 +301,14 @@ customStyleArray = _customStyleArray;
 - (void)clearImageCache
 {
     [_resImageCache removeAllObjects];
-//    [_resOtherCache removeAllObjects];
+    //    [_resOtherCache removeAllObjects];
 }
 - (void)resetStyle
 {
     // swith to default style
     _isLoading = NO;
     NSDictionary *defalutStyleDict = [_defaultStyleArray objectAtIndex:0];
-    NSString *styleName = [defalutStyleDict objectForKey:kStyleName];    
+    NSString *styleName = [defalutStyleDict objectForKey:kStyleName];
     [self swithToStyle:styleName];
 }
 
@@ -369,7 +369,7 @@ customStyleArray = _customStyleArray;
                                                                        SYSTEM_STYLE_LIGHT,
                                                                        SYSTEM_STYLE_LIGHT_URL,
                                                                        SYSTEM_STYLE_VERSION,
-                                                                       nil] 
+                                                                       nil]
                                                               forKeys:[NSArray arrayWithObjects:
                                                                        kStyleID,
                                                                        kStyleName,
@@ -381,7 +381,7 @@ customStyleArray = _customStyleArray;
                                                                        SYSTEM_STYLE_NIGHT,
                                                                        SYSTEM_STYLE_NIGHT_URL,
                                                                        SYSTEM_STYLE_VERSION,
-                                                                       nil] 
+                                                                       nil]
                                                               forKeys:[NSArray arrayWithObjects:
                                                                        kStyleID,
                                                                        kStyleName,
@@ -399,29 +399,29 @@ customStyleArray = _customStyleArray;
 - (NSUInteger)styleTypeIndexByName:(NSString *)name
 {
     __block NSUInteger styleIndex = NSNotFound;
-    [_allStyleArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) 
-    {
-        NSDictionary *styleDict = (NSDictionary *)obj;
-        NSString *styleName = [styleDict objectForKey:kStyleName];
-        if ([styleName isEqualToString:name]) 
-        {
-            styleIndex = idx;
-            return;
-        }
-    }];
+    [_allStyleArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
+     {
+         NSDictionary *styleDict = (NSDictionary *)obj;
+         NSString *styleName = [styleDict objectForKey:kStyleName];
+         if ([styleName isEqualToString:name])
+         {
+             styleIndex = idx;
+             return;
+         }
+     }];
     
     return styleIndex;
 }
-// 
+//
 - (NSString *)getDocumentsDirectoryWithSubDir:(NSString *)subDir
 {
-    NSString *newDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) 
+    NSString *newDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)
                               objectAtIndex:0];
-    if (subDir) 
+    if (subDir)
     {
         newDirectory = [newDirectory stringByAppendingPathComponent:subDir];
     }
-
+    
     BOOL isDir = NO;
 	BOOL isExist = [[NSFileManager defaultManager] fileExistsAtPath:newDirectory isDirectory:&isDir];
     NSError *error;
@@ -429,11 +429,11 @@ customStyleArray = _customStyleArray;
 		[[NSFileManager defaultManager] removeItemAtPath:newDirectory error:nil];
 	}
 	if(!isExist || !isDir){
-        if(![[NSFileManager defaultManager] createDirectoryAtPath:newDirectory 
+        if(![[NSFileManager defaultManager] createDirectoryAtPath:newDirectory
                                       withIntermediateDirectories:NO attributes:nil error:&error])
         {
             DLog(@"create file error：%@",error);
-        }   
+        }
 	}
     return newDirectory;
 }
@@ -450,22 +450,37 @@ customStyleArray = _customStyleArray;
     NSString *bundlePath = nil;
     
     DLog(@"bundleURL:%@",bundleURL);
-    if ([self isBundleURL:bundleURL]) 
+    BOOL changeStyle = NO;
+    if ([self.styleName isEqualToString:name])
     {
-        _styleType = ResStyleType_System;
+        changeStyle = YES;
+    }
+    if ([self isBundleURL:bundleURL])
+    {
+        if (changeStyle)
+        {
+            _styleType = ResStyleType_System;
+        }
+        
         filePath = [[NSBundle mainBundle] bundlePath];
         bundlePath = [NSString stringWithFormat:@"%@/%@",filePath,[bundleURL substringFromIndex:BUNDLE_PREFIX.length]];
     }
     else if([self isDocumentsURL:bundleURL])
     {
-        _styleType = ResStyleType_Custom;
+        if (changeStyle)
+        {
+            _styleType = ResStyleType_Custom;
+        }
         filePath = [self getDocumentsDirectoryWithSubDir:nil];
         bundlePath = [NSString stringWithFormat:@"%@/%@",filePath,[bundleURL substringFromIndex:DOCUMENTS_PREFIX.length]];
     }
-    else 
+    else
     {
         DLog(@"na ni !!! bundleName:%@",bundleURL);
-        _styleType = ResStyleType_Unknow;        
+        if (changeStyle)
+        {
+            _styleType = ResStyleType_Unknow;
+        }
         return nil;
     }
     
@@ -494,22 +509,22 @@ customStyleArray = _customStyleArray;
         }else{
             [self resetStyle];
         }
-
+        
     }
     return self;
 }
 
 + (PKResManager*)getInstance{
-    @synchronized(self) { 
+    @synchronized(self) {
 		if (_instance == nil) {
             [[self alloc] init];
 		}
 	}
-	return _instance; 
+	return _instance;
 }
 
 + (id) allocWithZone:(NSZone*) zone {
-	@synchronized(self) { 
+	@synchronized(self) {
 		if (_instance == nil) {
 			_instance = [super allocWithZone:zone];  // assignment and return on first allocation
 			return _instance;
