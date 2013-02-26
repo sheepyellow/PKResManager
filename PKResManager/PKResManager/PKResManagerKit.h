@@ -48,14 +48,14 @@
 
 #define SYSTEM_STYLE_LIGHT      @"light"
 #define SYSTEM_STYLE_NIGHT      @"night"
-#define SYSTEM_STYLE_LIGHT_URL  @"bundle://skintype_light.bundle"
-#define SYSTEM_STYLE_NIGHT_URL  @"bundle://skintype_night.bundle"
+#define SYSTEM_STYLE_LIGHT_URL  @"bundle://style_light.bundle"
+#define SYSTEM_STYLE_NIGHT_URL  @"bundle://style_night.bundle"
 
 #define SYSTEM_STYLE_ID         @""
 #define SYSTEM_STYLE_VERSION    @"999.0"
 
 #define CONFIG_PLIST_PATH    @"/#config/styleConfig"
-#define PREVIEW_PATH      @"/#config/preview"
+#define PREVIEW_PATH         @"/#config/preview"
 
 // error
 #define PK_ERROR_DOMAIN   @"PK_ERROR_DOMAIN"

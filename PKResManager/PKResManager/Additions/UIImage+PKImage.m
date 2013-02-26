@@ -21,7 +21,7 @@
         DLog(@" imageForKey:cache: key = nil");
         return nil;
     }
-    
+    // 去除扩展名    
     if ([key hasSuffix:@".png"] || [key hasSuffix:@".jpg"]) {
         key = [key substringToIndex:((NSString*)key).length-4];
     }
@@ -29,6 +29,7 @@
     UIImage *image = [[PKResManager getInstance].resImageCache objectForKey:key];
     if (image == nil)
     {
+        // no cache
         image = [UIImage imageForKey:key style:[PKResManager getInstance].styleName];
     }
     // cache
@@ -47,11 +48,12 @@
         DLog(@" imageForKey:style: key = nil");
         return nil;
     }
+    // 去除扩展名
     if ([key hasSuffix:@".png"] || [key hasSuffix:@".jpg"])
     {
         key = [key substringToIndex:((NSString*)key).length-4];
     }
-    NSString *imagePath = nil;
+    
     UIImage *image = nil;
     NSBundle *styleBundle = nil;
     // 不是当前style情况
@@ -64,25 +66,26 @@
         styleBundle = [PKResManager getInstance].styleBundle;
     }
     
-    imagePath = [styleBundle pathForResource:key ofType:@"png"];
-    if (![[NSFileManager defaultManager] fileExistsAtPath:imagePath]) {
-        imagePath = [styleBundle pathForResource:key ofType:@"jpg"];
-    }
-    image = [UIImage imageWithContentsOfFile:imagePath];
+    image = [UIImage imageForKey:key inBundle:styleBundle];
     
-    // 处理mainBundle情况
+    // mainBundle情况
     if (image == nil)
     {
         DLog(@" will get default style => %@",key);
         styleBundle = [NSBundle mainBundle];
-        imagePath = [styleBundle pathForResource:key ofType:@"png"];
-        if (![[NSFileManager defaultManager] fileExistsAtPath:imagePath]) {
-            imagePath = [styleBundle pathForResource:key ofType:@"jpg"];
-        }
-        image = [UIImage imageWithContentsOfFile:imagePath];
+        image = [UIImage imageForKey:key inBundle:styleBundle];
     }
     
     return image;
 }
 
+// 支持png和jpg，可扩展
++ (UIImage *)imageForKey:(id)key inBundle:(NSBundle *)bundle
+{
+    NSString *imagePath = [bundle pathForResource:key ofType:@"png"];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:imagePath]) {
+        imagePath = [bundle pathForResource:key ofType:@"jpg"];
+    }
+    return [UIImage imageWithContentsOfFile:imagePath];
+}
 @end
