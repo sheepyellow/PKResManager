@@ -42,48 +42,44 @@
 
 + (UIImage *)imageForKey:(id)key style:(NSString *)name
 {
-    if (key == nil) {
+    if (key == nil)
+    {
         DLog(@" imageForKey:style: key = nil");
         return nil;
     }
-    UIImage *image = nil;
+    if ([key hasSuffix:@".png"] || [key hasSuffix:@".jpg"])
+    {
+        key = [key substringToIndex:((NSString*)key).length-4];
+    }
     NSString *imagePath = nil;
-    
+    UIImage *image = nil;
+    NSBundle *styleBundle = nil;
+    // 不是当前style情况
     if (![name isEqualToString:[PKResManager getInstance].styleName])
     {
-        NSBundle *tempBundle = [[PKResManager getInstance] bundleByStyleName:name];
-        NSAssert(tempBundle != nil,@" tempBundle = nil");
-        
-        if ([key hasSuffix:@".png"] || [key hasSuffix:@".jpg"])
-        {
-            key = [key substringToIndex:((NSString*)key).length-4];
-        }
-        imagePath = [tempBundle pathForResource:key ofType:@"png"];
-        image = [UIImage imageWithContentsOfFile:imagePath];
-        
-        if (image == nil)
-        {
-            imagePath = [[PKResManager getInstance].styleBundle pathForResource:key ofType:@"jpg"];
-            image = [UIImage imageWithContentsOfFile:imagePath];
-        }
+        styleBundle = [[PKResManager getInstance] bundleByStyleName:name];
     }
     else
     {
-        imagePath = [[PKResManager getInstance].styleBundle pathForResource:key ofType:@"png"];
-        image = [UIImage imageWithContentsOfFile:imagePath];
-    }
-    if (image == nil)
-    {
-        imagePath = [[PKResManager getInstance].styleBundle pathForResource:key ofType:@"jpg"];
-        image = [UIImage imageWithContentsOfFile:imagePath];
+        styleBundle = [PKResManager getInstance].styleBundle;
     }
     
+    imagePath = [styleBundle pathForResource:key ofType:@"png"];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:imagePath]) {
+        imagePath = [styleBundle pathForResource:key ofType:@"jpg"];
+    }
+    image = [UIImage imageWithContentsOfFile:imagePath];
+    
+    // 处理mainBundle情况
     if (image == nil)
     {
         DLog(@" will get default style => %@",key);
-        imagePath = [[NSBundle mainBundle] pathForResource:key ofType:@"png"];
+        styleBundle = [NSBundle mainBundle];
+        imagePath = [styleBundle pathForResource:key ofType:@"png"];
+        if (![[NSFileManager defaultManager] fileExistsAtPath:imagePath]) {
+            imagePath = [styleBundle pathForResource:key ofType:@"jpg"];
+        }
         image = [UIImage imageWithContentsOfFile:imagePath];
-        NSAssert(image!=nil,@" get default Image error !!!");
     }
     
     return image;
