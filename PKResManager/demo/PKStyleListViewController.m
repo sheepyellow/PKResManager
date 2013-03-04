@@ -9,8 +9,8 @@
 #import "PKStyleListViewController.h"
 
 @interface PKStyleListViewController ()
-@property (nonatomic, retain) UITableView *tableView;
-@property (nonatomic, retain) NSMutableArray *dataArray;
+@property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) NSMutableArray *dataArray;
 - (void)refreshDataSource;
 @end
 
@@ -20,12 +20,6 @@ tableView = _tableView,
 dataArray = _dataArray;
 
 
-- (void)dealloc
-{
-    self.tableView = nil;
-    self.dataArray = nil;
-    [super dealloc];
-}
 
 - (void)viewDidLoad
 {
@@ -74,18 +68,14 @@ dataArray = _dataArray;
     [_dataArray removeAllObjects];
     // test add undownload style
     for (int i = 0; i < 2; i++) {
-        NSDictionary *unknowDict = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:
-                                                                        [NSDate date],
+        NSDictionary *unknowDict = [NSDictionary dictionaryWithObjects:@[[NSDate date],
                                                                         [NSString stringWithFormat:@"%d",i],
                                                                         [NSString stringWithFormat:@"documents://testSave.bundle%d",i],
-                                                                        @"v0.1",
-                                                                        nil]
-                                                               forKeys:[NSArray arrayWithObjects:
-                                                                        kStyleID,
+                                                                        @"v0.1"]
+                                                               forKeys:@[kStyleID,
                                                                         kStyleName,
                                                                         kStyleURL,
-                                                                        kStyleVersion,
-                                                                        nil]];
+                                                                        kStyleVersion]];
         [_dataArray addObject:unknowDict];
     }
     
@@ -104,7 +94,7 @@ dataArray = _dataArray;
     NSBundle *bundle = [NSBundle bundleWithPath:[[NSBundle mainBundle] pathForResource:@"testSave" ofType:@"bundle"]];
     [[PKResManager getInstance] saveStyle:@"32198139428"
                                      name:CUSTOM_STYLE
-                                  version:[NSNumber numberWithFloat:1.0f]
+                                  version:@1.0f
                                withBundle:bundle];
     [self refreshDataSource];
 }
@@ -130,9 +120,9 @@ dataArray = _dataArray;
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
     }
 
-    NSDictionary *aStyleDict = [self.dataArray objectAtIndex:indexPath.row];
-    NSString *styleName = [aStyleDict objectForKey:kStyleName];
-    NSNumber *styleVersion = [aStyleDict objectForKey:kStyleVersion];
+    NSDictionary *aStyleDict = (self.dataArray)[indexPath.row];
+    NSString *styleName = aStyleDict[kStyleName];
+    NSNumber *styleVersion = aStyleDict[kStyleVersion];
     // name
     cell.textLabel.font = [UIFont systemFontOfSize:13.0f];
     cell.textLabel.text = styleName;
@@ -143,7 +133,7 @@ dataArray = _dataArray;
         UIImageView *perviewImageView = [[UIImageView alloc] initWithImage:image];
         perviewImageView.frame = CGRectMake(100.0f, 0.0f, 40, 40);
         [cell addSubview:perviewImageView];
-        [perviewImageView release];        
+    
     }
     
     // version
@@ -153,7 +143,7 @@ dataArray = _dataArray;
         versionLabel.text = [NSString stringWithFormat:@"v%.1f   ",styleVersion.floatValue];
         versionLabel.textAlignment = UITextAlignmentRight;
         cell.accessoryView = versionLabel;
-        [versionLabel release];
+
     }
     
     return cell;
@@ -162,8 +152,8 @@ dataArray = _dataArray;
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *aStyleDict = [self.dataArray objectAtIndex:indexPath.row];
-    NSString *styleName = [aStyleDict objectForKey:kStyleName];
+    NSDictionary *aStyleDict = (self.dataArray)[indexPath.row];
+    NSString *styleName = aStyleDict[kStyleName];
     [[PKResManager getInstance] swithToStyle:styleName onComplete:^(BOOL finished, NSError *error) {
         if (finished) {
             if (error && error.code != PKErrorCodeUnavailable) {
@@ -173,7 +163,6 @@ dataArray = _dataArray;
                                                           cancelButtonTitle:@"OK"
                                                           otherButtonTitles:nil];
                 [alertView show];
-                [alertView autorelease];
             }
         }
     }];

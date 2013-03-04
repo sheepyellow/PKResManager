@@ -15,7 +15,7 @@
 - (void)addTestBtn;
 - (void)addAllStyleView;
 - (void)addProgressView;
-@property (nonatomic, retain) UIScrollView *scrollView;
+@property (nonatomic, strong) UIScrollView *scrollView;
 @end
 
 @implementation PKStyledViewController
@@ -23,11 +23,6 @@
 @synthesize 
 scrollView = _scrollView;
 
-- (void)dealloc
-{
-    self.scrollView = nil;
-    [super dealloc];
-}
 - (void)popSelf
 {
     [self.navigationController popViewControllerAnimated:YES];
@@ -67,7 +62,6 @@ scrollView = _scrollView;
         for (int col = 0; col < 2; col ++) {
             StyledView *view = [[StyledView alloc] initWithFrame:CGRectMake(col*160, row*60, 150, 50)];
             [_scrollView addSubview:view];
-            [view release];            
         }
     }   
 }
@@ -138,7 +132,6 @@ scrollView = _scrollView;
     changeBtn.backgroundColor = [UIColor redColor];
     [changeBtn addTarget:self action:@selector(changeAction) forControlEvents:UIControlEventTouchDown];
     [self.view addSubview:changeBtn];
-    [changeBtn release];
     
     
     UIButton *savedBtn = [[UIButton alloc] initWithFrame:CGRectMake(120.0f, 380.0f, 80.0f, 30.0f)];
@@ -146,7 +139,6 @@ scrollView = _scrollView;
     savedBtn.backgroundColor = [UIColor blueColor];
     [savedBtn addTarget:self action:@selector(customAction) forControlEvents:UIControlEventTouchDown];
     [self.view addSubview:savedBtn];
-    [savedBtn release];
     
     
     UIButton *resetBtn = [[UIButton alloc] initWithFrame:CGRectMake(220.0f, 380.0f, 80.0f, 30.0f)];
@@ -154,7 +146,6 @@ scrollView = _scrollView;
     resetBtn.backgroundColor = [UIColor blackColor];
     [resetBtn addTarget:self action:@selector(resetAction) forControlEvents:UIControlEventTouchDown];
     [self.view addSubview:resetBtn];
-    [resetBtn release];    
 }
 
 @end

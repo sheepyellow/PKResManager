@@ -14,21 +14,14 @@
 
 @synthesize window = _window;
 @synthesize demoViewController = _demoViewController;
-- (void)dealloc
-{
-    self.window = nil;
-    self.demoViewController = nil;
-    [super dealloc];
-}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
-    self.demoViewController = [[[PKDemoViewController alloc] init] autorelease];
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.demoViewController = [[PKDemoViewController alloc] init];
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:self.demoViewController];
     self.window.rootViewController = navController;//self.viewController;
     [self.window makeKeyAndVisible];
-    [navController release];
     
     return YES;
 }

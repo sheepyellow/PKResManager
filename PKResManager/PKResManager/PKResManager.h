@@ -44,11 +44,11 @@ typedef enum {
 /*!
  * 图片缓存
  */
-@property (nonatomic, retain) NSMutableDictionary *resImageCache;
+@property (nonatomic, strong) NSMutableDictionary *resImageCache;
 /*!
  * plist 资源缓存
  */
-@property (nonatomic, retain) NSMutableDictionary *resOtherCache;
+@property (nonatomic, strong) NSMutableDictionary *resOtherCache;
 
 /*!
  * All style Dict Array

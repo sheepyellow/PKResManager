@@ -25,35 +25,35 @@
     NSArray *keyArray = [key componentsSeparatedByString:@"-"];
     NSAssert1(keyArray.count == 2, @"module key name error!!! [color] ==> %@", key);
     
-    NSString *moduleKey = [keyArray objectAtIndex:0];
-    NSString *memberKey = [keyArray objectAtIndex:1];
+    NSString *moduleKey = keyArray[0];
+    NSString *memberKey = keyArray[1];
     
-    NSDictionary *moduleDict = [[PKResManager getInstance].resOtherCache objectForKey:moduleKey];
+    NSDictionary *moduleDict = ([PKResManager getInstance].resOtherCache)[moduleKey];
     // 容错处理读取默认配置
     if (moduleDict.count <= 0)
     {
-        moduleDict = [[PKResManager getInstance].defaultResOtherCache objectForKey:moduleKey];
+        moduleDict = ([PKResManager getInstance].defaultResOtherCache)[moduleKey];
     }
     NSAssert1(moduleDict.count > 0, @"module not exist !!! [color] ==> %@", key);
-    NSDictionary *memberDict = [moduleDict objectForKey:memberKey];
+    NSDictionary *memberDict = moduleDict[memberKey];
     // 容错处理读取默认配置
     if (memberDict.count <= 0) {
-        moduleDict = [[PKResManager getInstance].defaultResOtherCache objectForKey:moduleKey];
-        memberDict = [moduleDict objectForKey:memberKey];
+        moduleDict = ([PKResManager getInstance].defaultResOtherCache)[moduleKey];
+        memberDict = moduleDict[memberKey];
     }
     NSAssert1(memberDict.count > 0, @"color not exist !!! [color] ==> %@", key);
     
-    NSString *colorStr = [memberDict objectForKey:kColor];
+    NSString *colorStr = memberDict[kColor];
     
     BOOL shadow = NO;
     if (type & PKColorTypeShadow) {
         shadow = YES;
-        colorStr = [memberDict objectForKey:kShadowColor];
+        colorStr = memberDict[kShadowColor];
     }
     if (type & PKColorTypeHightLight) {
-        colorStr = [memberDict objectForKey:kColorHL];
+        colorStr = memberDict[kColorHL];
         if (shadow) {
-            colorStr = [memberDict objectForKey:kShadowColorHL];
+            colorStr = memberDict[kShadowColorHL];
         }
     }
     
@@ -63,15 +63,15 @@
     NSNumber *alphaValue;
     NSArray *colorArray = [colorStr componentsSeparatedByString:@","];
     if (colorArray != nil && colorArray.count == 3) {
-        redValue = [NSNumber numberWithFloat:[[colorArray objectAtIndex:0] floatValue]];
-        greenValue = [NSNumber numberWithFloat:[[colorArray objectAtIndex:1] floatValue]];
-        blueValue = [NSNumber numberWithFloat:[[colorArray objectAtIndex:2] floatValue]];
-        alphaValue = [NSNumber numberWithFloat:1.0f];
+        redValue = @([colorArray[0] floatValue]);
+        greenValue = @([colorArray[1] floatValue]);
+        blueValue = @([colorArray[2] floatValue]);
+        alphaValue = @1.0f;
     } else if (colorArray != nil && colorArray.count == 4) {
-        redValue = [NSNumber numberWithFloat:[[colorArray objectAtIndex:0] floatValue]];
-        greenValue = [NSNumber numberWithFloat:[[colorArray objectAtIndex:1] floatValue]];
-        blueValue = [NSNumber numberWithFloat:[[colorArray objectAtIndex:2] floatValue]];
-        alphaValue = [NSNumber numberWithFloat:[[colorArray objectAtIndex:3] floatValue]];
+        redValue = @([colorArray[0] floatValue]);
+        greenValue = @([colorArray[1] floatValue]);
+        blueValue = @([colorArray[2] floatValue]);
+        alphaValue = @([colorArray[3] floatValue]);
     } else {
         return nil;
     }

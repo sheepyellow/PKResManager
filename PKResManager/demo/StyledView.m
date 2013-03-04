@@ -14,9 +14,6 @@
 {
 //    DLog(@" dealloc :%@",[self description]);
     [[PKResManager getInstance] removeChangeStyleObject:self];
-    [_imageView release];    
-    [_label release];
-    [super dealloc];
 }
 
 - (id)initWithFrame:(CGRect)frame

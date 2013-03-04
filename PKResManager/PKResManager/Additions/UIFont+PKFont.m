@@ -15,14 +15,14 @@
     NSArray *keyArray = [key componentsSeparatedByString:@"-"];
     NSAssert1(keyArray.count == 2, @"module key name error!!! [font]==> %@", key);
     
-    NSString *moduleKey = [keyArray objectAtIndex:0];
-    NSString *memberKey = [keyArray objectAtIndex:1];
+    NSString *moduleKey = keyArray[0];
+    NSString *memberKey = keyArray[1];
     
-    NSDictionary *moduleDict = [[PKResManager getInstance].resOtherCache objectForKey:moduleKey];
-    NSDictionary *memberDict = [moduleDict objectForKey:memberKey];
+    NSDictionary *moduleDict = ([PKResManager getInstance].resOtherCache)[moduleKey];
+    NSDictionary *memberDict = moduleDict[memberKey];
     
-    NSString *fontName = [memberDict objectForKey:@"font"];
-    NSNumber *fontSize = [memberDict objectForKey:@"size"];
+    NSString *fontName = memberDict[@"font"];
+    NSNumber *fontSize = memberDict[@"size"];
     UIFont *font = [UIFont fontWithName:fontName
                                    size:fontSize.floatValue];
     

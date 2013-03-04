@@ -11,8 +11,8 @@
 #import "PKStyleListViewController.h"
 
 @interface PKDemoViewController ()
-@property (nonatomic, retain) UITableView *tableView;
-@property (nonatomic, retain) NSMutableArray *dataArray;
+@property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) NSMutableArray *dataArray;
 @end
 
 @implementation PKDemoViewController
@@ -22,9 +22,6 @@ dataArray;
 - (void)dealloc
 {
     [[PKResManager getInstance] removeChangeStyleObject:self];
-    self.dataArray = nil;
-    self.tableView = nil;
-    [super dealloc];
 }
 - (void)viewDidLoad
 {
@@ -32,8 +29,8 @@ dataArray;
     [[PKResManager getInstance] addChangeStyleObject:self];    
     self.navigationController.navigationBar.tintColor = [UIColor colorForKey:@"DemoModule-navBar"];
     self.navigationItem.title = @"Demo";
-    self.dataArray = [[[NSMutableArray alloc] initWithObjects:@"Demo",@"List",@"Reset", nil] autorelease];
-    self.tableView = [[[UITableView alloc] initWithFrame:self.view.bounds] autorelease];
+    self.dataArray = [[NSMutableArray alloc] initWithObjects:@"Demo",@"List",@"Reset", nil];
+    self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds];
     _tableView.delegate = self;
     _tableView.dataSource = self;
     [self.view addSubview:_tableView];
@@ -68,7 +65,7 @@ dataArray;
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     cell.textLabel.font = [UIFont fontForKey:@"SettingModule-tableCell"];
-    cell.textLabel.text = [self.dataArray objectAtIndex:indexPath.row];
+    cell.textLabel.text = (self.dataArray)[indexPath.row];
     // 
     return cell;
 }
@@ -76,16 +73,13 @@ dataArray;
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *dataStr = [self.dataArray objectAtIndex:indexPath.row];
+    NSString *dataStr = (self.dataArray)[indexPath.row];
     if ([dataStr isEqualToString:@"Demo"]) {        
         PKStyledViewController *viewController = [[PKStyledViewController alloc] init];
         [self.navigationController pushViewController:viewController animated:YES];
-        [viewController release];
-        
     }else if([dataStr isEqualToString:@"List"]){
         PKStyleListViewController *viewController = [[PKStyleListViewController alloc] init];
         [self.navigationController pushViewController:viewController animated:YES];
-        [viewController release];
     }else if([dataStr isEqualToString:@"Reset"]){
         [[PKResManager getInstance] resetStyle];
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"完成" 
@@ -94,7 +88,6 @@ dataArray;
                                                   cancelButtonTitle:@"确定" 
                                                   otherButtonTitles:nil];
         [alertView show];
-        [alertView autorelease];
     }
 }
 #pragma mark - PKResChangeStyleDelegate

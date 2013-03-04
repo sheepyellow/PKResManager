@@ -26,7 +26,7 @@
         key = [key substringToIndex:((NSString*)key).length-4];
     }
     
-    UIImage *image = [[PKResManager getInstance].resImageCache objectForKey:key];
+    UIImage *image = ([PKResManager getInstance].resImageCache)[key];
     if (image == nil)
     {
         // no cache
@@ -35,7 +35,7 @@
     // cache
     if (image != nil && needCache)
     {
-        [[PKResManager getInstance].resImageCache setObject:image forKey:key];
+        ([PKResManager getInstance].resImageCache)[key] = image;
     }
     
     return image;
