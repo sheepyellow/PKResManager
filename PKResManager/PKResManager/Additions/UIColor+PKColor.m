@@ -85,4 +85,27 @@
                            alpha:(CGFloat)([alphaValue floatValue])];
 }
 
+
++ (UIColor *)colorForKey:(id)key alpha:(CGFloat)alpha style:(PKColorType)type
+{
+    UIColor *styleColor = [UIColor colorForKey:key style:type];
+    if (alpha > 0.0f && alpha <= 1.0f)
+    {
+        CGColorRef alphaColorRef = CGColorCreateCopyWithAlpha(styleColor.CGColor,alpha);
+        styleColor = [UIColor colorWithCGColor:alphaColorRef];
+        CGColorRelease(alphaColorRef);
+    }
+    return styleColor;
+}
+
++ (UIColor *)colorForKey:(id)key alpha:(CGFloat)alpha
+{
+    return [UIColor colorForKey:key alpha:alpha style:PKColorTypeNormal];
+}
+
++ (UIColor *)shadowColorForKey:(id)key alpha:(CGFloat)alpha
+{
+    return [UIColor colorForKey:key alpha:alpha style:PKColorTypeShadow];
+}
+
 @end

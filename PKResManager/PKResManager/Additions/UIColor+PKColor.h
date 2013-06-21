@@ -22,4 +22,11 @@ typedef enum {
 
 + (UIColor *)shadowColorForKey:(id)key;
 
++ (UIColor *)colorForKey:(id)key alpha:(CGFloat)alpha style:(PKColorType)type;
+
++ (UIColor *)colorForKey:(id)key alpha:(CGFloat)alpha;
+
++ (UIColor *)shadowColorForKey:(id)key alpha:(CGFloat)alpha;
+
+
 @end
