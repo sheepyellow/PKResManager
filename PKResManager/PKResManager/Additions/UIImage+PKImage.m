@@ -21,7 +21,7 @@
         DLog(@" imageForKey:cache: key = nil");
         return nil;
     }
-    // 去除扩展名    
+    // 去除扩展名
     if ([key hasSuffix:@".png"] || [key hasSuffix:@".jpg"]) {
         key = [key substringToIndex:((NSString*)key).length-4];
     }
@@ -68,7 +68,17 @@
     
     image = [UIImage imageForKey:key inBundle:styleBundle];
     
-    // mainBundle情况
+    // @2x情况
+    if (image == nil)
+    {
+        if (![key hasSuffix:@"@2x"]) {
+            image = [UIImage imageForKey:[NSString stringWithFormat:@"%@@2x",key] inBundle:styleBundle];
+        }else if ([key hasSuffix:@"@2x"]){
+            image = [UIImage imageForKey:[key substringToIndex:((NSString*)key).length-3] inBundle:styleBundle];
+        }
+    }
+    
+    // 最后从mainBundle中找
     if (image == nil)
     {
         DLog(@" will get default style => %@",key);
