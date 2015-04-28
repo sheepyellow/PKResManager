@@ -31,8 +31,8 @@
 #define kAllResStyle     @"kAllResStyle"
 #define kNowResStyle     @"kNowResStyle"
 
-#define PK_STYLE_SAVED_DIR  @"com.kuaikan.style"
-#define PK_STYLE_TEMP_DIR   @"com.kuaikan.style.tmp"
+#define PK_STYLE_SAVED_DIR  @"com.pk.res.style"
+#define PK_STYLE_TEMP_DIR   @"com.pk.res.style.tmp"
 
 #define kStyleID       @"kStyleID"
 #define kStyleName     @"kStyleName"
@@ -57,7 +57,6 @@
 #define PK_CONFIG_SEPARATE_KEY  @"-"
 
 // config key
-#define kPKConfigColor              @"color"
 #define kPKConfigFontName           @"font"
 #define kPKConfigFontSize           @"size"
 

@@ -12,14 +12,7 @@
 
 + (UIColor *)pk_colorForKey:(id)aKey
 {
-    NSDictionary *retDict = [[PKResManager getInstance] getConfigDictByKey:aKey withType:PKResConfigType_Default];
-    NSString *colorStr = retDict[kPKConfigColor];
-    
-    //NSString *colorStr = [[PKResManager getInstance].configColorCache objectForKey:aKey];
-    if (colorStr.length <= 0) {
-        colorStr = [[PKResManager getInstance].defaultConfigColorCache objectForKey:aKey];
-    }
-
+    NSString *colorStr = [[PKResManager getInstance] getConfigDictByKey:aKey withType:PKResConfigType_Color];
     NSArray *colorArray = [colorStr componentsSeparatedByString:@","];
     
     NSInteger r = 255;

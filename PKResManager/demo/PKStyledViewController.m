@@ -27,6 +27,20 @@ scrollView = _scrollView;
 {
     [self.navigationController popViewControllerAnimated:YES];
 }
+
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        // iOS 7 later
+        if (isiOS7Higher) {
+            self.edgesForExtendedLayout = UIRectEdgeNone; // default: UIRectEdgeAll
+            self.extendedLayoutIncludesOpaqueBars = YES; // default: NO
+            self.automaticallyAdjustsScrollViewInsets = NO; // default: YES
+        }
+    }
+    return self;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -53,7 +67,7 @@ scrollView = _scrollView;
 {
     int rowCount = 150;
     
-    CGRect frame = CGRectMake(0.0f, 30, self.view.bounds.size.width, self.view.bounds.size.height-120.0f);
+    CGRect frame = CGRectMake(.0f, 10.0f, self.view.bounds.size.width, self.view.bounds.size.height-150.0f);
     _scrollView = [[UIScrollView alloc] initWithFrame:frame];
     [_scrollView setContentSize:CGSizeMake(self.view.bounds.size.width, rowCount*60)];
     [self.view addSubview:_scrollView];
@@ -67,14 +81,15 @@ scrollView = _scrollView;
 }
 - (void)addProgressView
 {
+    CGFloat progressY = _scrollView.frame.size.height + 20.f;
     // percent 
-    UILabel *progressLabel  = [[UILabel alloc] initWithFrame:CGRectMake(20.0f, 0.0f, 50, 30)];
+    UILabel *progressLabel  = [[UILabel alloc] initWithFrame:CGRectMake(20.0f, progressY, 50, 30)];
     progressLabel.text = @"0.0% ";
     progressLabel.font = [UIFont systemFontOfSize:12.0f];
     [self.view addSubview:progressLabel];
     
     // time
-    UILabel *timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(270.0f, 0.0f, 50, 30)];
+    UILabel *timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(270.0f, progressY, 50, 30)];
     timeLabel.text = @"0.00'";
     timeLabel.font = [UIFont systemFontOfSize:12.0f];
     [self.view addSubview:timeLabel];
@@ -83,7 +98,7 @@ scrollView = _scrollView;
     UIProgressView *progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
     CGRect frame = progressView.frame;
     frame.origin.x = 80.0f;
-    frame.origin.y = 10.0f;
+    frame.origin.y = progressY;
     progressView.frame = frame;
     [progressView setProgress:0.0f];
     [self.view addSubview:progressView];
@@ -127,21 +142,23 @@ scrollView = _scrollView;
 }
 - (void)addTestBtn
 {
-    UIButton *changeBtn = [[UIButton alloc] initWithFrame:CGRectMake(20.0f, 380.0f, 80.0f, 30.0f)];
+    CGFloat progressY = _scrollView.frame.size.height + 50.f;
+    
+    UIButton *changeBtn = [[UIButton alloc] initWithFrame:CGRectMake(20.0f, progressY, 80.0f, 30.0f)];
     [changeBtn setTitle:@"change" forState:UIControlStateNormal];
     changeBtn.backgroundColor = [UIColor redColor];
     [changeBtn addTarget:self action:@selector(changeAction) forControlEvents:UIControlEventTouchDown];
     [self.view addSubview:changeBtn];
     
     
-    UIButton *savedBtn = [[UIButton alloc] initWithFrame:CGRectMake(120.0f, 380.0f, 80.0f, 30.0f)];
+    UIButton *savedBtn = [[UIButton alloc] initWithFrame:CGRectMake(120.0f, progressY, 80.0f, 30.0f)];
     [savedBtn setTitle:@"custom" forState:UIControlStateNormal];
     savedBtn.backgroundColor = [UIColor blueColor];
     [savedBtn addTarget:self action:@selector(customAction) forControlEvents:UIControlEventTouchDown];
     [self.view addSubview:savedBtn];
     
     
-    UIButton *resetBtn = [[UIButton alloc] initWithFrame:CGRectMake(220.0f, 380.0f, 80.0f, 30.0f)];
+    UIButton *resetBtn = [[UIButton alloc] initWithFrame:CGRectMake(220.0f, progressY, 80.0f, 30.0f)];
     [resetBtn setTitle:@"reset" forState:UIControlStateNormal];
     resetBtn.backgroundColor = [UIColor blackColor];
     [resetBtn addTarget:self action:@selector(resetAction) forControlEvents:UIControlEventTouchDown];

@@ -17,4 +17,6 @@
 
 #define SAVED_NIGHT_STYLE @"SAVED_NIGHT_STYLE"
 
+#define isiOS7Higher ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7 ? YES : NO)
+
 #endif

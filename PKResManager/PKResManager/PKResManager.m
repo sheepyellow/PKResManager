@@ -339,8 +339,8 @@ NSMutableArray* CreateNonRetainingArray() {
     return [NSBundle bundleWithPath:bundlePath];
 }
 
-- (NSDictionary *)getConfigDictByKey:(id)aKey withType:(PKResConfigType)type {
-    NSDictionary *retDict = nil;
+- (id)getConfigDictByKey:(id)aKey withType:(PKResConfigType)type {
+    id ret = nil;
     
     NSMutableDictionary *styleConfigCache = nil;
     NSMutableDictionary *defaultStyleConfigCache = nil;
@@ -358,38 +358,31 @@ NSMutableArray* CreateNonRetainingArray() {
             defaultStyleConfigCache = self.defaultConfigCache;
             break;
     }
-    
-    if (![aKey isKindOfClass:[NSString class]]) {
-        retDict = styleConfigCache[aKey];
-        if (nil == retDict) {
-            retDict = defaultStyleConfigCache[aKey];
-        }
-        return retDict;
-    }
+
     NSArray *keyArray = [aKey componentsSeparatedByString:PK_CONFIG_SEPARATE_KEY];
     for (id aKey in keyArray) {
         if (0 == [keyArray indexOfObject:aKey]) {
-            retDict = styleConfigCache[keyArray.firstObject];
-        } else if (retDict) {
-            retDict = [retDict objectForKey:aKey];
+            ret = styleConfigCache[keyArray.firstObject];
+        } else if (ret) {
+            ret = [ret objectForKey:aKey];
         } else {
             break;
         }
     }
     
-    if (nil == retDict) {
+    if (nil == ret) {
         for (id aKey in keyArray) {
             if (0 == [keyArray indexOfObject:aKey]) {
-                retDict = defaultStyleConfigCache[keyArray.firstObject];
-            } else if (retDict) {
-                retDict = [retDict objectForKey:aKey];
+                ret = defaultStyleConfigCache[keyArray.firstObject];
+            } else if (ret) {
+                ret = [ret objectForKey:aKey];
             } else {
                 break;
             }
         }
     }
     
-    return retDict;
+    return ret;
 }
 
 - (UIImage *)previewImage

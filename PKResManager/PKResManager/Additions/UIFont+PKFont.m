@@ -12,26 +12,21 @@
 
 + (UIFont *)pk_fontForKey:(id)aKey
 {
-//    NSString *fontSize = [[PKResManager getInstance].configFontCache objectForKey:aKey];
-//    if (!fontSize) {
-//        fontSize = [[PKResManager getInstance].defaultConfigFontCache objectForKey:aKey];
-//    }
-//    
-//    if (fontSize.floatValue > 0) {
-//        return [UIFont systemFontOfSize:fontSize.floatValue];
-//    }
+    id ret = [[PKResManager getInstance] getConfigDictByKey:aKey withType:PKResConfigType_Font];
     
-    NSDictionary *retDict = [[PKResManager getInstance] getConfigDictByKey:aKey withType:PKResConfigType_Default];
-    NSString *fontName = retDict[kPKConfigFontName];
-    NSString *fontSize = retDict[kPKConfigFontSize];
-    
-    if (fontName.length > 0 && fontSize.length > 0) {
-        return [UIFont fontWithName:fontName
-                               size:fontSize.floatValue];
-    } else {
-        return [UIFont systemFontOfSize:fontSize.floatValue];
+    if ([ret isKindOfClass:[NSDictionary class]]) {
+        NSString *fontName = ret[kPKConfigFontName];
+        id        fontSize = ret[kPKConfigFontSize];
+        if (fontName.length > 0 && fontSize) {
+            return [UIFont fontWithName:fontName
+                                   size:[fontSize floatValue]];
+        } else {
+            return [UIFont systemFontOfSize:[fontSize floatValue]];
+        }
+    } else if ([ret isKindOfClass:[NSString class]] || [ret isKindOfClass:[NSNumber class]]) {
+        return [UIFont systemFontOfSize:[ret floatValue]];
     }
-    
+
     return nil;
 }
 

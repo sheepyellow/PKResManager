@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>DemoNavFont</key>
+	<string>13.0</string>
+	<key>DemoCellFont</key>
+	<dict>
+		<key>size</key>
+		<string>16.0</string>
+		<key>font</key>
+		<string>Didot-Italic</string>
+	</dict>
+	<key>DemoModule</key>
+	<dict>
+		<key>LabelFont</key>
+		<dict>
+			<key>font</key>
+			<string>Didot-Italic</string>
+			<key>size</key>
+			<string>18.0</string>
+		</dict>
+	</dict>
+</dict>
+</plist>

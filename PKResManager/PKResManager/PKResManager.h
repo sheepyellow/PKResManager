@@ -137,7 +137,7 @@ typedef void (^ResStyleCompleteBlock) (BOOL finished, NSError *error);
 - (UIImage *)previewImage;
 - (UIImage *)previewImageByStyleName:(NSString *)name;
 
-- (NSDictionary *)getConfigDictByKey:(id)aKey withType:(PKResConfigType)type;
+- (id)getConfigDictByKey:(id)aKey withType:(PKResConfigType)type;
 /*!
  * 单例
  */
