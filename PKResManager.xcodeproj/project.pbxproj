@@ -22,9 +22,9 @@
 		2F4FF39815B40F8400BA831D /* PKResManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F4FF39315B40F8400BA831D /* PKResManager.m */; };
 		2FDCA45015B5E4B4005F68D6 /* PKStyleListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FDCA44F15B5E4B4005F68D6 /* PKStyleListViewController.m */; };
 		DF089BEE1AEF583300C254D7 /* PKResManager+Private.m in Sources */ = {isa = PBXBuildFile; fileRef = DF089BED1AEF583300C254D7 /* PKResManager+Private.m */; };
-		DFB215151AEF29C500747708 /* PKStyleDefault.bundle in Resources */ = {isa = PBXBuildFile; fileRef = DFB215121AEF29C500747708 /* PKStyleDefault.bundle */; };
-		DFB215161AEF29C500747708 /* testNight.bundle in Resources */ = {isa = PBXBuildFile; fileRef = DFB215131AEF29C500747708 /* testNight.bundle */; };
-		DFB215171AEF29C500747708 /* testSave.bundle in Resources */ = {isa = PBXBuildFile; fileRef = DFB215141AEF29C500747708 /* testSave.bundle */; };
+		DF089BF01AEF6DE100C254D7 /* PKStyleDefault.bundle in Resources */ = {isa = PBXBuildFile; fileRef = DF089BEF1AEF6DE100C254D7 /* PKStyleDefault.bundle */; };
+		DF089BF41AEF6DE900C254D7 /* testNight.bundle in Resources */ = {isa = PBXBuildFile; fileRef = DF089BF21AEF6DE900C254D7 /* testNight.bundle */; };
+		DF089BF51AEF6DE900C254D7 /* testSave.bundle in Resources */ = {isa = PBXBuildFile; fileRef = DF089BF31AEF6DE900C254D7 /* testSave.bundle */; };
 		DFB2151B1AEF3E8800747708 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DFB2151A1AEF3E8800747708 /* Images.xcassets */; };
 /* End PBXBuildFile section */
 
@@ -58,9 +58,9 @@
 		2FDCA44F15B5E4B4005F68D6 /* PKStyleListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKStyleListViewController.m; sourceTree = "<group>"; };
 		DF089BEC1AEF583300C254D7 /* PKResManager+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PKResManager+Private.h"; sourceTree = "<group>"; };
 		DF089BED1AEF583300C254D7 /* PKResManager+Private.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PKResManager+Private.m"; sourceTree = "<group>"; };
-		DFB215121AEF29C500747708 /* PKStyleDefault.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = PKStyleDefault.bundle; path = PKResManager/PKStyleDefault.bundle; sourceTree = "<group>"; };
-		DFB215131AEF29C500747708 /* testNight.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = testNight.bundle; path = PKResManager/testNight.bundle; sourceTree = "<group>"; };
-		DFB215141AEF29C500747708 /* testSave.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = testSave.bundle; path = PKResManager/testSave.bundle; sourceTree = "<group>"; };
+		DF089BEF1AEF6DE100C254D7 /* PKStyleDefault.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = PKStyleDefault.bundle; sourceTree = "<group>"; };
+		DF089BF21AEF6DE900C254D7 /* testNight.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = testNight.bundle; sourceTree = "<group>"; };
+		DF089BF31AEF6DE900C254D7 /* testSave.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = testSave.bundle; sourceTree = "<group>"; };
 		DFB2151A1AEF3E8800747708 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -136,13 +136,11 @@
 		2F4FF37A15B40F3A00BA831D /* PKResManager */ = {
 			isa = PBXGroup;
 			children = (
+				DF089BF11AEF6DE900C254D7 /* Resources */,
 				2F4FF39115B40F8400BA831D /* PKResManager */,
 				2F07BBA315B53E1400C46164 /* demo */,
 				2F4FF38315B40F3A00BA831D /* AppDelegate.h */,
 				2F4FF38415B40F3A00BA831D /* AppDelegate.m */,
-				DFB215121AEF29C500747708 /* PKStyleDefault.bundle */,
-				DFB215131AEF29C500747708 /* testNight.bundle */,
-				DFB215141AEF29C500747708 /* testSave.bundle */,
 				DFB2151A1AEF3E8800747708 /* Images.xcassets */,
 				2F4FF37B15B40F3A00BA831D /* Supporting Files */,
 			);
@@ -169,8 +167,18 @@
 				DF089BEC1AEF583300C254D7 /* PKResManager+Private.h */,
 				DF089BED1AEF583300C254D7 /* PKResManager+Private.m */,
 				2F4FF39415B40F8400BA831D /* PKResManagerKit.h */,
+				DF089BEF1AEF6DE100C254D7 /* PKStyleDefault.bundle */,
 			);
 			path = PKResManager;
+			sourceTree = "<group>";
+		};
+		DF089BF11AEF6DE900C254D7 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				DF089BF21AEF6DE900C254D7 /* testNight.bundle */,
+				DF089BF31AEF6DE900C254D7 /* testSave.bundle */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -223,11 +231,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DFB215151AEF29C500747708 /* PKStyleDefault.bundle in Resources */,
+				DF089BF51AEF6DE900C254D7 /* testSave.bundle in Resources */,
+				DF089BF01AEF6DE100C254D7 /* PKStyleDefault.bundle in Resources */,
 				DFB2151B1AEF3E8800747708 /* Images.xcassets in Resources */,
+				DF089BF41AEF6DE900C254D7 /* testNight.bundle in Resources */,
 				2F4FF37F15B40F3A00BA831D /* InfoPlist.strings in Resources */,
-				DFB215171AEF29C500747708 /* testSave.bundle in Resources */,
-				DFB215161AEF29C500747708 /* testNight.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

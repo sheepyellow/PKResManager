@@ -122,7 +122,7 @@ scrollView = _scrollView;
 - (void)customAction
 {
     if ([[PKResManager getInstance] containsStyle:SAVED_CUSTOM_STYLE]) {
-        [[PKResManager getInstance] swithToStyle:SAVED_CUSTOM_STYLE];        
+        [[PKResManager getInstance] swithToStyle:SAVED_CUSTOM_STYLE];
     }
 }
 - (void)changeAction
@@ -151,11 +151,13 @@ scrollView = _scrollView;
     [self.view addSubview:changeBtn];
     
     
-    UIButton *savedBtn = [[UIButton alloc] initWithFrame:CGRectMake(120.0f, progressY, 80.0f, 30.0f)];
-    [savedBtn setTitle:@"custom" forState:UIControlStateNormal];
-    savedBtn.backgroundColor = [UIColor blueColor];
-    [savedBtn addTarget:self action:@selector(customAction) forControlEvents:UIControlEventTouchDown];
-    [self.view addSubview:savedBtn];
+    if ([[PKResManager getInstance] containsStyle:SAVED_CUSTOM_STYLE]) {
+        UIButton *savedBtn = [[UIButton alloc] initWithFrame:CGRectMake(120.0f, progressY, 80.0f, 30.0f)];
+        [savedBtn setTitle:@"custom" forState:UIControlStateNormal];
+        savedBtn.backgroundColor = [UIColor blueColor];
+        [savedBtn addTarget:self action:@selector(customAction) forControlEvents:UIControlEventTouchDown];
+        [self.view addSubview:savedBtn];
+    }
     
     
     UIButton *resetBtn = [[UIButton alloc] initWithFrame:CGRectMake(220.0f, progressY, 80.0f, 30.0f)];
