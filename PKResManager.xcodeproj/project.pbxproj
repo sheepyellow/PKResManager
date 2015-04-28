@@ -21,6 +21,7 @@
 		2F4FF38515B40F3A00BA831D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F4FF38415B40F3A00BA831D /* AppDelegate.m */; };
 		2F4FF39815B40F8400BA831D /* PKResManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F4FF39315B40F8400BA831D /* PKResManager.m */; };
 		2FDCA45015B5E4B4005F68D6 /* PKStyleListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FDCA44F15B5E4B4005F68D6 /* PKStyleListViewController.m */; };
+		DF089BEE1AEF583300C254D7 /* PKResManager+Private.m in Sources */ = {isa = PBXBuildFile; fileRef = DF089BED1AEF583300C254D7 /* PKResManager+Private.m */; };
 		DFB215151AEF29C500747708 /* PKStyleDefault.bundle in Resources */ = {isa = PBXBuildFile; fileRef = DFB215121AEF29C500747708 /* PKStyleDefault.bundle */; };
 		DFB215161AEF29C500747708 /* testNight.bundle in Resources */ = {isa = PBXBuildFile; fileRef = DFB215131AEF29C500747708 /* testNight.bundle */; };
 		DFB215171AEF29C500747708 /* testSave.bundle in Resources */ = {isa = PBXBuildFile; fileRef = DFB215141AEF29C500747708 /* testSave.bundle */; };
@@ -55,6 +56,8 @@
 		2F4FF39415B40F8400BA831D /* PKResManagerKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKResManagerKit.h; sourceTree = "<group>"; };
 		2FDCA44E15B5E4B4005F68D6 /* PKStyleListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKStyleListViewController.h; sourceTree = "<group>"; };
 		2FDCA44F15B5E4B4005F68D6 /* PKStyleListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKStyleListViewController.m; sourceTree = "<group>"; };
+		DF089BEC1AEF583300C254D7 /* PKResManager+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PKResManager+Private.h"; sourceTree = "<group>"; };
+		DF089BED1AEF583300C254D7 /* PKResManager+Private.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PKResManager+Private.m"; sourceTree = "<group>"; };
 		DFB215121AEF29C500747708 /* PKStyleDefault.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = PKStyleDefault.bundle; path = PKResManager/PKStyleDefault.bundle; sourceTree = "<group>"; };
 		DFB215131AEF29C500747708 /* testNight.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = testNight.bundle; path = PKResManager/testNight.bundle; sourceTree = "<group>"; };
 		DFB215141AEF29C500747708 /* testSave.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = testSave.bundle; path = PKResManager/testSave.bundle; sourceTree = "<group>"; };
@@ -163,6 +166,8 @@
 				2F30774A166F2C18005383B4 /* Additions */,
 				2F4FF39215B40F8400BA831D /* PKResManager.h */,
 				2F4FF39315B40F8400BA831D /* PKResManager.m */,
+				DF089BEC1AEF583300C254D7 /* PKResManager+Private.h */,
+				DF089BED1AEF583300C254D7 /* PKResManager+Private.m */,
 				2F4FF39415B40F8400BA831D /* PKResManagerKit.h */,
 			);
 			path = PKResManager;
@@ -194,7 +199,7 @@
 		2F4FF36715B40F3A00BA831D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0430;
+				LastUpgradeCheck = 0630;
 			};
 			buildConfigurationList = 2F4FF36A15B40F3A00BA831D /* Build configuration list for PBXProject "PKResManager" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -235,6 +240,7 @@
 			files = (
 				2F4FF38115B40F3A00BA831D /* main.m in Sources */,
 				2F4FF38515B40F3A00BA831D /* AppDelegate.m in Sources */,
+				DF089BEE1AEF583300C254D7 /* PKResManager+Private.m in Sources */,
 				2F4FF39815B40F8400BA831D /* PKResManager.m in Sources */,
 				2F07BBAB15B55E6D00C46164 /* PKDemoViewController.m in Sources */,
 				2F07BBAE15B563C500C46164 /* PKStyledViewController.m in Sources */,
@@ -264,11 +270,19 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -276,10 +290,14 @@
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -288,13 +306,24 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";

@@ -29,9 +29,9 @@
                                   version:@1.0f
                                withBundle:bundle];
     
-    [[PKResManager getInstance] swithToStyle:[PKResManager getInstance].styleName
+    [[PKResManager getInstance] swithToStyle:[PKResManager getInstance].currentStyleName
                                   onComplete:^(BOOL finished, NSError *error) {
-                                      if ([[PKResManager getInstance].styleName isEqualToString:PK_SYSTEM_STYLE_DEFAULT]) {
+                                      if ([[PKResManager getInstance].currentStyleName isEqualToString:PK_SYSTEM_STYLE_DEFAULT]) {
                                           [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
                                       } else {
                                           if (isiOS7Higher) {

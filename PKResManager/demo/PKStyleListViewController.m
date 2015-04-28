@@ -17,14 +17,13 @@
 @implementation PKStyleListViewController
 
 - (void)dealloc {
-    [[PKResManager getInstance] removeChangeStyleObject:self];
+    [[PKResManager getInstance] removeChangeStyleObserver:self];
 }
 
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [[PKResManager getInstance] addChangeStyleObject:self];
     if (!_tableView) {
         _tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
         _tableView.delegate = self;
@@ -51,6 +50,8 @@
                           action:@selector(delCustomStyleAction:) 
                 forControlEvents:UIControlEventTouchDown];
     [self.view addSubview:delCustomStyleBtn];
+    
+    [[PKResManager getInstance] addChangeStyleObserver:self];
 }
 
 - (void)viewDidUnload
@@ -157,7 +158,7 @@
         if (finished) {
             if (error && error.code != PKStyleErrorCode_Unavailable) {
                 UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                                    message:[NSString stringWithFormat:@"code:%d",error.code]
+                                                                    message:[NSString stringWithFormat:@"code:%ld",(long)error.code]
                                                                    delegate:nil
                                                           cancelButtonTitle:@"OK"
                                                           otherButtonTitles:nil];

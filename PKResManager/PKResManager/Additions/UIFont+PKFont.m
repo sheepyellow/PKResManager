@@ -7,6 +7,7 @@
 //
 
 #import "UIFont+PKFont.h"
+#import "PKResManager+Private.h"
 
 @implementation UIFont (PKFont)
 

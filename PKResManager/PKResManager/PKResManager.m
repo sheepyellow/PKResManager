@@ -7,6 +7,7 @@
 //
 
 #import "PKResManager.h"
+#import "PKResManager+Private.h"
 #import "PKResManagerKit.h"
 
 static const void* RetainNoOp(CFAllocatorRef allocator, const void *value) { return value; }
@@ -20,18 +21,14 @@ NSMutableArray* CreateNonRetainingArray() {
 
 @interface PKResManager ()
 @property (nonatomic, strong) NSMutableArray *styleChangedHandlers; // delegates
-@property (nonatomic, strong) NSMutableArray *resObjectsArray;
-@property (nonatomic, strong) NSMutableArray *defaultStyleArray;
+@property (nonatomic, strong) NSMutableArray *resObserverArray;
 @property (nonatomic, strong) NSMutableArray *customStyleArray;
 
-@property (nonatomic, readwrite, strong) NSBundle *styleBundle;
-@property (nonatomic, readwrite, strong) NSMutableDictionary *defaultConfigCache;
-@property (nonatomic, readwrite, strong) NSMutableDictionary *defaultConfigColorCache;
-@property (nonatomic, readwrite, strong) NSMutableDictionary *defaultConfigFontCache;
-@property (nonatomic, readwrite, strong) NSMutableArray *allStyleArray;
-@property (nonatomic, readwrite, strong) NSString *styleName;
-@property (nonatomic, readwrite, assign) PKResStyleType styleType;
+@property (nonatomic, readwrite, strong) NSBundle *currentStyleBundle;
+@property (nonatomic, readwrite, strong) NSString *currentStyleName;
+@property (nonatomic, readwrite, assign) PKResStyleType currentStyleType;
 @property (nonatomic, readwrite, assign) BOOL isLoading;
+@property (nonatomic, readwrite, strong) NSMutableArray *allStyleArray;
 @end
 
 @implementation PKResManager
@@ -39,30 +36,39 @@ NSMutableArray* CreateNonRetainingArray() {
 - (void)dealloc
 {
     [self.styleChangedHandlers removeAllObjects];
-    if (_allStyleArray.count>0) {
-        [_allStyleArray removeAllObjects];
-        _allStyleArray= nil;
+    if (self.allStyleArray.count > 0) {
+        [self.allStyleArray removeAllObjects];
+        self.allStyleArray= nil;
     }
 }
 
-- (void)addChangeStyleObject:(id)object
+- (void)addChangeStyleObserver:(id<PKResChangeStyleDelegate>)object
 {
-    if (![self.resObjectsArray containsObject:object])
+    if (![self.resObserverArray containsObject:object])
     {
-        @synchronized(self.resObjectsArray)
+        @synchronized(self.resObserverArray)
         {
-            [self.resObjectsArray addObject:object];
+            [self.resObserverArray addObject:object];
+            if ([object respondsToSelector:@selector(didChangeStyleWithManager:)]) {
+                if ([NSThread isMainThread]) {
+                    [object didChangeStyleWithManager:self];
+                } else {
+                    dispatch_sync(dispatch_get_main_queue(), ^{
+                        [object didChangeStyleWithManager:self];
+                    });
+                }
+            }
         }
     }
 }
 
-- (void)removeChangeStyleObject:(id)object
+- (void)removeChangeStyleObserver:(id<PKResChangeStyleDelegate>)object
 {
-    if ([self.resObjectsArray containsObject:object])
+    if ([self.resObserverArray containsObject:object])
     {
-        @synchronized(self.resObjectsArray)
+        @synchronized(self.resObserverArray)
         {
-            [self.resObjectsArray removeObject:object];
+            [self.resObserverArray removeObject:object];
         }
     }
 }
@@ -72,7 +78,7 @@ NSMutableArray* CreateNonRetainingArray() {
 }
 - (void)swithToStyle:(NSString *)name onComplete:(ResStyleCompleteBlock)block
 {
-    if ([_styleName isEqualToString:name]
+    if ([self.currentStyleName isEqualToString:name]
         || name == nil )
     {
         if (block) {
@@ -81,7 +87,7 @@ NSMutableArray* CreateNonRetainingArray() {
         }
         return;
     }
-    else if (_isLoading) {
+    else if (self.isLoading) {
         if (block) {
             block(NO,nil);
         }
@@ -89,40 +95,40 @@ NSMutableArray* CreateNonRetainingArray() {
         return;
     }
     DLog(@"[Style Manager] start change style");
-    _isLoading = YES;
+    self.isLoading = YES;
 
-    _styleName = [name copy];
+    self.currentStyleName = [name copy];
     
     // read resource bundle
-    _styleBundle = [self bundleByStyleName:name];
-    if (self.styleBundle == nil) {
+    self.currentStyleBundle = [self bundleByStyleName:name];
+    if (self.currentStyleBundle == nil) {
         if (block) {
             NSError *error = [NSError errorWithDomain:PK_STYLE_ERROR_DOMAIN code:PKStyleErrorCode_BundleName userInfo:nil];
             block(YES,error);
         }
-        _isLoading = NO;
+        self.isLoading = NO;
         return;
     }
     
     // remove cache
-    [_resImageCache removeAllObjects];
-    [_configCache removeAllObjects];
+    [self.resImageCache removeAllObjects];
+    [self.configCache removeAllObjects];
     
     // get plist dict
-    NSString *plistPath=[self.styleBundle pathForResource:CONFIG_PLIST_PATH ofType:@"plist"];
+    NSString *plistPath=[self.currentStyleBundle pathForResource:CONFIG_PLIST_PATH ofType:@"plist"];
     self.configCache = [NSMutableDictionary dictionaryWithContentsOfFile:plistPath];
     DLog(@"[Style Manager] configCacheCount:%ld",(long)self.configCache.count);
     
-    NSString *colorPlistPath = [self.styleBundle pathForResource:CONFIG_COLOR_PLIST_PATH ofType:@"plist"];
+    NSString *colorPlistPath = [self.currentStyleBundle pathForResource:CONFIG_COLOR_PLIST_PATH ofType:@"plist"];
     self.configColorCache = [NSMutableDictionary dictionaryWithContentsOfFile:colorPlistPath];
     DLog(@"[Style Manager] configColorCacheCount:%ld",(long)self.configColorCache.count);
     
-    NSString *fontPlistPath = [self.styleBundle pathForResource:CONFIG_FONT_PLIST_PATH ofType:@"plist"];
+    NSString *fontPlistPath = [self.currentStyleBundle pathForResource:CONFIG_FONT_PLIST_PATH ofType:@"plist"];
     self.configFontCache = [NSMutableDictionary dictionaryWithContentsOfFile:fontPlistPath];
     DLog(@"[Style Manager] configFontCacheCount:%ld",(long)self.configFontCache.count);
     
     // thread issue
-    NSMutableArray *holdResObjectArray = [NSMutableArray arrayWithArray:_resObjectsArray];
+    NSMutableArray *holdResObjectArray = [NSMutableArray arrayWithArray:self.resObserverArray];
     DLog(@"[Style Manager] all res object count:%ld",(long)holdResObjectArray.count);
     
     // change style
@@ -132,7 +138,9 @@ NSMutableArray* CreateNonRetainingArray() {
             if ([obj respondsToSelector:@selector(didChangeStyleWithManager:)])
             {
                 dispatch_sync(dispatch_get_main_queue(), ^{
-                    [obj didChangeStyleWithManager:self];
+                    @synchronized(self.resObserverArray) {
+                        [obj didChangeStyleWithManager:self];
+                    }
                 });
             } else {
                 DLog(@"[Style Manager]  change style failed ! => %@",obj);
@@ -146,12 +154,12 @@ NSMutableArray* CreateNonRetainingArray() {
                 
             }
         }];
-        _isLoading = NO;
+        self.isLoading = NO;
         
         // save
         dispatch_sync(dispatch_get_main_queue(), ^{
             // save
-            NSData *data = [NSKeyedArchiver archivedDataWithRootObject:_styleName];
+            NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.currentStyleName];
             [[NSUserDefaults standardUserDefaults] setObject:data forKey:kNowResStyle];
             // block
             if (block) {
@@ -161,7 +169,7 @@ NSMutableArray* CreateNonRetainingArray() {
         DLog(@"[Style Manager] end change style");
     });
     
-    while (!_isLoading) {
+    while (!self.isLoading) {
         return;
     }
     
@@ -189,7 +197,7 @@ NSMutableArray* CreateNonRetainingArray() {
         return NO;
     }
     
-    NSDictionary *styleDict = (self.allStyleArray)[index];
+    NSDictionary *styleDict = self.allStyleArray[index];
     NSString *bundleName = [(NSString *)styleDict[kStyleURL]
                             substringFromIndex:PK_CUSTOM_BUNDLE_PREFIX.length];
     BOOL isDir=NO;
@@ -208,14 +216,14 @@ NSMutableArray* CreateNonRetainingArray() {
         return NO;
     }
     
-    [_allStyleArray removeObjectAtIndex:index];
+    [self.allStyleArray removeObjectAtIndex:index];
     
     [self p_saveCustomStyleArray];
     
     DLog(@"[Style Manager]  %@",self.allStyleArray);
     
     // need reset
-    if ([_styleName isEqualToString:name]) {
+    if ([self.currentStyleName isEqualToString:name]) {
         [self resetStyle];
     }
     
@@ -241,11 +249,11 @@ NSMutableArray* CreateNonRetainingArray() {
         // if exists ,replace
         if (index != NSNotFound)
         {
-            _allStyleArray[index] = styleDict;
+            self.allStyleArray[index] = styleDict;
         }
         else
         {
-            [_allStyleArray addObject:styleDict];
+            [self.allStyleArray addObject:styleDict];
         }
         [self p_saveCustomStyleArray];
         
@@ -277,16 +285,20 @@ NSMutableArray* CreateNonRetainingArray() {
 
 - (void)clearImageCache
 {
-    [_resImageCache removeAllObjects];
-    //    [_configCache removeAllObjects];
+    [self.resImageCache removeAllObjects];
 }
 - (void)resetStyle
 {
     // swith to default style
-    _isLoading = NO;
-    NSDictionary *defalutStyleDict = _defaultStyleArray[0];
+    self.isLoading = NO;
+    NSDictionary *defalutStyleDict = self.defaultStyleArray[0];
     NSString *styleName = defalutStyleDict[kStyleName];
     [self swithToStyle:styleName];
+}
+
+- (NSMutableArray *)defaultStyleName {
+    NSDictionary *defalutStyleDict = self.defaultStyleArray[0];
+    return defalutStyleDict[kStyleName];
 }
 
 - (NSBundle *)bundleByStyleName:(NSString *)name
@@ -296,14 +308,14 @@ NSMutableArray* CreateNonRetainingArray() {
         return nil;
     }
     
-    NSDictionary *styleDict = (self.allStyleArray)[index];
+    NSDictionary *styleDict = self.allStyleArray[index];
     NSString *bundleURL = styleDict[kStyleURL];
     NSString *filePath = nil;
     NSString *bundlePath = nil;
     
     //DLog(@"[Style Manager] bundleURL:%@",bundleURL);
     BOOL changeStyle = NO;
-    if ([self.styleName isEqualToString:name])
+    if ([self.currentStyleName isEqualToString:name])
     {
         changeStyle = YES;
     }
@@ -311,7 +323,7 @@ NSMutableArray* CreateNonRetainingArray() {
     {
         if (changeStyle)
         {
-            _styleType = PKResStyleType_System;
+            self.currentStyleType = PKResStyleType_System;
         }
         
         filePath = [[NSBundle mainBundle] bundlePath];
@@ -321,7 +333,7 @@ NSMutableArray* CreateNonRetainingArray() {
     {
         if (changeStyle)
         {
-            _styleType = PKResStyleType_Custom;
+            self.currentStyleType = PKResStyleType_Custom;
         }
         filePath = [self p_getSavedDirectoryWithSubDir:nil];
         bundlePath = [NSString stringWithFormat:@"%@/%@",filePath,[bundleURL substringFromIndex:PK_CUSTOM_BUNDLE_PREFIX.length]];
@@ -331,7 +343,7 @@ NSMutableArray* CreateNonRetainingArray() {
         DLog(@"[Style Manager] na ni !!! bundleName:%@",bundleURL);
         if (changeStyle)
         {
-            _styleType = PKResStyleType_Unknow;
+            self.currentStyleType = PKResStyleType_Unknow;
         }
         return nil;
     }
@@ -339,55 +351,9 @@ NSMutableArray* CreateNonRetainingArray() {
     return [NSBundle bundleWithPath:bundlePath];
 }
 
-- (id)getConfigDictByKey:(id)aKey withType:(PKResConfigType)type {
-    id ret = nil;
-    
-    NSMutableDictionary *styleConfigCache = nil;
-    NSMutableDictionary *defaultStyleConfigCache = nil;
-    switch (type) {
-        case PKResConfigType_Color:
-            styleConfigCache = self.configColorCache;
-            defaultStyleConfigCache = self.defaultConfigColorCache;
-            break;
-        case PKResConfigType_Font:
-            styleConfigCache = self.configFontCache;
-            defaultStyleConfigCache = self.defaultConfigFontCache;
-            break;
-        default:
-            styleConfigCache = self.configCache;
-            defaultStyleConfigCache = self.defaultConfigCache;
-            break;
-    }
-
-    NSArray *keyArray = [aKey componentsSeparatedByString:PK_CONFIG_SEPARATE_KEY];
-    for (id aKey in keyArray) {
-        if (0 == [keyArray indexOfObject:aKey]) {
-            ret = styleConfigCache[keyArray.firstObject];
-        } else if (ret) {
-            ret = [ret objectForKey:aKey];
-        } else {
-            break;
-        }
-    }
-    
-    if (nil == ret) {
-        for (id aKey in keyArray) {
-            if (0 == [keyArray indexOfObject:aKey]) {
-                ret = defaultStyleConfigCache[keyArray.firstObject];
-            } else if (ret) {
-                ret = [ret objectForKey:aKey];
-            } else {
-                break;
-            }
-        }
-    }
-    
-    return ret;
-}
-
 - (UIImage *)previewImage
 {
-    return [self previewImageByStyleName:_styleName];
+    return [self previewImageByStyleName:self.currentStyleName];
 }
 - (UIImage *)previewImageByStyleName:(NSString *)name
 {
@@ -398,41 +364,6 @@ NSMutableArray* CreateNonRetainingArray() {
         image = [UIImage imageWithContentsOfFile:imagePath];
     }
     return image;
-}
-
-- (NSMutableDictionary *)defaultConfigCache
-{
-    if (!_defaultConfigCache)
-    {
-        NSDictionary *defalutStyleDict = _defaultStyleArray[0];
-        NSString *defaultStyleName = defalutStyleDict[kStyleName];
-        NSBundle *tempBundle = [self bundleByStyleName:defaultStyleName];
-        NSString *plistPath=[tempBundle pathForResource:CONFIG_PLIST_PATH ofType:@"plist"];
-        _defaultConfigCache = [NSMutableDictionary dictionaryWithContentsOfFile:plistPath];
-    }
-    return _defaultConfigCache;
-}
-
-- (NSMutableDictionary *)defaultConfigColorCache {
-    if (!_defaultConfigColorCache) {
-        NSDictionary *defalutStyleDict = _defaultStyleArray[0];
-        NSString *defaultStyleName = defalutStyleDict[kStyleName];
-        NSBundle *tempBundle = [self bundleByStyleName:defaultStyleName];
-        NSString *plistPath=[tempBundle pathForResource:CONFIG_COLOR_PLIST_PATH ofType:@"plist"];
-        _defaultConfigColorCache = [NSMutableDictionary dictionaryWithContentsOfFile:plistPath];
-    }
-    return _defaultConfigColorCache;
-}
-
-- (NSMutableDictionary *)defaultConfigFontCache {
-    if (!_defaultConfigFontCache) {
-        NSDictionary *defalutStyleDict = _defaultStyleArray[0];
-        NSString *defaultStyleName = defalutStyleDict[kStyleName];
-        NSBundle *tempBundle = [self bundleByStyleName:defaultStyleName];
-        NSString *plistPath=[tempBundle pathForResource:CONFIG_FONT_PLIST_PATH ofType:@"plist"];
-        _defaultConfigFontCache = [NSMutableDictionary dictionaryWithContentsOfFile:plistPath];
-    }
-    return _defaultConfigFontCache;
 }
 
 #pragma mark - Private
@@ -451,31 +382,27 @@ NSMutableArray* CreateNonRetainingArray() {
     NSRange range;
     range.location = 0;
     range.length = self.defaultStyleArray.count;
-    [self.customStyleArray removeObjectsInRange:range];
-    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.customStyleArray];
-    [[NSUserDefaults standardUserDefaults] setObject:data forKey:kAllResStyle];
+    if (range.length > 0) {
+        [self.customStyleArray removeObjectsInRange:range];
+        NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.customStyleArray];
+        [[NSUserDefaults standardUserDefaults] setObject:data forKey:kAllResStyle];
+    }
 }
 - (NSMutableArray*)p_getSavedStyleArray
 {
-    if (!_defaultStyleArray) {
-        NSDictionary *defaultStyleDict = @{kStyleID : PK_SYSTEM_STYLE_ID,
-                                           kStyleName : PK_SYSTEM_STYLE_DEFAULT,
-                                           kStyleURL : PK_SYSTEM_STYLE_DEFAULT_URL,
-                                           kStyleVersion : PK_SYSTEM_STYLE_VERSION};
-        
-        _defaultStyleArray = [[NSMutableArray alloc] initWithObjects:defaultStyleDict, nil];
-    }
     NSMutableArray *retArray = [NSMutableArray arrayWithArray:self.defaultStyleArray];
     NSData *data = [[NSUserDefaults standardUserDefaults] objectForKey:kAllResStyle];
-    NSArray *customStyleArray = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-    [retArray addObjectsFromArray:customStyleArray];
+    if (data) {
+        NSArray *customStyleArray = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+        [retArray addObjectsFromArray:customStyleArray];
+    }
     return retArray;
 }
 
 - (NSUInteger)p_styleTypeIndexByName:(NSString *)name
 {
     __block NSUInteger styleIndex = NSNotFound;
-    [_allStyleArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
+    [self.allStyleArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
      {
          NSDictionary *styleDict = (NSDictionary *)obj;
          NSString *styleName = styleDict[kStyleName];
@@ -488,7 +415,7 @@ NSMutableArray* CreateNonRetainingArray() {
     
     return styleIndex;
 }
-//
+
 - (NSString *)p_getSavedDirectoryWithSubDir:(NSString *)subDir
 {
     NSString *newDirectory = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES)[0];
@@ -519,18 +446,18 @@ NSMutableArray* CreateNonRetainingArray() {
 - (instancetype)init {
     self = [super init];
     if (self) {
-        _styleChangedHandlers = [[NSMutableArray alloc] init];
-        _resObjectsArray = CreateNonRetainingArray(); // 不retain的数组
-        _resImageCache = [[NSMutableDictionary alloc] init];
-        _configCache = [[NSMutableDictionary alloc] init];
+        self.styleChangedHandlers = [[NSMutableArray alloc] init];
+        self.resObserverArray = CreateNonRetainingArray(); // 不retain的数组
+        self.resImageCache = [[NSMutableDictionary alloc] init];
+        self.configCache = [[NSMutableDictionary alloc] init];
         
         // get all style ( will get defalut style array)
-        _allStyleArray = [self p_getSavedStyleArray];
+        self.allStyleArray = [self p_getSavedStyleArray];
         
         // read
         NSData *data = [[NSUserDefaults standardUserDefaults] objectForKey:kNowResStyle];
         if (nil != data) {
-            _isLoading = NO;
+            self.isLoading = NO;
             NSString *nowStyleName = [NSKeyedUnarchiver unarchiveObjectWithData:data];
             [self swithToStyle:nowStyleName];
         }else{

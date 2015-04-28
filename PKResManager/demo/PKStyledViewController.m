@@ -127,7 +127,7 @@ scrollView = _scrollView;
 }
 - (void)changeAction
 {
-    if ([[PKResManager getInstance].styleName isEqualToString:PK_SYSTEM_STYLE_DEFAULT])
+    if ([[PKResManager getInstance].currentStyleName isEqualToString:PK_SYSTEM_STYLE_DEFAULT])
     {
         [[PKResManager getInstance] swithToStyle:SAVED_NIGHT_STYLE];
     }

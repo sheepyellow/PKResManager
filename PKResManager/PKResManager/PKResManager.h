@@ -41,65 +41,39 @@ typedef void (^ResStyleCompleteBlock) (BOOL finished, NSError *error);
 @interface PKResManager : NSObject
 
 /*!
- * 当前主题 style bundle
+ * current style bundle
  */
-@property (nonatomic, readonly) NSBundle *styleBundle;
+@property (nonatomic, readonly) NSBundle *currentStyleBundle;
 /*!
- * 图片缓存
+ * current style name
  */
-@property (nonatomic, strong) NSMutableDictionary *resImageCache;
-
+@property (nonatomic, readonly) NSString *currentStyleName;
 /*!
- * 默认主题下 plist 资源
+ * default style name
  */
-@property (nonatomic, readonly) NSMutableDictionary *defaultConfigCache;
-/*!
- * 默认主题下 plist 资源
- */
-@property (nonatomic, readonly) NSMutableDictionary *defaultConfigColorCache;
-/*!
- * 默认主题下 plist 资源
- */
-@property (nonatomic, readonly) NSMutableDictionary *defaultConfigFontCache;
-
-/*!
- * plist 资源缓存
- */
-@property (nonatomic, strong) NSMutableDictionary *configCache;
-/*!
- * plist 资源缓存
- */
-@property (nonatomic, strong) NSMutableDictionary *configColorCache;
-/*!
- * plist 资源缓存
- */
-@property (nonatomic, strong) NSMutableDictionary *configFontCache;
-/*!
- * All style Dict Array
- */
-@property (nonatomic, readonly) NSMutableArray *allStyleArray;
-/*!
- * Current style name
- */
-@property (nonatomic, readonly) NSString *styleName;
+@property (nonatomic, readonly) NSString *defaultStyleName;
 /*!
  * Current style type
  */
-@property (nonatomic, readonly) PKResStyleType styleType;
+@property (nonatomic, readonly) PKResStyleType currentStyleType;
 /*!
  * is loading?
  */
 @property (nonatomic, readonly) BOOL isLoading;
+/*!
+ * all style Dict Array
+ */
+@property (nonatomic, readonly) NSMutableArray *allStyleArray;
 
 // Add style Object
-- (void)addChangeStyleObject:(id)object;
+- (void)addChangeStyleObserver:(id<PKResChangeStyleDelegate>)object;
 // Object dealloc invoke this method!!!
-- (void)removeChangeStyleObject:(id)object;
+- (void)removeChangeStyleObserver:(id<PKResChangeStyleDelegate>)object;
 /*!
  * Switch to style by name
  * @discuss You should not swith to a new style until completed
  */
-- (void)swithToStyle:(NSString *)name; // not safety
+- (void)swithToStyle:(NSString *)name;
 - (void)swithToStyle:(NSString *)name onComplete:(ResStyleCompleteBlock)block; 
 /*!
  * containsStyle
@@ -128,20 +102,17 @@ typedef void (^ResStyleCompleteBlock) (BOOL finished, NSError *error);
  */
 - (void)resetStyle;
 /*!
- * 通过名字获取资源bundle
+ * get bundle by name
  */
 - (NSBundle *)bundleByStyleName:(NSString *)name;
 /*!
- * 预览图
+ * preview
  */
 - (UIImage *)previewImage;
 - (UIImage *)previewImageByStyleName:(NSString *)name;
-
-- (id)getConfigDictByKey:(id)aKey withType:(PKResConfigType)type;
 /*!
- * 单例
+ * Singlton
  */
 + (PKResManager*)getInstance;
-
 
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "UIImage+PKImage.h"
+#import "PKResManager+Private.h"
 
 @implementation UIImage (PKImage)
 
@@ -30,8 +31,9 @@
     if (image == nil)
     {
         // no cache
-        image = [UIImage pk_imageForKey:aKey style:[PKResManager getInstance].styleName];
+        image = [UIImage pk_imageForKey:aKey style:[PKResManager getInstance].currentStyleName];
     }
+
     // cache
     if (image != nil && needCache)
     {
@@ -43,9 +45,9 @@
 
 + (UIImage *)pk_imageForKey:(id)aKey style:(NSString *)name
 {
-    if (aKey == nil)
+    if (aKey == nil || name.length <= 0)
     {
-        DLog(@" pk_imageForKey:style: aKey = nil");
+        DLog(@" pk_imageForKey:style: aKey = nil || name.length <= 0");
         return nil;
     }
     // 去除扩展名
@@ -57,11 +59,11 @@
     UIImage *image = nil;
     NSBundle *styleBundle = nil;
     // 不是当前style情况
-    if (![name isEqualToString:[PKResManager getInstance].styleName])
+    if (![name isEqualToString:[PKResManager getInstance].currentStyleName])
     {
         styleBundle = [[PKResManager getInstance] bundleByStyleName:name];
     } else {
-        styleBundle = [PKResManager getInstance].styleBundle;
+        styleBundle = [PKResManager getInstance].currentStyleBundle;
     }
     
     image = [UIImage pk_imageForKey:aKey inBundle:styleBundle];
@@ -89,9 +91,18 @@
     // 最后从mainBundle中找
     if (image == nil)
     {
-        DLog(@" will get default style => %@",aKey);
+        DLog(@" will get default style1 => %@",aKey);
         styleBundle = [NSBundle mainBundle];
         image = [UIImage pk_imageForKey:aKey inBundle:styleBundle];
+    }
+    if (image == nil) {
+        DLog(@" will get default style2 => %@",aKey);
+        image = [UIImage imageNamed:aKey];
+    }
+    
+    if (image == nil && ![name isEqualToString:[PKResManager getInstance].defaultStyleName]) {
+        DLog(@" pk_imageForKey:style: currentStyle not exist")
+        image = [UIImage pk_imageForKey:aKey style:[PKResManager getInstance].defaultStyleName];
     }
     
     return image;

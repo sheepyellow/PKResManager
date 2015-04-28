@@ -21,17 +21,11 @@ tableView = _tableView,
 dataArray;
 - (void)dealloc
 {
-    [[PKResManager getInstance] removeChangeStyleObject:self];
+    [[PKResManager getInstance] removeChangeStyleObserver:self];
 }
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [[PKResManager getInstance] addChangeStyleObject:self];
-    if (isiOS7Higher) {
-        self.navigationController.navigationBar.barTintColor = [UIColor pk_colorForKey:@"DemoNavColor"];
-    } else {
-        self.navigationController.navigationBar.tintColor = [UIColor pk_colorForKey:@"DemoNavColor"];
-    }
     
     self.navigationItem.title = @"Demo";
     self.dataArray = [[NSMutableArray alloc] initWithObjects:@"Demo",@"List",@"Reset", nil];
@@ -39,6 +33,9 @@ dataArray;
     _tableView.delegate = self;
     _tableView.dataSource = self;
     [self.view addSubview:_tableView];
+    [_tableView reloadData];
+    
+     [[PKResManager getInstance] addChangeStyleObserver:self];
 }
 
 - (void)viewDidUnload
@@ -99,7 +96,7 @@ dataArray;
 - (void)didChangeStyleWithManager:(PKResManager *)manager
 {
     UIColor *navFontColor = nil;
-    if ([[PKResManager getInstance].styleName isEqualToString:PK_SYSTEM_STYLE_DEFAULT]) {
+    if ([[PKResManager getInstance].currentStyleName isEqualToString:PK_SYSTEM_STYLE_DEFAULT]) {
         [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
         navFontColor = [UIColor blackColor];
     } else {
