@@ -27,7 +27,7 @@ dataArray;
 {
     [super viewDidLoad];
     [[PKResManager getInstance] addChangeStyleObject:self];    
-    self.navigationController.navigationBar.tintColor = [UIColor colorForKey:@"DemoModule-navBar"];
+    self.navigationController.navigationBar.tintColor = [UIColor pk_colorForKey:@"DemoModule-navBar"];
     self.navigationItem.title = @"Demo";
     self.dataArray = [[NSMutableArray alloc] initWithObjects:@"Demo",@"List",@"Reset", nil];
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds];
@@ -64,7 +64,7 @@ dataArray;
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:demoId];
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
-    cell.textLabel.font = [UIFont fontForKey:@"SettingModule-tableCell"];
+    cell.textLabel.font = [UIFont pk_fontForKey:@"SettingModule-tableCell"];
     cell.textLabel.text = (self.dataArray)[indexPath.row];
     // 
     return cell;
@@ -91,14 +91,14 @@ dataArray;
     }
 }
 #pragma mark - PKResChangeStyleDelegate
-- (void)changeStyle:(id)sender
+- (void)didChangeStyleWithManager:(PKResManager *)manager
 {
     [[UIApplication sharedApplication] setStatusBarStyle:UIScrollViewIndicatorStyleDefault animated:YES];
-    if ([[PKResManager getInstance].styleName isEqualToString:SYSTEM_STYLE_NIGHT]) {
+    if ([[PKResManager getInstance].styleName isEqualToString:PK_SYSTEM_STYLE_DEFAULT]) {
         [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent animated:YES];        
     }
 
-    self.navigationController.navigationBar.tintColor = [UIColor colorForKey:@"DemoModule-navBar"]; 
+    self.navigationController.navigationBar.tintColor = [UIColor pk_colorForKey:@"DemoModule-navBar"]; 
     
     [self.tableView reloadData];
 }

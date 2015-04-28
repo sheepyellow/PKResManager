@@ -8,27 +8,34 @@
 
 #import <Foundation/Foundation.h>
 
-typedef enum {
-	PKErrorCodeSuccess						= 0, // 自定义,表示成功.
-	PKErrorCodeUnknow                       = 1, // 未知错误
-	PKErrorCodeUnavailable	        		= 2, // 不可用，需要下载
-    PKErrorCodeBundleName                   = 3, // bundleName问题
-} PKErrorCode;
+typedef NS_ENUM(NSUInteger, PKStyleErrorCode) {
+    PKStyleErrorCode_Success                 = 0, // 自定义,表示成功.
+    PKStyleErrorCode_Unknow                  = 1, // 未知错误
+    PKStyleErrorCode_Unavailable	         = 2, // 不可用，需要下载
+    PKStyleErrorCode_BundleName              = 3, // bundleName问题
+};
+
+typedef NS_ENUM(NSUInteger, PKResStyleType) {
+    PKResStyleType_System,
+    PKResStyleType_Custom,
+    PKResStyleType_Unknow
+};
+
+typedef NS_ENUM(NSUInteger, PKResConfigType) {
+    PKResConfigType_Default,
+    PKResConfigType_Color,
+    PKResConfigType_Font
+};
 
 
 typedef void (^ResStyleProgressBlock) (double progress);
 typedef void (^ResStyleCompleteBlock) (BOOL finished, NSError *error);
 
-typedef enum {
-    ResStyleType_System,
-    ResStyleType_Custom,
-    ResStyleType_Unknow
-}ResStyleType;
-
+@class PKResManager;
 
 @protocol PKResChangeStyleDelegate <NSObject>
 @optional
-- (void)changeStyle:(id)sender;
+- (void)didChangeStyleWithManager:(PKResManager *)manager;
 @end
 
 @interface PKResManager : NSObject
@@ -38,18 +45,35 @@ typedef enum {
  */
 @property (nonatomic, readonly) NSBundle *styleBundle;
 /*!
- * 默认主题下 plist 资源
- */
-@property (nonatomic, readonly) NSMutableDictionary *defaultResOtherCache;
-/*!
  * 图片缓存
  */
 @property (nonatomic, strong) NSMutableDictionary *resImageCache;
+
+/*!
+ * 默认主题下 plist 资源
+ */
+@property (nonatomic, readonly) NSMutableDictionary *defaultConfigCache;
+/*!
+ * 默认主题下 plist 资源
+ */
+@property (nonatomic, readonly) NSMutableDictionary *defaultConfigColorCache;
+/*!
+ * 默认主题下 plist 资源
+ */
+@property (nonatomic, readonly) NSMutableDictionary *defaultConfigFontCache;
+
 /*!
  * plist 资源缓存
  */
-@property (nonatomic, strong) NSMutableDictionary *resOtherCache;
-
+@property (nonatomic, strong) NSMutableDictionary *configCache;
+/*!
+ * plist 资源缓存
+ */
+@property (nonatomic, strong) NSMutableDictionary *configColorCache;
+/*!
+ * plist 资源缓存
+ */
+@property (nonatomic, strong) NSMutableDictionary *configFontCache;
 /*!
  * All style Dict Array
  */
@@ -61,7 +85,7 @@ typedef enum {
 /*!
  * Current style type
  */
-@property (nonatomic, readonly) ResStyleType styleType;
+@property (nonatomic, readonly) PKResStyleType styleType;
 /*!
  * is loading?
  */
@@ -112,9 +136,12 @@ typedef enum {
  */
 - (UIImage *)previewImage;
 - (UIImage *)previewImageByStyleName:(NSString *)name;
+
+- (NSDictionary *)getConfigDictByKey:(id)aKey withType:(PKResConfigType)type;
 /*!
  * 单例
  */
 + (PKResManager*)getInstance;
+
 
 @end

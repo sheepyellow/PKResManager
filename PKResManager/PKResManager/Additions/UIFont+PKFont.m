@@ -10,23 +10,29 @@
 
 @implementation UIFont (PKFont)
 
-+ (UIFont *)fontForKey:(id)key
++ (UIFont *)pk_fontForKey:(id)aKey
 {
-    NSArray *keyArray = [key componentsSeparatedByString:@"-"];
-    NSAssert1(keyArray.count == 2, @"module key name error!!! [font]==> %@", key);
+//    NSString *fontSize = [[PKResManager getInstance].configFontCache objectForKey:aKey];
+//    if (!fontSize) {
+//        fontSize = [[PKResManager getInstance].defaultConfigFontCache objectForKey:aKey];
+//    }
+//    
+//    if (fontSize.floatValue > 0) {
+//        return [UIFont systemFontOfSize:fontSize.floatValue];
+//    }
     
-    NSString *moduleKey = keyArray[0];
-    NSString *memberKey = keyArray[1];
+    NSDictionary *retDict = [[PKResManager getInstance] getConfigDictByKey:aKey withType:PKResConfigType_Default];
+    NSString *fontName = retDict[kPKConfigFontName];
+    NSString *fontSize = retDict[kPKConfigFontSize];
     
-    NSDictionary *moduleDict = ([PKResManager getInstance].resOtherCache)[moduleKey];
-    NSDictionary *memberDict = moduleDict[memberKey];
+    if (fontName.length > 0 && fontSize.length > 0) {
+        return [UIFont fontWithName:fontName
+                               size:fontSize.floatValue];
+    } else {
+        return [UIFont systemFontOfSize:fontSize.floatValue];
+    }
     
-    NSString *fontName = memberDict[@"font"];
-    NSNumber *fontSize = memberDict[@"size"];
-    UIFont *font = [UIFont fontWithName:fontName
-                                   size:fontSize.floatValue];
-    
-    return font;
+    return nil;
 }
 
 @end

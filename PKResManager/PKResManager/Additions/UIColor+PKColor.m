@@ -10,102 +10,64 @@
 
 @implementation UIColor (PKColor)
 
-+ (UIColor *)colorForKey:(id)key
++ (UIColor *)pk_colorForKey:(id)aKey
 {
-    return [UIColor colorForKey:key style:PKColorTypeNormal];
-}
+    NSDictionary *retDict = [[PKResManager getInstance] getConfigDictByKey:aKey withType:PKResConfigType_Default];
+    NSString *colorStr = retDict[kPKConfigColor];
+    
+    //NSString *colorStr = [[PKResManager getInstance].configColorCache objectForKey:aKey];
+    if (colorStr.length <= 0) {
+        colorStr = [[PKResManager getInstance].defaultConfigColorCache objectForKey:aKey];
+    }
 
-+ (UIColor *)shadowColorForKey:(id)key
-{
-    return [UIColor colorForKey:key style:PKColorTypeShadow];
-}
-
-+ (UIColor *)colorForKey:(id)key style:(PKColorType)type
-{
-    NSArray *keyArray = [key componentsSeparatedByString:@"-"];
-    NSAssert1(keyArray.count == 2, @"module key name error!!! [color] ==> %@", key);
+    NSArray *colorArray = [colorStr componentsSeparatedByString:@","];
     
-    NSString *moduleKey = keyArray[0];
-    NSString *memberKey = keyArray[1];
-    
-    NSDictionary *moduleDict = ([PKResManager getInstance].resOtherCache)[moduleKey];
-    // 容错处理读取默认配置
-    if (moduleDict.count <= 0)
-    {
-        moduleDict = ([PKResManager getInstance].defaultResOtherCache)[moduleKey];
-    }
-    NSAssert1(moduleDict.count > 0, @"module not exist !!! [color] ==> %@", key);
-    NSDictionary *memberDict = moduleDict[memberKey];
-    // 容错处理读取默认配置
-    if (memberDict.count <= 0) {
-        moduleDict = ([PKResManager getInstance].defaultResOtherCache)[moduleKey];
-        memberDict = moduleDict[memberKey];
-    }
-    NSAssert1(memberDict.count > 0, @"color not exist !!! [color] ==> %@", key);
-    
-    NSString *colorStr = memberDict[kColor];
-    
-    BOOL shadow = NO;
-    if (type & PKColorTypeShadow) {
-        shadow = YES;
-        colorStr = memberDict[kShadowColor];
-    }
-    if (type & PKColorTypeHightLight) {
-        colorStr = memberDict[kColorHL];
-        if (shadow) {
-            colorStr = memberDict[kShadowColorHL];
+    NSInteger r = 255;
+    NSInteger g = 255;
+    NSInteger b = 255;
+    CGFloat a = 1.0f;
+    if (colorArray.count >= 3) {
+        r = [colorArray[0] integerValue];
+        g = [colorArray[1] integerValue];
+        b = [colorArray[2] integerValue];
+        if (colorArray.count >= 4) {
+            a = [colorArray[3] floatValue];
+        }
+        if (a <= .0f) {
+            return [UIColor clearColor];
+        }
+        return [self colorWithRed:((CGFloat)r / 255.f)
+                            green:((CGFloat)g / 255.f)
+                             blue:((CGFloat)b / 255.f)
+                            alpha:a];
+    } else {
+        if ([colorStr hasPrefix:@"#"]) {
+            colorStr = [colorStr substringFromIndex:1];
+        }
+        if ([[colorStr lowercaseString] hasPrefix:@"0x"]) {
+            colorStr = [colorStr substringFromIndex:2];
+        }
+        if ([colorStr length] == 6) {
+            NSScanner *scanner = [[NSScanner alloc] initWithString:colorStr];
+            unsigned hexValue = 0;
+            if ([scanner scanHexInt:&hexValue] && [scanner isAtEnd]) {
+                r = ((hexValue & 0xFF0000) >> 16);
+                g = ((hexValue & 0x00FF00) >>  8);
+                b = ( hexValue & 0x0000FF)       ;
+                return [self colorWithRed:((CGFloat)r / 255.f)
+                                    green:((CGFloat)g / 255.f)
+                                     blue:((CGFloat)b / 255.f)
+                                    alpha:a];
+            }
         }
     }
-    
-    NSNumber *redValue;
-    NSNumber *greenValue;
-    NSNumber *blueValue;
-    NSNumber *alphaValue;
-    NSArray *colorArray = [colorStr componentsSeparatedByString:@","];
-    if (colorArray != nil && colorArray.count == 3) {
-        redValue = @([colorArray[0] floatValue]);
-        greenValue = @([colorArray[1] floatValue]);
-        blueValue = @([colorArray[2] floatValue]);
-        alphaValue = @1.0f;
-    } else if (colorArray != nil && colorArray.count == 4) {
-        redValue = @([colorArray[0] floatValue]);
-        greenValue = @([colorArray[1] floatValue]);
-        blueValue = @([colorArray[2] floatValue]);
-        alphaValue = @([colorArray[3] floatValue]);
-    } else {
-        return nil;
-    }
-    
-    if ([alphaValue floatValue]<=0.0f) {
-        return [UIColor clearColor];
-    }
-    return [UIColor colorWithRed:(CGFloat)([redValue floatValue]/255.0f)
-                           green:(CGFloat)([greenValue floatValue]/255.0f)
-                            blue:(CGFloat)([blueValue floatValue]/255.0f)
-                           alpha:(CGFloat)([alphaValue floatValue])];
+    return nil;
 }
 
 
-+ (UIColor *)colorForKey:(id)key alpha:(CGFloat)alpha style:(PKColorType)type
++ (UIColor *)pk_colorForKey:(id)aKey alpha:(CGFloat)alpha
 {
-    UIColor *styleColor = [UIColor colorForKey:key style:type];
-    if (alpha > 0.0f && alpha <= 1.0f)
-    {
-        CGColorRef alphaColorRef = CGColorCreateCopyWithAlpha(styleColor.CGColor,alpha);
-        styleColor = [UIColor colorWithCGColor:alphaColorRef];
-        CGColorRelease(alphaColorRef);
-    }
-    return styleColor;
-}
-
-+ (UIColor *)colorForKey:(id)key alpha:(CGFloat)alpha
-{
-    return [UIColor colorForKey:key alpha:alpha style:PKColorTypeNormal];
-}
-
-+ (UIColor *)shadowColorForKey:(id)key alpha:(CGFloat)alpha
-{
-    return [UIColor colorForKey:key alpha:alpha style:PKColorTypeShadow];
+    return [[UIColor pk_colorForKey:aKey] colorWithAlphaComponent:alpha];
 }
 
 @end

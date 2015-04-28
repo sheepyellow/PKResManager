@@ -92,15 +92,15 @@ dataArray = _dataArray;
 {
     // test save custom style
     NSBundle *bundle = [NSBundle bundleWithPath:[[NSBundle mainBundle] pathForResource:@"testSave" ofType:@"bundle"]];
-    [[PKResManager getInstance] saveStyle:@"32198139428"
-                                     name:CUSTOM_STYLE
+    [[PKResManager getInstance] saveStyle:@"pk_style_test_custom"
+                                     name:SAVED_CUSTOM_STYLE
                                   version:@1.0f
                                withBundle:bundle];
     [self refreshDataSource];
 }
 - (void)delCustomStyleAction:(id)sender
 {
-    [[PKResManager getInstance] deleteStyle:CUSTOM_STYLE];
+    [[PKResManager getInstance] deleteStyle:SAVED_CUSTOM_STYLE];
     [self refreshDataSource];
 }
 #pragma mark - UITableViewDataSource
@@ -156,7 +156,7 @@ dataArray = _dataArray;
     NSString *styleName = aStyleDict[kStyleName];
     [[PKResManager getInstance] swithToStyle:styleName onComplete:^(BOOL finished, NSError *error) {
         if (finished) {
-            if (error && error.code != PKErrorCodeUnavailable) {
+            if (error && error.code != PKStyleErrorCode_Unavailable) {
                 UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error"
                                                                     message:[NSString stringWithFormat:@"code:%d",error.code]
                                                                    delegate:nil

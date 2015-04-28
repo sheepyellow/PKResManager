@@ -12,12 +12,12 @@
 
 /*!
  *   @method
- *   @abstract get image by key
+ *   @abstract get image by aKey
  *   @param needCache , will cached
  *   @param name, will not cached
  */
-+ (UIImage *)imageForKey:(id)key style:(NSString *)name;
-+ (UIImage *)imageForKey:(id)key cache:(BOOL)needCache;
-+ (UIImage *)imageForKey:(id)key; // default cached
++ (UIImage *)pk_imageForKey:(id)aKey style:(NSString *)name;
++ (UIImage *)pk_imageForKey:(id)aKey cache:(BOOL)needCache;
++ (UIImage *)pk_imageForKey:(id)aKey; // default cached
 
 @end

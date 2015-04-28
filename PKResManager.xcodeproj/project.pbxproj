@@ -20,10 +20,10 @@
 		2F4FF38115B40F3A00BA831D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F4FF38015B40F3A00BA831D /* main.m */; };
 		2F4FF38515B40F3A00BA831D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F4FF38415B40F3A00BA831D /* AppDelegate.m */; };
 		2F4FF39815B40F8400BA831D /* PKResManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F4FF39315B40F8400BA831D /* PKResManager.m */; };
-		2F4FF39915B40F8400BA831D /* style_light.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2F4FF39515B40F8400BA831D /* style_light.bundle */; };
-		2F4FF39A15B40F8400BA831D /* style_night.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2F4FF39615B40F8400BA831D /* style_night.bundle */; };
-		2F4FF39B15B40F8400BA831D /* testSave.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2F4FF39715B40F8400BA831D /* testSave.bundle */; };
 		2FDCA45015B5E4B4005F68D6 /* PKStyleListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FDCA44F15B5E4B4005F68D6 /* PKStyleListViewController.m */; };
+		DFB215151AEF29C500747708 /* PKStyleDefault.bundle in Resources */ = {isa = PBXBuildFile; fileRef = DFB215121AEF29C500747708 /* PKStyleDefault.bundle */; };
+		DFB215161AEF29C500747708 /* testNight.bundle in Resources */ = {isa = PBXBuildFile; fileRef = DFB215131AEF29C500747708 /* testNight.bundle */; };
+		DFB215171AEF29C500747708 /* testSave.bundle in Resources */ = {isa = PBXBuildFile; fileRef = DFB215141AEF29C500747708 /* testSave.bundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,11 +52,11 @@
 		2F4FF39215B40F8400BA831D /* PKResManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKResManager.h; sourceTree = "<group>"; };
 		2F4FF39315B40F8400BA831D /* PKResManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKResManager.m; sourceTree = "<group>"; };
 		2F4FF39415B40F8400BA831D /* PKResManagerKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKResManagerKit.h; sourceTree = "<group>"; };
-		2F4FF39515B40F8400BA831D /* style_light.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = style_light.bundle; sourceTree = "<group>"; };
-		2F4FF39615B40F8400BA831D /* style_night.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = style_night.bundle; sourceTree = "<group>"; };
-		2F4FF39715B40F8400BA831D /* testSave.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = testSave.bundle; sourceTree = "<group>"; };
 		2FDCA44E15B5E4B4005F68D6 /* PKStyleListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKStyleListViewController.h; sourceTree = "<group>"; };
 		2FDCA44F15B5E4B4005F68D6 /* PKStyleListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKStyleListViewController.m; sourceTree = "<group>"; };
+		DFB215121AEF29C500747708 /* PKStyleDefault.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = PKStyleDefault.bundle; path = PKResManager/PKStyleDefault.bundle; sourceTree = "<group>"; };
+		DFB215131AEF29C500747708 /* testNight.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = testNight.bundle; path = PKResManager/testNight.bundle; sourceTree = "<group>"; };
+		DFB215141AEF29C500747708 /* testSave.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = testSave.bundle; path = PKResManager/testSave.bundle; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,6 +135,9 @@
 				2F07BBA315B53E1400C46164 /* demo */,
 				2F4FF38315B40F3A00BA831D /* AppDelegate.h */,
 				2F4FF38415B40F3A00BA831D /* AppDelegate.m */,
+				DFB215121AEF29C500747708 /* PKStyleDefault.bundle */,
+				DFB215131AEF29C500747708 /* testNight.bundle */,
+				DFB215141AEF29C500747708 /* testSave.bundle */,
 				2F4FF37B15B40F3A00BA831D /* Supporting Files */,
 			);
 			path = PKResManager;
@@ -158,9 +161,6 @@
 				2F4FF39215B40F8400BA831D /* PKResManager.h */,
 				2F4FF39315B40F8400BA831D /* PKResManager.m */,
 				2F4FF39415B40F8400BA831D /* PKResManagerKit.h */,
-				2F4FF39515B40F8400BA831D /* style_light.bundle */,
-				2F4FF39615B40F8400BA831D /* style_night.bundle */,
-				2F4FF39715B40F8400BA831D /* testSave.bundle */,
 			);
 			path = PKResManager;
 			sourceTree = "<group>";
@@ -215,10 +215,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DFB215151AEF29C500747708 /* PKStyleDefault.bundle in Resources */,
 				2F4FF37F15B40F3A00BA831D /* InfoPlist.strings in Resources */,
-				2F4FF39915B40F8400BA831D /* style_light.bundle in Resources */,
-				2F4FF39A15B40F8400BA831D /* style_night.bundle in Resources */,
-				2F4FF39B15B40F8400BA831D /* testSave.bundle in Resources */,
+				DFB215171AEF29C500747708 /* testSave.bundle in Resources */,
+				DFB215161AEF29C500747708 /* testNight.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

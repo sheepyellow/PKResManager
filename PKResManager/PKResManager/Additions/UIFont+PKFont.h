@@ -9,5 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface UIFont (PKFont)
-+ (UIFont *)fontForKey:(id)key;
+
++ (UIFont *)pk_fontForKey:(id)aKey;
+
 @end

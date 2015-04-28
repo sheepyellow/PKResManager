@@ -13,6 +13,8 @@
     #import <Foundation/Foundation.h>
     #import "PKResManagerKit.h"
 
-#define CUSTOM_STYLE @"customStyle"
+#define SAVED_CUSTOM_STYLE @"SAVED_CUSTOM_STYLE"
+
+#define SAVED_NIGHT_STYLE @"SAVED_NIGHT_STYLE"
 
 #endif

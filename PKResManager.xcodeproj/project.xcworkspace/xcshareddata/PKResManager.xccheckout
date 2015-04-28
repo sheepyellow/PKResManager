@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>61E21F93-48EC-4FF9-B063-51E6F01A12B8</string>
+	<key>IDESourceControlProjectName</key>
+	<string>PKResManager</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>EA0F9622AB94EA2E77946BC815A223FE41F3E9F4</key>
+		<string>https://github.com/passerbycrk/PKResManager.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>PKResManager.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>EA0F9622AB94EA2E77946BC815A223FE41F3E9F4</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/passerbycrk/PKResManager.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>EA0F9622AB94EA2E77946BC815A223FE41F3E9F4</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>EA0F9622AB94EA2E77946BC815A223FE41F3E9F4</string>
+			<key>IDESourceControlWCCName</key>
+			<string>PKResManager</string>
+		</dict>
+	</array>
+</dict>
+</plist>

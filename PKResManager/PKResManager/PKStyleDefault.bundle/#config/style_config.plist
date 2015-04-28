@@ -9,10 +9,10 @@
 		<key>tableCell</key>
 		<dict>
 			<key>font</key>
-			<string>Chalkduster</string>
+			<string>STHeitiSC-Light</string>
 			<key>size</key>
 			<string>16.0</string>
-			<key>rgb</key>
+			<key>color</key>
 			<string>10,10,10,1</string>
 		</dict>
 	</dict>
@@ -20,20 +20,20 @@
 	<dict>
 		<key>navBar</key>
 		<dict>
-			<key>rgb</key>
-			<string>0,30,80</string>
+			<key>color</key>
+			<string>0,50,200</string>
 		</dict>
 		<key>styleView</key>
 		<dict>
-			<key>rgb</key>
-			<string>0,255,255</string>
+			<key>color</key>
+			<string>0,0,255</string>
 		</dict>
 		<key>label</key>
 		<dict>
 			<key>font</key>
-			<string>Chalkduster</string>
-			<key>rgb</key>
-			<string>0,0,0</string>
+			<string>STHeitiSC-Light</string>
+			<key>color</key>
+			<string>255,255,255</string>
 			<key>size</key>
 			<string>13.0</string>
 		</dict>

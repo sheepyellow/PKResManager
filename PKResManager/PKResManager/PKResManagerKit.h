@@ -14,11 +14,10 @@
 #endif
 
 #ifdef DEBUG
-#   define DLog(fmt, ...) {NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);}
-#   define ELog(err) {if(err) DLog(@"%@", err)}
+    //#define DLog(fmt, ...) {NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);}
+    #define DLog(fmt, ...) {NSLog(fmt, ##__VA_ARGS__);}
 #else
-#   define DLog(...)
-#   define ELog(err)
+    #define DLog(...)
 #endif
 
 #import "PKResManager.h"
@@ -26,38 +25,40 @@
 #import "UIColor+PKColor.h"
 #import "UIFont+PKFont.h"
 
-#define BUNDLE_PREFIX    @"bundle://"
-#define DOCUMENTS_PREFIX @"documents://"
+#define PK_DEFAULT_BUNDLE_PREFIX    @"bundle://"
+#define PK_CUSTOM_BUNDLE_PREFIX @"custom_bundle://"
 
 #define kAllResStyle     @"kAllResStyle"
 #define kNowResStyle     @"kNowResStyle"
 
-#define SAVED_STYLE_DIR  @"SavedStyleDir"
-#define TEMP_STYLE_DIR   @"TempStyleDir"
+#define PK_STYLE_SAVED_DIR  @"com.kuaikan.style"
+#define PK_STYLE_TEMP_DIR   @"com.kuaikan.style.tmp"
 
 #define kStyleID       @"kStyleID"
 #define kStyleName     @"kStyleName"
 #define kStyleVersion  @"kStyleVersion"
 #define kStyleURL      @"kStyleURL"
-// color
-#define kColor           @"rgb"
-#define kColorHL         @"rgb_hl"
-#define kShadowColor     @"shadow_rgb"
-#define kShadowColorHL   @"shadow_rgb_hl"
-#define kShadowOffset    @"shadow_offset"
 
-#define SYSTEM_STYLE_LIGHT      @"light"
-#define SYSTEM_STYLE_NIGHT      @"night"
-#define SYSTEM_STYLE_LIGHT_URL  @"bundle://style_light.bundle"
-#define SYSTEM_STYLE_NIGHT_URL  @"bundle://style_night.bundle"
+#define PK_SYSTEM_STYLE_DEFAULT      @"PK_SYSTEM_STYLE_DEFAULT"
+#define PK_SYSTEM_STYLE_DEFAULT_URL  @"bundle://PKStyleDefault.bundle"
 
-#define SYSTEM_STYLE_ID         @""
-#define SYSTEM_STYLE_VERSION    @"999.0"
+#define PK_SYSTEM_STYLE_ID         @"1"
+#define PK_SYSTEM_STYLE_VERSION    @"1"
 
-#define CONFIG_PLIST_PATH    @"/#config/styleConfig"
-#define PREVIEW_PATH         @"/#config/preview"
+#define CONFIG_PLIST_PATH           @"/#config/style_config"
+#define CONFIG_COLOR_PLIST_PATH     @"/#config/style_config_color"
+#define CONFIG_FONT_PLIST_PATH      @"/#config/style_config_font"
+#define PREVIEW_PATH                @"/#config/preview"
 
 // error
-#define PK_ERROR_DOMAIN   @"PK_ERROR_DOMAIN"
+#define PK_STYLE_ERROR_DOMAIN   @"PK_STYLE_ERROR_DOMAIN"
+
+// config separate key
+#define PK_CONFIG_SEPARATE_KEY  @"-"
+
+// config key
+#define kPKConfigColor              @"color"
+#define kPKConfigFontName           @"font"
+#define kPKConfigFontSize           @"size"
 
 #endif

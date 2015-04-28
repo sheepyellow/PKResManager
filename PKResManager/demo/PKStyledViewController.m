@@ -106,19 +106,19 @@ scrollView = _scrollView;
 }
 - (void)customAction
 {
-    if ([[PKResManager getInstance] containsStyle:CUSTOM_STYLE]) {
-        [[PKResManager getInstance] swithToStyle:CUSTOM_STYLE];        
+    if ([[PKResManager getInstance] containsStyle:SAVED_CUSTOM_STYLE]) {
+        [[PKResManager getInstance] swithToStyle:SAVED_CUSTOM_STYLE];        
     }
 }
 - (void)changeAction
 {
-    if ([[PKResManager getInstance].styleName isEqualToString:SYSTEM_STYLE_LIGHT]) 
+    if ([[PKResManager getInstance].styleName isEqualToString:PK_SYSTEM_STYLE_DEFAULT])
     {
-        [[PKResManager getInstance] swithToStyle:SYSTEM_STYLE_NIGHT];
+        [[PKResManager getInstance] swithToStyle:SAVED_NIGHT_STYLE];
     }
     else 
     {
-        [[PKResManager getInstance] swithToStyle:SYSTEM_STYLE_LIGHT];
+        [[PKResManager getInstance] swithToStyle:PK_SYSTEM_STYLE_DEFAULT];
     }
 }
 - (void)resetAction

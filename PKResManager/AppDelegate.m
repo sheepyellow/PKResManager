@@ -23,6 +23,12 @@
     self.window.rootViewController = navController;//self.viewController;
     [self.window makeKeyAndVisible];
     
+    NSBundle *bundle = [NSBundle bundleWithPath:[[NSBundle mainBundle] pathForResource:@"testNight" ofType:@"bundle"]];
+    [[PKResManager getInstance] saveStyle:@"pk_style_night_custom"
+                                     name:SAVED_NIGHT_STYLE
+                                  version:@1.0f
+                               withBundle:bundle];
+    [PKResManager getInstance];
     return YES;
 }
 

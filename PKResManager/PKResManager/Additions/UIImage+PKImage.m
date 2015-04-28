@@ -10,48 +10,48 @@
 
 @implementation UIImage (PKImage)
 
-+ (UIImage *)imageForKey:(id)key
++ (UIImage *)pk_imageForKey:(id)aKey
 {
-    return [UIImage imageForKey:key cache:YES];
+    return [UIImage pk_imageForKey:aKey cache:YES];
 }
 
-+ (UIImage *)imageForKey:(id)key cache:(BOOL)needCache
++ (UIImage *)pk_imageForKey:(id)aKey cache:(BOOL)needCache
 {
-    if (key == nil) {
-        DLog(@" imageForKey:cache: key = nil");
+    if (aKey == nil) {
+        DLog(@" pk_imageForKey:cache: aKey = nil");
         return nil;
     }
     // 去除扩展名
-    if ([key hasSuffix:@".png"] || [key hasSuffix:@".jpg"]) {
-        key = [key substringToIndex:((NSString*)key).length-4];
+    if ([aKey hasSuffix:@".png"] || [aKey hasSuffix:@".jpg"]) {
+        aKey = [aKey substringToIndex:((NSString*)aKey).length-4];
     }
     
-    UIImage *image = ([PKResManager getInstance].resImageCache)[key];
+    UIImage *image = [PKResManager getInstance].resImageCache[aKey];
     if (image == nil)
     {
         // no cache
-        image = [UIImage imageForKey:key style:[PKResManager getInstance].styleName];
+        image = [UIImage pk_imageForKey:aKey style:[PKResManager getInstance].styleName];
     }
     // cache
     if (image != nil && needCache)
     {
-        ([PKResManager getInstance].resImageCache)[key] = image;
+        [PKResManager getInstance].resImageCache[aKey] = image;
     }
     
     return image;
 }
 
-+ (UIImage *)imageForKey:(id)key style:(NSString *)name
++ (UIImage *)pk_imageForKey:(id)aKey style:(NSString *)name
 {
-    if (key == nil)
+    if (aKey == nil)
     {
-        DLog(@" imageForKey:style: key = nil");
+        DLog(@" pk_imageForKey:style: aKey = nil");
         return nil;
     }
     // 去除扩展名
-    if ([key hasSuffix:@".png"] || [key hasSuffix:@".jpg"])
+    if ([aKey hasSuffix:@".png"] || [aKey hasSuffix:@".jpg"])
     {
-        key = [key substringToIndex:((NSString*)key).length-4];
+        aKey = [aKey substringToIndex:((NSString*)aKey).length-4];
     }
     
     UIImage *image = nil;
@@ -60,41 +60,49 @@
     if (![name isEqualToString:[PKResManager getInstance].styleName])
     {
         styleBundle = [[PKResManager getInstance] bundleByStyleName:name];
-    }
-    else
-    {
+    } else {
         styleBundle = [PKResManager getInstance].styleBundle;
     }
     
-    image = [UIImage imageForKey:key inBundle:styleBundle];
+    image = [UIImage pk_imageForKey:aKey inBundle:styleBundle];
     
     // @2x情况
     if (image == nil)
     {
-        if (![key hasSuffix:@"@2x"]) {
-            image = [UIImage imageForKey:[NSString stringWithFormat:@"%@@2x",key] inBundle:styleBundle];
-        }else if ([key hasSuffix:@"@2x"]){
-            image = [UIImage imageForKey:[key substringToIndex:((NSString*)key).length-3] inBundle:styleBundle];
+        if (![aKey hasSuffix:@"@2x"]) {
+            image = [UIImage pk_imageForKey:[NSString stringWithFormat:@"%@@2x",aKey] inBundle:styleBundle];
+        } else if ([aKey hasSuffix:@"@2x"]){
+            image = [UIImage pk_imageForKey:[aKey substringToIndex:((NSString*)aKey).length-3] inBundle:styleBundle];
+        }
+    }
+    
+    // @3x情况
+    if (image == nil)
+    {
+        if (![aKey hasSuffix:@"@3x"]) {
+            image = [UIImage pk_imageForKey:[NSString stringWithFormat:@"%@@3x",aKey] inBundle:styleBundle];
+        } else if ([aKey hasSuffix:@"@3x"]){
+            image = [UIImage pk_imageForKey:[aKey substringToIndex:((NSString*)aKey).length-3] inBundle:styleBundle];
         }
     }
     
     // 最后从mainBundle中找
     if (image == nil)
     {
-        DLog(@" will get default style => %@",key);
+        DLog(@" will get default style => %@",aKey);
         styleBundle = [NSBundle mainBundle];
-        image = [UIImage imageForKey:key inBundle:styleBundle];
+        image = [UIImage pk_imageForKey:aKey inBundle:styleBundle];
     }
     
     return image;
 }
 
 // 支持png和jpg，可扩展
-+ (UIImage *)imageForKey:(id)key inBundle:(NSBundle *)bundle
++ (UIImage *)pk_imageForKey:(id)aKey inBundle:(NSBundle *)bundle
 {
-    NSString *imagePath = [bundle pathForResource:key ofType:@"png"];
+    NSString *imagePath = [bundle pathForResource:aKey ofType:@"png"];
     if (![[NSFileManager defaultManager] fileExistsAtPath:imagePath]) {
-        imagePath = [bundle pathForResource:key ofType:@"jpg"];
+        imagePath = [bundle pathForResource:aKey ofType:@"jpg"];
     }
     return [UIImage imageWithContentsOfFile:imagePath];
 }
