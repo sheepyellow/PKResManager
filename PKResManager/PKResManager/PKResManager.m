@@ -23,6 +23,7 @@ NSMutableArray* CreateNonRetainingArray() {
 @property (nonatomic, strong) NSMutableArray *styleChangedHandlers; // delegates
 @property (nonatomic, strong) NSMutableArray *resObserverArray;
 @property (nonatomic, strong) NSMutableArray *customStyleArray;
+@property (nonatomic,   copy) ResStyleProgressBlock changeStyleProgressBlock;
 
 @property (nonatomic, readwrite, strong) NSBundle *currentStyleBundle;
 @property (nonatomic, readwrite, strong) NSString *currentStyleName;
@@ -91,7 +92,6 @@ NSMutableArray* CreateNonRetainingArray() {
         if (block) {
             block(NO,nil);
         }
-        
         return;
     }
     DLog(@"[Style Manager] start change style");
@@ -126,49 +126,48 @@ NSMutableArray* CreateNonRetainingArray() {
     NSString *fontPlistPath = [self.currentStyleBundle pathForResource:CONFIG_FONT_PLIST_PATH ofType:@"plist"];
     self.configFontCache = [NSMutableDictionary dictionaryWithContentsOfFile:fontPlistPath];
     DLog(@"[Style Manager] configFontCacheCount:%ld",(long)self.configFontCache.count);
-    
-    // thread issue
-    NSMutableArray *holdResObjectArray = [NSMutableArray arrayWithArray:self.resObserverArray];
-    DLog(@"[Style Manager] all res object count:%ld",(long)holdResObjectArray.count);
-    
-    // change style
-    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
-    dispatch_async(queue, ^{
-        [holdResObjectArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            if ([obj respondsToSelector:@selector(didChangeStyleWithManager:)])
-            {
-                dispatch_sync(dispatch_get_main_queue(), ^{
-                    @synchronized(self.resObserverArray) {
+    @synchronized(self.resObserverArray) {
+        DLog(@"[Style Manager] all res object count:%ld",(long)self.resObserverArray.count);
+        // change style
+        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
+        dispatch_async(queue, ^{
+            NSInteger idx = 0;
+            for (id obj in self.resObserverArray) {
+                if ([obj respondsToSelector:@selector(didChangeStyleWithManager:)])
+                {
+                    dispatch_sync(dispatch_get_main_queue(), ^{
                         [obj didChangeStyleWithManager:self];
-                    }
-                });
-            } else {
-                DLog(@"[Style Manager]  change style failed ! => %@",obj);
-            }
-            __block double progress = (double)(idx+1) / (double)(holdResObjectArray.count);
-            for(ResStyleProgressBlock progressBlock in self.styleChangedHandlers)
-            {
+                    });
+                } else {
+                    DLog(@"[Style Manager]  change style failed ! => %@",obj);
+                }
+                __block double progress = (double)(idx+1) / (double)(self.resObserverArray.count);
                 dispatch_sync(dispatch_get_main_queue(), ^{
-                    progressBlock(progress);
+                    if (self.changeStyleProgressBlock) {
+                        self.changeStyleProgressBlock(progress);
+                    }
+                    [[NSNotificationCenter defaultCenter]
+                     postNotificationName:PKResManagerChangeStyleProgressUpdateNotification
+                     object:self
+                     userInfo:@{PKResManagerChangeStyleProgressUpdateNotificationProgressKey : @(progress)}];
                 });
-                
+                ++idx;
             }
-        }];
-        self.isLoading = NO;
-        
-        // save
-        dispatch_sync(dispatch_get_main_queue(), ^{
+            self.isLoading = NO;
+            
             // save
-            NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.currentStyleName];
-            [[NSUserDefaults standardUserDefaults] setObject:data forKey:kNowResStyle];
-            // block
-            if (block) {
-                block(YES,nil);
-            }
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                // save
+                NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.currentStyleName];
+                [[NSUserDefaults standardUserDefaults] setObject:data forKey:kNowResStyle];
+                // block
+                if (block) {
+                    block(YES,nil);
+                }
+            });
+            DLog(@"[Style Manager] end change style");
         });
-        DLog(@"[Style Manager] end change style");
-    });
-    
+    }
     while (!self.isLoading) {
         return;
     }
@@ -183,8 +182,7 @@ NSMutableArray* CreateNonRetainingArray() {
 }
 - (void)changeStyleOnProgress:(ResStyleProgressBlock)progressBlock
 {
-    ResStyleProgressBlock tempBlock = [progressBlock copy];
-    [self.styleChangedHandlers addObject:tempBlock];
+    self.changeStyleProgressBlock = progressBlock;
 }
 
 - (BOOL)deleteStyle:(NSString *)name
@@ -478,3 +476,7 @@ NSMutableArray* CreateNonRetainingArray() {
 }
 
 @end
+
+NSString* const PKResManagerChangeStyleProgressUpdateNotification = @"PKResManagerChangeStyleProgressUpdateNotification";
+NSString* const PKResManagerChangeStyleProgressUpdateNotificationProgressKey = @"PKResManagerChangeStyleProgressUpdateNotificationProgressKey";
+

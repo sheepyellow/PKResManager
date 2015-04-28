@@ -26,7 +26,7 @@
 #import "UIFont+PKFont.h"
 
 #define PK_DEFAULT_BUNDLE_PREFIX    @"bundle://"
-#define PK_CUSTOM_BUNDLE_PREFIX @"custom_bundle://"
+#define PK_CUSTOM_BUNDLE_PREFIX     @"custom_bundle://"
 
 #define kAllResStyle     @"kAllResStyle"
 #define kNowResStyle     @"kNowResStyle"

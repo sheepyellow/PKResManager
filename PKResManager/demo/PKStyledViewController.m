@@ -10,23 +10,20 @@
 #import "StyledView.h"
 
 @interface PKStyledViewController ()
-- (void)customAction;
-- (void)changeAction;
-- (void)addTestBtn;
-- (void)addAllStyleView;
-- (void)addProgressView;
 @property (nonatomic, strong) UIScrollView *scrollView;
+@property (nonatomic, strong) UILabel *progressLabel;
+@property (nonatomic, strong) UILabel *timeLabel;
+@property (nonatomic, strong) UIProgressView *progressView;
 @end
 
-@implementation PKStyledViewController
-
-@synthesize 
-scrollView = _scrollView;
-
-- (void)popSelf
-{
-    [self.navigationController popViewControllerAnimated:YES];
+@implementation PKStyledViewController {
+    NSTimeInterval _beginChangeStyleTime;
 }
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -37,6 +34,7 @@ scrollView = _scrollView;
             self.extendedLayoutIncludesOpaqueBars = YES; // default: NO
             self.automaticallyAdjustsScrollViewInsets = NO; // default: YES
         }
+        _beginChangeStyleTime = .0f;
     }
     return self;
 }
@@ -82,42 +80,40 @@ scrollView = _scrollView;
 - (void)addProgressView
 {
     CGFloat progressY = _scrollView.frame.size.height + 20.f;
-    // percent 
-    UILabel *progressLabel  = [[UILabel alloc] initWithFrame:CGRectMake(20.0f, progressY, 50, 30)];
-    progressLabel.text = @"0.0% ";
-    progressLabel.font = [UIFont systemFontOfSize:12.0f];
-    [self.view addSubview:progressLabel];
+    // percent
+    if (!_progressLabel) {
+        UILabel *progressLabel  = [[UILabel alloc] initWithFrame:CGRectMake(20.0f, progressY, 50, 30)];
+        progressLabel.text = @"0.0% ";
+        progressLabel.font = [UIFont systemFontOfSize:12.0f];
+        [self.view addSubview:progressLabel];
+        _progressLabel = progressLabel;
+    }
+    
     
     // time
-    UILabel *timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(270.0f, progressY, 50, 30)];
-    timeLabel.text = @"0.00'";
-    timeLabel.font = [UIFont systemFontOfSize:12.0f];
-    [self.view addSubview:timeLabel];
+    if (!_timeLabel) {
+        UILabel *timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(270.0f, progressY, 50, 30)];
+        timeLabel.text = @"0.00'";
+        timeLabel.font = [UIFont systemFontOfSize:12.0f];
+        [self.view addSubview:timeLabel];
+        _timeLabel = timeLabel;
+    }
+    
     
     // view
-    UIProgressView *progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
-    CGRect frame = progressView.frame;
-    frame.origin.x = 80.0f;
-    frame.origin.y = progressY;
-    progressView.frame = frame;
-    [progressView setProgress:0.0f];
-    [self.view addSubview:progressView];
-    __block BOOL needreset = YES;
-    __block NSTimeInterval time = 0.0f;
-    [[PKResManager getInstance] changeStyleOnProgress:^(double progress) {        
-        if (needreset) {
-            needreset = NO;
-            time = [[NSDate date] timeIntervalSince1970];
-        }
-        progressLabel.text = [NSString stringWithFormat:@"%.1f%%",progress*100];
-        [progressView setProgress:(float)progress];
-        if (progress >= 1.0f) {
-            time = [[NSDate date] timeIntervalSince1970] - time;            
-            timeLabel.text = [NSString stringWithFormat:@"%.2f'",time];
-            needreset = YES;
-        }
-    }];   
-    
+    if (!_progressView) {
+        UIProgressView *progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
+        CGRect frame = progressView.frame;
+        frame.origin.x = 80.0f;
+        frame.origin.y = progressY;
+        progressView.frame = frame;
+        [progressView setProgress:0.0f];
+        [self.view addSubview:progressView];
+        _progressView = progressView;
+    }
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(changeStyleProgressUpdateNotification:)
+                                                 name:PKResManagerChangeStyleProgressUpdateNotification object:nil];
 }
 - (void)customAction
 {
@@ -165,6 +161,24 @@ scrollView = _scrollView;
     resetBtn.backgroundColor = [UIColor blackColor];
     [resetBtn addTarget:self action:@selector(resetAction) forControlEvents:UIControlEventTouchDown];
     [self.view addSubview:resetBtn];
+}
+
+- (void)changeStyleProgressUpdateNotification:(NSNotification *)notification {
+    NSNumber *progressNum = [notification.userInfo objectForKey:PKResManagerChangeStyleProgressUpdateNotificationProgressKey];
+    if (progressNum.floatValue > 0) {
+        if (_beginChangeStyleTime <= .0f) {
+            _beginChangeStyleTime = [[NSDate date] timeIntervalSince1970];
+        }
+        self.progressLabel.text = [NSString stringWithFormat:@"%.1f%%",progressNum.floatValue*100];
+        [self.progressView setProgress:progressNum.floatValue];
+        if (progressNum.floatValue >= 1.0f) {
+            NSTimeInterval endTime = [[NSDate date] timeIntervalSince1970] - _beginChangeStyleTime;
+            self.timeLabel.text = [NSString stringWithFormat:@"%.2f'",endTime];
+            _beginChangeStyleTime = .0f;
+        }
+    } else {
+        _beginChangeStyleTime = .0f;
+    }
 }
 
 @end

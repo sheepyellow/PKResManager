@@ -8,6 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
+// progress update notification
+extern NSString* const PKResManagerChangeStyleProgressUpdateNotification;
+extern NSString* const PKResManagerChangeStyleProgressUpdateNotificationProgressKey;
+
+
 typedef NS_ENUM(NSUInteger, PKStyleErrorCode) {
     PKStyleErrorCode_Success                 = 0, // 自定义,表示成功.
     PKStyleErrorCode_Unknow                  = 1, // 未知错误
