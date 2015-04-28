@@ -288,7 +288,6 @@ NSMutableArray* CreateNonRetainingArray() {
 - (void)resetStyle
 {
     // swith to default style
-    self.isLoading = NO;
     NSDictionary *defalutStyleDict = self.defaultStyleArray[0];
     NSString *styleName = defalutStyleDict[kStyleName];
     [self swithToStyle:styleName];
