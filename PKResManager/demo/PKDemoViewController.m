@@ -26,8 +26,13 @@ dataArray;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [[PKResManager getInstance] addChangeStyleObject:self];    
-    self.navigationController.navigationBar.tintColor = [UIColor pk_colorForKey:@"DemoNavColor"];
+    [[PKResManager getInstance] addChangeStyleObject:self];
+    if (isiOS7Higher) {
+        self.navigationController.navigationBar.barTintColor = [UIColor pk_colorForKey:@"DemoNavColor"];
+    } else {
+        self.navigationController.navigationBar.tintColor = [UIColor pk_colorForKey:@"DemoNavColor"];
+    }
+    
     self.navigationItem.title = @"Demo";
     self.dataArray = [[NSMutableArray alloc] initWithObjects:@"Demo",@"List",@"Reset", nil];
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds];
@@ -82,10 +87,10 @@ dataArray;
         [self.navigationController pushViewController:viewController animated:YES];
     }else if([dataStr isEqualToString:@"Reset"]){
         [[PKResManager getInstance] resetStyle];
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"完成" 
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Result"
                                                             message:nil 
                                                            delegate:nil 
-                                                  cancelButtonTitle:@"确定" 
+                                                  cancelButtonTitle:@"OK" 
                                                   otherButtonTitles:nil];
         [alertView show];
     }
@@ -93,12 +98,26 @@ dataArray;
 #pragma mark - PKResChangeStyleDelegate
 - (void)didChangeStyleWithManager:(PKResManager *)manager
 {
-    [[UIApplication sharedApplication] setStatusBarStyle:UIScrollViewIndicatorStyleDefault animated:YES];
+    UIColor *navFontColor = nil;
     if ([[PKResManager getInstance].styleName isEqualToString:PK_SYSTEM_STYLE_DEFAULT]) {
-        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent animated:YES];        
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
+        navFontColor = [UIColor blackColor];
+    } else {
+        if (isiOS7Higher) {
+            [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
+        } else {
+            [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque animated:YES];
+        }
+        navFontColor = [UIColor whiteColor];
     }
 
-    self.navigationController.navigationBar.tintColor = [UIColor pk_colorForKey:@"DemoNavColor"];
+    if (isiOS7Higher) {
+        self.navigationController.navigationBar.barTintColor = [UIColor pk_colorForKey:@"DemoNavColor"];
+    } else {
+        self.navigationController.navigationBar.tintColor = [UIColor pk_colorForKey:@"DemoNavColor"];
+    }
+    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : navFontColor,
+                                                                    NSFontAttributeName : [UIFont pk_fontForKey:@"DemoNavFont"]};
     
     [self.tableView reloadData];
 }

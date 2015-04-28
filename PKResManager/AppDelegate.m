@@ -28,7 +28,19 @@
                                      name:SAVED_NIGHT_STYLE
                                   version:@1.0f
                                withBundle:bundle];
-    [PKResManager getInstance];
+    
+    [[PKResManager getInstance] swithToStyle:[PKResManager getInstance].styleName
+                                  onComplete:^(BOOL finished, NSError *error) {
+                                      if ([[PKResManager getInstance].styleName isEqualToString:PK_SYSTEM_STYLE_DEFAULT]) {
+                                          [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
+                                      } else {
+                                          if (isiOS7Higher) {
+                                              [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
+                                          } else {
+                                              [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque animated:YES];
+                                          }
+                                      }
+                                  }];
     return YES;
 }
 

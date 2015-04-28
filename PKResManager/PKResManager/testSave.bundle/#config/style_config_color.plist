@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>DemoNavColor</key>
-	<string>0,30,80</string>
+	<string>80,0,30</string>
 	<key>DemoCellColor</key>
 	<string>10,10,10,1</string>
 	<key>DemoModule</key>

@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>DemoNavFont</key>
-	<string>11.0</string>
+	<string>16.0</string>
 	<key>DemoCellFont</key>
 	<dict>
 		<key>font</key>

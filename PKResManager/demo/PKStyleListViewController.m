@@ -15,15 +15,16 @@
 @end
 
 @implementation PKStyleListViewController
-@synthesize 
-tableView = _tableView,
-dataArray = _dataArray;
 
+- (void)dealloc {
+    [[PKResManager getInstance] removeChangeStyleObject:self];
+}
 
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [[PKResManager getInstance] addChangeStyleObject:self];
     if (!_tableView) {
         _tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
         _tableView.delegate = self;
@@ -70,7 +71,7 @@ dataArray = _dataArray;
     for (int i = 0; i < 2; i++) {
         NSDictionary *unknowDict = [NSDictionary dictionaryWithObjects:@[[NSDate date],
                                                                         [NSString stringWithFormat:@"%d",i],
-                                                                        [NSString stringWithFormat:@"documents://testSave.bundle%d",i],
+                                                                        [NSString stringWithFormat:@"hehehe://testSave.bundle%d",i],
                                                                         @"v0.1"]
                                                                forKeys:@[kStyleID,
                                                                         kStyleName,
@@ -120,20 +121,19 @@ dataArray = _dataArray;
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
     }
 
-    NSDictionary *aStyleDict = (self.dataArray)[indexPath.row];
+    NSDictionary *aStyleDict = self.dataArray[indexPath.row];
     NSString *styleName = aStyleDict[kStyleName];
     NSNumber *styleVersion = aStyleDict[kStyleVersion];
     // name
-    cell.textLabel.font = [UIFont systemFontOfSize:13.0f];
+    cell.textLabel.font = [UIFont pk_fontForKey:@"DemoCellFont"];
     cell.textLabel.text = styleName;
     
     // preview
     UIImage *image = [[PKResManager getInstance] previewImageByStyleName:styleName];
     if (image) {
         UIImageView *perviewImageView = [[UIImageView alloc] initWithImage:image];
-        perviewImageView.frame = CGRectMake(100.0f, 0.0f, 40, 40);
+        perviewImageView.frame = CGRectMake(tableView.frame.size.width - 100, 0.0f, 40, 40);
         [cell addSubview:perviewImageView];
-    
     }
     
     // version
@@ -141,9 +141,8 @@ dataArray = _dataArray;
         UILabel *versionLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 100, cell.frame.size.height)];
         versionLabel.font = [UIFont systemFontOfSize:13.0f];;
         versionLabel.text = [NSString stringWithFormat:@"v%.1f   ",styleVersion.floatValue];
-        versionLabel.textAlignment = UITextAlignmentRight;
+        versionLabel.textAlignment = NSTextAlignmentRight;
         cell.accessoryView = versionLabel;
-
     }
     
     return cell;
@@ -166,6 +165,12 @@ dataArray = _dataArray;
             }
         }
     }];
+}
+
+#pragma mark - delegate
+- (void)didChangeStyleWithManager:(PKResManager *)manager
+{
+    [self.tableView reloadData];
 }
 
 @end
