@@ -9,7 +9,7 @@
 	<key>DemoModule</key>
 	<dict>
 		<key>StyleViewColor</key>
-		<string>#0000ff</string>
+		<string>#0000ff,0.3</string>
 		<key>SubModule</key>
 		<dict>
 			<key>LabelColor</key>

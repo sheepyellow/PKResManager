@@ -22,7 +22,7 @@
         DLog(@" pk_imageForKey:cache: aKey = nil");
         return nil;
     }
-    // 去除扩展名
+    // remove ext
     if ([aKey hasSuffix:@".png"] || [aKey hasSuffix:@".jpg"]) {
         aKey = [aKey substringToIndex:((NSString*)aKey).length-4];
     }
@@ -50,7 +50,7 @@
         DLog(@" pk_imageForKey:style: aKey = nil || name.length <= 0");
         return nil;
     }
-    // 去除扩展名
+    // remove ext
     if ([aKey hasSuffix:@".png"] || [aKey hasSuffix:@".jpg"])
     {
         aKey = [aKey substringToIndex:((NSString*)aKey).length-4];
@@ -58,7 +58,7 @@
     
     UIImage *image = nil;
     NSBundle *styleBundle = nil;
-    // 不是当前style情况
+
     if (![name isEqualToString:[PKResManager getInstance].currentStyleName])
     {
         styleBundle = [[PKResManager getInstance] bundleByStyleName:name];
@@ -66,9 +66,14 @@
         styleBundle = [PKResManager getInstance].currentStyleBundle;
     }
     
-    image = [UIImage pk_imageForKey:aKey inBundle:styleBundle];
+    // @3x
+    if (![aKey hasSuffix:@"@3x"]) {
+        image = [UIImage pk_imageForKey:[NSString stringWithFormat:@"%@@3x",aKey] inBundle:styleBundle];
+    } else if ([aKey hasSuffix:@"@3x"]){
+        image = [UIImage pk_imageForKey:[aKey substringToIndex:((NSString*)aKey).length-3] inBundle:styleBundle];
+    }
     
-    // @2x情况
+    // @2x
     if (image == nil)
     {
         if (![aKey hasSuffix:@"@2x"]) {
@@ -78,17 +83,11 @@
         }
     }
     
-    // @3x情况
-    if (image == nil)
-    {
-        if (![aKey hasSuffix:@"@3x"]) {
-            image = [UIImage pk_imageForKey:[NSString stringWithFormat:@"%@@3x",aKey] inBundle:styleBundle];
-        } else if ([aKey hasSuffix:@"@3x"]){
-            image = [UIImage pk_imageForKey:[aKey substringToIndex:((NSString*)aKey).length-3] inBundle:styleBundle];
-        }
+    if (image == nil) {
+        image = [UIImage pk_imageForKey:aKey inBundle:styleBundle];
     }
-    
-    // 最后从mainBundle中找
+
+    // mainBundle
     if (image == nil)
     {
         DLog(@" will get default style1 => %@",aKey);
@@ -108,7 +107,7 @@
     return image;
 }
 
-// 支持png和jpg，可扩展
+// support png&jpg
 + (UIImage *)pk_imageForKey:(id)aKey inBundle:(NSBundle *)bundle
 {
     NSString *imagePath = [bundle pathForResource:aKey ofType:@"png"];

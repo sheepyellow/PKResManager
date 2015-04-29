@@ -14,10 +14,10 @@ extern NSString* const PKResManagerChangeStyleProgressUpdateNotificationProgress
 
 
 typedef NS_ENUM(NSUInteger, PKStyleErrorCode) {
-    PKStyleErrorCode_Success                 = 0, // 自定义,表示成功.
-    PKStyleErrorCode_Unknow                  = 1, // 未知错误
-    PKStyleErrorCode_Unavailable	         = 2, // 不可用，需要下载
-    PKStyleErrorCode_BundleName              = 3, // bundleName问题
+    PKStyleErrorCode_Success                 = 0,
+    PKStyleErrorCode_Unknow                  = 1,
+    PKStyleErrorCode_Unavailable	         = 2,
+    PKStyleErrorCode_BundleName              = 3,
 };
 
 typedef NS_ENUM(NSUInteger, PKResStyleType) {

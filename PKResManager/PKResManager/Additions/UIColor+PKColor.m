@@ -34,15 +34,19 @@
                             green:((CGFloat)g / 255.f)
                              blue:((CGFloat)b / 255.f)
                             alpha:a];
-    } else {
-        if ([colorStr hasPrefix:@"#"]) {
-            colorStr = [colorStr substringFromIndex:1];
+    } else if (colorArray.count >= 1) {
+        NSString *hexColorStr = colorArray[0];
+        if ([hexColorStr hasPrefix:@"#"]) {
+            hexColorStr = [hexColorStr substringFromIndex:1];
         }
-        if ([[colorStr lowercaseString] hasPrefix:@"0x"]) {
-            colorStr = [colorStr substringFromIndex:2];
+        if ([[hexColorStr lowercaseString] hasPrefix:@"0x"]) {
+            hexColorStr = [hexColorStr substringFromIndex:2];
         }
-        if ([colorStr length] == 6) {
-            NSScanner *scanner = [[NSScanner alloc] initWithString:colorStr];
+        if (colorArray.count == 2) {
+            a = [colorArray[1] floatValue];
+        }
+        if ([hexColorStr length] == 6) {
+            NSScanner *scanner = [[NSScanner alloc] initWithString:hexColorStr];
             unsigned hexValue = 0;
             if ([scanner scanHexInt:&hexValue] && [scanner isAtEnd]) {
                 r = ((hexValue & 0xFF0000) >> 16);
