@@ -7,6 +7,7 @@
 //
 
 #import "PKResManager+Private.h"
+#import "PKResManagerDefine.h"
 #import <objc/runtime.h>
 
 static void *const _kPKResManagerAssociatedResImageCache = (void *)&_kPKResManagerAssociatedResImageCache;
@@ -40,10 +41,10 @@ static void *const _kPKResManagerAssociatedDefaultStyleArray = (void *)&_kPKResM
 - (NSMutableArray *)defaultStyleArray {
     NSMutableArray *ret = (NSMutableArray *)objc_getAssociatedObject(self, _kPKResManagerAssociatedDefaultStyleArray);
     if (!ret) {
-        NSDictionary *defaultStyleDict = @{kStyleID : PK_SYSTEM_STYLE_ID,
-                                           kStyleName : PK_SYSTEM_STYLE_DEFAULT,
+        NSDictionary *defaultStyleDict = @{kStyleID : PK_SYSTEM_STYLE_DEFAULT_ID,
+                                           kStyleName : PK_SYSTEM_STYLE_DEFAULT_NAME,
                                            kStyleURL : PK_SYSTEM_STYLE_DEFAULT_URL,
-                                           kStyleVersion : PK_SYSTEM_STYLE_VERSION};        
+                                           kStyleVersion : PK_SYSTEM_STYLE_DEFAULT_VERSION};        
         ret = [NSMutableArray arrayWithObjects:defaultStyleDict, nil];
         self.defaultStyleArray = ret;
     }

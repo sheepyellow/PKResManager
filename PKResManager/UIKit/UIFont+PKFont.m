@@ -8,6 +8,7 @@
 
 #import "UIFont+PKFont.h"
 #import "PKResManager+Private.h"
+#import "PKResManagerDefine.h"
 
 @implementation UIFont (PKFont)
 

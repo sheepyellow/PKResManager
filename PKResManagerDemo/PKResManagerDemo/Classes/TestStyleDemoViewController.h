@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "PKResManagerKit.h"
 @interface TestStyleDemoViewController : UIViewController
 
 @end

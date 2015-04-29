@@ -8,6 +8,7 @@
 
 #import "UIColor+PKColor.h"
 #import "PKResManager+Private.h"
+#import "PKResManagerDefine.h"
 
 @implementation UIColor (PKColor)
 

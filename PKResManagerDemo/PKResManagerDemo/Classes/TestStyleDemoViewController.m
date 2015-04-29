@@ -27,12 +27,9 @@
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // iOS 7 later
-        if (isiOS7Higher) {
-            self.edgesForExtendedLayout = UIRectEdgeNone; // default: UIRectEdgeAll
-            self.extendedLayoutIncludesOpaqueBars = YES; // default: NO
-            self.automaticallyAdjustsScrollViewInsets = NO; // default: YES
-        }
+        self.edgesForExtendedLayout = UIRectEdgeNone; // default: UIRectEdgeAll
+        self.extendedLayoutIncludesOpaqueBars = YES; // default: NO
+        self.automaticallyAdjustsScrollViewInsets = NO; // default: YES
         _beginChangeStyleTime = .0f;
     }
     return self;
@@ -114,10 +111,10 @@
 }
 
 - (void)changeAction {
-    if ([[PKResManager getInstance].currentStyleName isEqualToString:PK_SYSTEM_STYLE_DEFAULT]) {
+    if ([[PKResManager getInstance].currentStyleName isEqualToString:PK_SYSTEM_STYLE_DEFAULT_NAME]) {
         [[PKResManager getInstance] swithToStyle:SAVED_NIGHT_STYLE];
     } else {
-        [[PKResManager getInstance] swithToStyle:PK_SYSTEM_STYLE_DEFAULT];
+        [[PKResManager getInstance] swithToStyle:PK_SYSTEM_STYLE_DEFAULT_NAME];
     }
 }
 

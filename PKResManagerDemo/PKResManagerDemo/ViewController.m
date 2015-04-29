@@ -74,23 +74,15 @@
 - (void)didChangeStyleWithManager:(PKResManager *)manager
 {
     UIColor *navFontColor = nil;
-    if ([[PKResManager getInstance].currentStyleName isEqualToString:PK_SYSTEM_STYLE_DEFAULT]) {
+    if ([[PKResManager getInstance].currentStyleName isEqualToString:PK_SYSTEM_STYLE_DEFAULT_NAME]) {
         [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
         navFontColor = [UIColor blackColor];
     } else {
-        if (isiOS7Higher) {
-            [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
-        } else {
-            [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque animated:YES];
-        }
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
         navFontColor = [UIColor whiteColor];
     }
     
-    if (isiOS7Higher) {
-        self.navigationController.navigationBar.barTintColor = [UIColor pk_colorForKey:@"DemoNavColor"];
-    } else {
-        self.navigationController.navigationBar.tintColor = [UIColor pk_colorForKey:@"DemoNavColor"];
-    }
+    self.navigationController.navigationBar.barTintColor = [UIColor pk_colorForKey:@"DemoNavColor"];
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : navFontColor,
                                                                     NSFontAttributeName : [UIFont pk_fontForKey:@"DemoNavFont"]};
     

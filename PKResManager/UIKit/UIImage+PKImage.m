@@ -8,6 +8,7 @@
 
 #import "UIImage+PKImage.h"
 #import "PKResManager+Private.h"
+#import "PKResManagerDefine.h"
 
 @implementation UIImage (PKImage)
 

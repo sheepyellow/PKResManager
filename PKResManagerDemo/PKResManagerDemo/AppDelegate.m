@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "PKResManagerKit.h"
 
 @interface AppDelegate ()
 
@@ -25,14 +26,10 @@
     
     [[PKResManager getInstance] swithToStyle:[PKResManager getInstance].currentStyleName
                                   onComplete:^(BOOL finished, NSError *error) {
-                                      if ([[PKResManager getInstance].currentStyleName isEqualToString:PK_SYSTEM_STYLE_DEFAULT]) {
+                                      if ([[PKResManager getInstance].currentStyleName isEqualToString:PK_SYSTEM_STYLE_DEFAULT_NAME]) {
                                           [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
                                       } else {
-                                          if (isiOS7Higher) {
-                                              [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
-                                          } else {
-                                              [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque animated:YES];
-                                          }
+                                          [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
                                       }
                                   }];
     return YES;

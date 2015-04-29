@@ -18,12 +18,12 @@
 		DF93D9891AF0B3DE00D9C4A1 /* TestStyleDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DF93D9831AF0B3DE00D9C4A1 /* TestStyleDemoViewController.m */; };
 		DF93D98A1AF0B3DE00D9C4A1 /* TestStyleListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DF93D9851AF0B3DE00D9C4A1 /* TestStyleListViewController.m */; };
 		DF93D98B1AF0B3DE00D9C4A1 /* TestStyleView.m in Sources */ = {isa = PBXBuildFile; fileRef = DF93D9871AF0B3DE00D9C4A1 /* TestStyleView.m */; };
-		DF93D99A1AF0B43800D9C4A1 /* UIColor+PKColor.m in Sources */ = {isa = PBXBuildFile; fileRef = DF93D98F1AF0B43800D9C4A1 /* UIColor+PKColor.m */; };
-		DF93D99B1AF0B43800D9C4A1 /* UIFont+PKFont.m in Sources */ = {isa = PBXBuildFile; fileRef = DF93D9911AF0B43800D9C4A1 /* UIFont+PKFont.m */; };
-		DF93D99C1AF0B43800D9C4A1 /* UIImage+PKImage.m in Sources */ = {isa = PBXBuildFile; fileRef = DF93D9931AF0B43800D9C4A1 /* UIImage+PKImage.m */; };
-		DF93D99D1AF0B43800D9C4A1 /* PKResManager+Private.m in Sources */ = {isa = PBXBuildFile; fileRef = DF93D9951AF0B43800D9C4A1 /* PKResManager+Private.m */; };
-		DF93D99E1AF0B43800D9C4A1 /* PKResManager.m in Sources */ = {isa = PBXBuildFile; fileRef = DF93D9971AF0B43800D9C4A1 /* PKResManager.m */; };
-		DF93D99F1AF0B43800D9C4A1 /* PKStyleDefault.bundle in Resources */ = {isa = PBXBuildFile; fileRef = DF93D9991AF0B43800D9C4A1 /* PKStyleDefault.bundle */; };
+		DFD1BBBE1AF0DD2000629CF7 /* PKResManager+Private.m in Sources */ = {isa = PBXBuildFile; fileRef = DFD1BBB11AF0DD2000629CF7 /* PKResManager+Private.m */; };
+		DFD1BBBF1AF0DD2000629CF7 /* PKResManager.m in Sources */ = {isa = PBXBuildFile; fileRef = DFD1BBB31AF0DD2000629CF7 /* PKResManager.m */; };
+		DFD1BBC01AF0DD2000629CF7 /* PKStyleDefault.bundle in Resources */ = {isa = PBXBuildFile; fileRef = DFD1BBB61AF0DD2000629CF7 /* PKStyleDefault.bundle */; };
+		DFD1BBC11AF0DD2000629CF7 /* UIColor+PKColor.m in Sources */ = {isa = PBXBuildFile; fileRef = DFD1BBB91AF0DD2000629CF7 /* UIColor+PKColor.m */; };
+		DFD1BBC21AF0DD2000629CF7 /* UIFont+PKFont.m in Sources */ = {isa = PBXBuildFile; fileRef = DFD1BBBB1AF0DD2000629CF7 /* UIFont+PKFont.m */; };
+		DFD1BBC31AF0DD2000629CF7 /* UIImage+PKImage.m in Sources */ = {isa = PBXBuildFile; fileRef = DFD1BBBD1AF0DD2000629CF7 /* UIImage+PKImage.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,19 +45,20 @@
 		DF93D9851AF0B3DE00D9C4A1 /* TestStyleListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestStyleListViewController.m; sourceTree = "<group>"; };
 		DF93D9861AF0B3DE00D9C4A1 /* TestStyleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestStyleView.h; sourceTree = "<group>"; };
 		DF93D9871AF0B3DE00D9C4A1 /* TestStyleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestStyleView.m; sourceTree = "<group>"; };
-		DF93D98E1AF0B43800D9C4A1 /* UIColor+PKColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+PKColor.h"; sourceTree = "<group>"; };
-		DF93D98F1AF0B43800D9C4A1 /* UIColor+PKColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+PKColor.m"; sourceTree = "<group>"; };
-		DF93D9901AF0B43800D9C4A1 /* UIFont+PKFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+PKFont.h"; sourceTree = "<group>"; };
-		DF93D9911AF0B43800D9C4A1 /* UIFont+PKFont.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+PKFont.m"; sourceTree = "<group>"; };
-		DF93D9921AF0B43800D9C4A1 /* UIImage+PKImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+PKImage.h"; sourceTree = "<group>"; };
-		DF93D9931AF0B43800D9C4A1 /* UIImage+PKImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+PKImage.m"; sourceTree = "<group>"; };
-		DF93D9941AF0B43800D9C4A1 /* PKResManager+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PKResManager+Private.h"; sourceTree = "<group>"; };
-		DF93D9951AF0B43800D9C4A1 /* PKResManager+Private.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PKResManager+Private.m"; sourceTree = "<group>"; };
-		DF93D9961AF0B43800D9C4A1 /* PKResManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKResManager.h; sourceTree = "<group>"; };
-		DF93D9971AF0B43800D9C4A1 /* PKResManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKResManager.m; sourceTree = "<group>"; };
-		DF93D9981AF0B43800D9C4A1 /* PKResManagerKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKResManagerKit.h; sourceTree = "<group>"; };
-		DF93D9991AF0B43800D9C4A1 /* PKStyleDefault.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = PKStyleDefault.bundle; sourceTree = "<group>"; };
 		DF93D9A01AF0B49600D9C4A1 /* PKResManagerDemo.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PKResManagerDemo.pch; sourceTree = "<group>"; };
+		DFD1BBB01AF0DD2000629CF7 /* PKResManager+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PKResManager+Private.h"; sourceTree = "<group>"; };
+		DFD1BBB11AF0DD2000629CF7 /* PKResManager+Private.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PKResManager+Private.m"; sourceTree = "<group>"; };
+		DFD1BBB21AF0DD2000629CF7 /* PKResManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKResManager.h; sourceTree = "<group>"; };
+		DFD1BBB31AF0DD2000629CF7 /* PKResManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKResManager.m; sourceTree = "<group>"; };
+		DFD1BBB41AF0DD2000629CF7 /* PKResManagerKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKResManagerKit.h; sourceTree = "<group>"; };
+		DFD1BBB61AF0DD2000629CF7 /* PKStyleDefault.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = PKStyleDefault.bundle; sourceTree = "<group>"; };
+		DFD1BBB81AF0DD2000629CF7 /* UIColor+PKColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+PKColor.h"; sourceTree = "<group>"; };
+		DFD1BBB91AF0DD2000629CF7 /* UIColor+PKColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+PKColor.m"; sourceTree = "<group>"; };
+		DFD1BBBA1AF0DD2000629CF7 /* UIFont+PKFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+PKFont.h"; sourceTree = "<group>"; };
+		DFD1BBBB1AF0DD2000629CF7 /* UIFont+PKFont.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+PKFont.m"; sourceTree = "<group>"; };
+		DFD1BBBC1AF0DD2000629CF7 /* UIImage+PKImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+PKImage.h"; sourceTree = "<group>"; };
+		DFD1BBBD1AF0DD2000629CF7 /* UIImage+PKImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+PKImage.m"; sourceTree = "<group>"; };
+		DFD1BBC41AF0DD4800629CF7 /* PKResManagerDefine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PKResManagerDefine.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,7 +91,7 @@
 		DF93D9531AF0B36300D9C4A1 /* PKResManagerDemo */ = {
 			isa = PBXGroup;
 			children = (
-				DF93D98C1AF0B43800D9C4A1 /* PKResManager */,
+				DFD1BBAE1AF0DD2000629CF7 /* PKResManager */,
 				DF93D9581AF0B36300D9C4A1 /* AppDelegate.h */,
 				DF93D9591AF0B36300D9C4A1 /* AppDelegate.m */,
 				DF93D95B1AF0B36300D9C4A1 /* ViewController.h */,
@@ -137,32 +138,49 @@
 			path = Classes;
 			sourceTree = "<group>";
 		};
-		DF93D98C1AF0B43800D9C4A1 /* PKResManager */ = {
+		DFD1BBAE1AF0DD2000629CF7 /* PKResManager */ = {
 			isa = PBXGroup;
 			children = (
-				DF93D98D1AF0B43800D9C4A1 /* Additions */,
-				DF93D9941AF0B43800D9C4A1 /* PKResManager+Private.h */,
-				DF93D9951AF0B43800D9C4A1 /* PKResManager+Private.m */,
-				DF93D9961AF0B43800D9C4A1 /* PKResManager.h */,
-				DF93D9971AF0B43800D9C4A1 /* PKResManager.m */,
-				DF93D9981AF0B43800D9C4A1 /* PKResManagerKit.h */,
-				DF93D9991AF0B43800D9C4A1 /* PKStyleDefault.bundle */,
+				DFD1BBAF1AF0DD2000629CF7 /* Core */,
+				DFD1BBB41AF0DD2000629CF7 /* PKResManagerKit.h */,
+				DFD1BBC41AF0DD4800629CF7 /* PKResManagerDefine.h */,
+				DFD1BBB51AF0DD2000629CF7 /* Resource */,
+				DFD1BBB71AF0DD2000629CF7 /* UIKit */,
 			);
 			name = PKResManager;
 			path = ../../PKResManager;
 			sourceTree = "<group>";
 		};
-		DF93D98D1AF0B43800D9C4A1 /* Additions */ = {
+		DFD1BBAF1AF0DD2000629CF7 /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				DF93D98E1AF0B43800D9C4A1 /* UIColor+PKColor.h */,
-				DF93D98F1AF0B43800D9C4A1 /* UIColor+PKColor.m */,
-				DF93D9901AF0B43800D9C4A1 /* UIFont+PKFont.h */,
-				DF93D9911AF0B43800D9C4A1 /* UIFont+PKFont.m */,
-				DF93D9921AF0B43800D9C4A1 /* UIImage+PKImage.h */,
-				DF93D9931AF0B43800D9C4A1 /* UIImage+PKImage.m */,
+				DFD1BBB01AF0DD2000629CF7 /* PKResManager+Private.h */,
+				DFD1BBB11AF0DD2000629CF7 /* PKResManager+Private.m */,
+				DFD1BBB21AF0DD2000629CF7 /* PKResManager.h */,
+				DFD1BBB31AF0DD2000629CF7 /* PKResManager.m */,
 			);
-			path = Additions;
+			path = Core;
+			sourceTree = "<group>";
+		};
+		DFD1BBB51AF0DD2000629CF7 /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				DFD1BBB61AF0DD2000629CF7 /* PKStyleDefault.bundle */,
+			);
+			path = Resource;
+			sourceTree = "<group>";
+		};
+		DFD1BBB71AF0DD2000629CF7 /* UIKit */ = {
+			isa = PBXGroup;
+			children = (
+				DFD1BBB81AF0DD2000629CF7 /* UIColor+PKColor.h */,
+				DFD1BBB91AF0DD2000629CF7 /* UIColor+PKColor.m */,
+				DFD1BBBA1AF0DD2000629CF7 /* UIFont+PKFont.h */,
+				DFD1BBBB1AF0DD2000629CF7 /* UIFont+PKFont.m */,
+				DFD1BBBC1AF0DD2000629CF7 /* UIImage+PKImage.h */,
+				DFD1BBBD1AF0DD2000629CF7 /* UIImage+PKImage.m */,
+			);
+			path = UIKit;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -222,7 +240,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DF93D99F1AF0B43800D9C4A1 /* PKStyleDefault.bundle in Resources */,
+				DFD1BBC01AF0DD2000629CF7 /* PKStyleDefault.bundle in Resources */,
 				DF93D97E1AF0B3A600D9C4A1 /* testSave.bundle in Resources */,
 				DF93D9601AF0B36300D9C4A1 /* Main.storyboard in Resources */,
 				DF93D9651AF0B36300D9C4A1 /* LaunchScreen.xib in Resources */,
@@ -238,16 +256,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DFD1BBC31AF0DD2000629CF7 /* UIImage+PKImage.m in Sources */,
 				DF93D98B1AF0B3DE00D9C4A1 /* TestStyleView.m in Sources */,
+				DFD1BBC11AF0DD2000629CF7 /* UIColor+PKColor.m in Sources */,
+				DFD1BBBF1AF0DD2000629CF7 /* PKResManager.m in Sources */,
 				DF93D95D1AF0B36300D9C4A1 /* ViewController.m in Sources */,
+				DFD1BBC21AF0DD2000629CF7 /* UIFont+PKFont.m in Sources */,
+				DFD1BBBE1AF0DD2000629CF7 /* PKResManager+Private.m in Sources */,
 				DF93D9891AF0B3DE00D9C4A1 /* TestStyleDemoViewController.m in Sources */,
-				DF93D99B1AF0B43800D9C4A1 /* UIFont+PKFont.m in Sources */,
 				DF93D98A1AF0B3DE00D9C4A1 /* TestStyleListViewController.m in Sources */,
 				DF93D95A1AF0B36300D9C4A1 /* AppDelegate.m in Sources */,
-				DF93D99A1AF0B43800D9C4A1 /* UIColor+PKColor.m in Sources */,
-				DF93D99C1AF0B43800D9C4A1 /* UIImage+PKImage.m in Sources */,
-				DF93D99E1AF0B43800D9C4A1 /* PKResManager.m in Sources */,
-				DF93D99D1AF0B43800D9C4A1 /* PKResManager+Private.m in Sources */,
 				DF93D9571AF0B36300D9C4A1 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
