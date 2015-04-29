@@ -1,0 +1,20 @@
+//
+//  PKResManagerDemo.pch
+//  PKResManagerDemo
+//
+//  Created by passerbycrk on 15/4/29.
+//  Copyright (c) 2015年 pcrk. All rights reserved.
+//
+
+#ifndef PKResManagerDemo_PKResManagerDemo_pch
+#define PKResManagerDemo_PKResManagerDemo_pch
+
+#import "PKResManagerKit.h"
+
+#define SAVED_CUSTOM_STYLE @"SAVED_CUSTOM_STYLE"
+
+#define SAVED_NIGHT_STYLE @"SAVED_NIGHT_STYLE"
+
+#define isiOS7Higher ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7 ? YES : NO)
+
+#endif

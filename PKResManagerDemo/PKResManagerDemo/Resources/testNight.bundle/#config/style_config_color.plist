@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>DemoNavColor</key>
+	<string>40,40,40</string>
+	<key>DemoCellColor</key>
+	<string>10,10,10,1</string>
+	<key>DemoModule</key>
+	<dict>
+		<key>StyleViewColor</key>
+		<string>20,20,20</string>
+		<key>SubModule</key>
+		<dict>
+			<key>LabelColor</key>
+			<string>#00ffff</string>
+		</dict>
+	</dict>
+</dict>
+</plist>
