@@ -2,11 +2,11 @@
 //  PKResManager.h
 //  TestResManager
 //
-//  Created by zhong sheng on 12-7-13.
+//  Created by passerbycrk on 12-7-13.
 //  Copyright (c) 2012年 . All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 // progress update notification
 extern NSString* const PKResManagerChangeStyleProgressUpdateNotification;
@@ -93,7 +93,7 @@ typedef void (^ResStyleCompleteBlock) (BOOL finished, NSError *error);
  * save in custom file path
  */
 - (BOOL)saveStyle:(NSString *)styleId name:(NSString *)name version:(NSNumber *)version withBundle:(NSBundle *)bundle;
-/*!
+/*!ne
  * delete style
  */
 - (BOOL)deleteStyle:(NSString *)name;

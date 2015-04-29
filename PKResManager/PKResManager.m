@@ -2,7 +2,7 @@
 //  PKResManager.m
 //  TestResManager
 //
-//  Created by zhong sheng on 12-7-13.
+//  Created by passerbycrk on 12-7-13.
 //  Copyright (c) 2012年 . All rights reserved.
 //
 

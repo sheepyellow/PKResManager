@@ -2,19 +2,14 @@
 //  PKResManager.h
 //  TestResManager
 //
-//  Created by zhong sheng on 12-7-16.
+//  Created by passerbycrk on 12-7-16.
 //  Copyright (c) 2012年 . All rights reserved.
 //
 
 #ifndef PKResManagerKit_PKResManagerKit_h
 #define PKResManagerKit_PKResManagerKit_h
 
-#ifndef __IPHONE_4_0
-#error "PKResManager uses features only available in iOS SDK 4.0 and later."
-#endif
-
 #ifdef DEBUG
-    //#define DLog(fmt, ...) {NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);}
     #define DLog(fmt, ...) {NSLog(fmt, ##__VA_ARGS__);}
 #else
     #define DLog(...)

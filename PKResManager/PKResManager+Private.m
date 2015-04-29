@@ -2,7 +2,7 @@
 //  PKResManager+Private.m
 //  PKResManager
 //
-//  Created by dabing on 15/4/28.
+//  Created by passerbycrk on 15/4/28.
 //
 //
 

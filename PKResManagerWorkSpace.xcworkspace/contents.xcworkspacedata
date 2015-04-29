@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:PKResManager.xcodeproj">
+      location = "group:PKResManagerDemo/PKResManagerDemo.xcodeproj">
    </FileRef>
 </Workspace>
