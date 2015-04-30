@@ -127,12 +127,13 @@ NSMutableArray* CreateNonRetainingArray() {
     self.configFontCache = [NSMutableDictionary dictionaryWithContentsOfFile:fontPlistPath];
     DLog(@"[Style Manager] configFontCacheCount:%ld",(long)self.configFontCache.count);
     @synchronized(self.resObserverArray) {
-        DLog(@"[Style Manager] all res object count:%ld",(long)self.resObserverArray.count);
+        NSArray *theOberverArray = [NSArray arrayWithArray:self.resObserverArray];
+        DLog(@"[Style Manager] all res object count:%ld",(long)theOberverArray.count);
         // change style
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
         dispatch_async(queue, ^{
             NSInteger idx = 0;
-            for (id obj in self.resObserverArray) {
+            for (id obj in theOberverArray) {
                 if ([obj respondsToSelector:@selector(didChangeStyleWithManager:)])
                 {
                     dispatch_sync(dispatch_get_main_queue(), ^{
@@ -141,7 +142,7 @@ NSMutableArray* CreateNonRetainingArray() {
                 } else {
                     DLog(@"[Style Manager]  change style failed ! => %@",obj);
                 }
-                __block double progress = (double)(idx+1) / (double)(self.resObserverArray.count);
+                __block double progress = (double)(idx+1) / (double)(theOberverArray.count);
                 dispatch_sync(dispatch_get_main_queue(), ^{
                     if (self.changeStyleProgressBlock) {
                         self.changeStyleProgressBlock(progress);
