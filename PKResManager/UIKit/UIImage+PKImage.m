@@ -28,17 +28,18 @@
         aKey = [aKey substringToIndex:((NSString*)aKey).length-4];
     }
     
-    UIImage *image = [PKResManager getInstance].resImageCache[aKey];
-    if (image == nil)
-    {
+    UIImage *image = (UIImage *)[[PKResManager getInstance].resImageCache objectForKey:aKey];
+    if (image == nil) {
         // no cache
         image = [UIImage pk_imageForKey:aKey style:[PKResManager getInstance].currentStyleName];
+    } else {
+        needCache = NO;
     }
 
     // cache
     if (image != nil && needCache)
     {
-        [PKResManager getInstance].resImageCache[aKey] = image;
+        [[PKResManager getInstance].resImageCache setObject:image forKey:aKey cost:image.size.width * image.size.height * image.scale * image.scale];
     }
     
     return image;

@@ -57,12 +57,12 @@ static void *const _kPKResManagerAssociatedDefaultStyleArray = (void *)&_kPKResM
                       withPolicy:OBJC_ASSOCIATION_RETAIN_NONATOMIC];
 }
 
-- (NSMutableDictionary *)resImageCache {
-    NSMutableDictionary *ret = (NSMutableDictionary *)objc_getAssociatedObject(self, _kPKResManagerAssociatedResImageCache);
+- (NSCache *)resImageCache {
+    NSCache *ret = (NSCache *)objc_getAssociatedObject(self, _kPKResManagerAssociatedResImageCache);
     return ret;
 }
 
-- (void)setResImageCache:(NSMutableDictionary *)resImageCache {
+- (void)setResImageCache:(NSCache *)resImageCache {
     [self pk_setAssociatedObject:resImageCache
                          withKey:_kPKResManagerAssociatedResImageCache
                       withPolicy:OBJC_ASSOCIATION_RETAIN_NONATOMIC];

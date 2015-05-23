@@ -14,7 +14,7 @@
 
 @property (nonatomic, strong) NSMutableArray *defaultStyleArray;
 
-@property (nonatomic, strong) NSMutableDictionary *resImageCache;
+@property (nonatomic, strong) NSCache *resImageCache;
 
 #pragma mark - Plist Default Style
 

@@ -36,6 +36,7 @@ NSMutableArray* CreateNonRetainingArray() {
 
 - (void)dealloc
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [self.styleChangedHandlers removeAllObjects];
     if (self.allStyleArray.count > 0) {
         [self.allStyleArray removeAllObjects];
@@ -438,6 +439,12 @@ NSMutableArray* CreateNonRetainingArray() {
     return newDirectory;
 }
 
+#pragma mark - Notification 
+
+- (void)p_didReceiveMemoryWarningNotification:(NSNotification *)aNotification {
+    [self clearImageCache];
+}
+
 
 #pragma mark - Singeton
 
@@ -446,7 +453,9 @@ NSMutableArray* CreateNonRetainingArray() {
     if (self) {
         self.styleChangedHandlers = [[NSMutableArray alloc] init];
         self.resObserverArray = CreateNonRetainingArray(); // 不retain的数组
-        self.resImageCache = [[NSMutableDictionary alloc] init];
+        self.resImageCache = [[NSCache alloc] init];
+        self.resImageCache.name = [@"com.pk.res.image" stringByAppendingFormat:@"%p",self];
+        
         self.configCache = [[NSMutableDictionary alloc] init];
         
         // get all style ( will get defalut style array)
@@ -461,7 +470,10 @@ NSMutableArray* CreateNonRetainingArray() {
         }else{
             [self resetStyle];
         }
-        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(p_didReceiveMemoryWarningNotification:)
+                                                     name:UIApplicationDidReceiveMemoryWarningNotification
+                                                   object:nil];
     }
     return self;
 }
